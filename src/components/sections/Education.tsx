@@ -2,6 +2,7 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { GraduationCap, Calendar, MapPin } from 'lucide-react';
 import templeLogo from '@/assets/temple-logo.png';
+import downingtownLogo from '@/assets/downingtown-logo.png';
 
 const education = [
   {
@@ -22,7 +23,7 @@ const education = [
     period: 'Aug 2019 – Jun 2023',
     description: 'Maintained a high level of engagement across diverse academic and extracurricular platforms. As an active member of FBLA and Student Council, developed foundational skills in professional communication, project coordination, and peer advocacy. Commitment to versatility demonstrated through participation in Track and Field and Guitar Club, cultivating creative collaboration.',
     highlights: ['FBLA', 'Student Council', 'Track and Field', 'Guitar Club'],
-    logo: null,
+    logo: downingtownLogo,
   },
 ];
 
