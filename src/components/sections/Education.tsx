@@ -1,6 +1,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { GraduationCap, Calendar, MapPin } from 'lucide-react';
+import templeLogo from '@/assets/temple-logo.png';
 
 const education = [
   {
@@ -11,6 +12,7 @@ const education = [
     period: 'January 2026 – Present',
     description: 'Data science undergraduate at Temple University with a concentration in Computational Analytics. Technically proficient in leveraging statistical methods and algorithmic approaches to derive insights from complex datasets. A collaborative team player with strong communication skills developed through competitive participation in Temple Taanam and the Badminton Club. Eager to apply analytical rigor and computational skills to solve real-world data challenges.',
     highlights: ['Statistical Methods', 'Algorithmic Approaches', 'Data Analysis', 'Temple Taanam', 'Badminton Club'],
+    logo: templeLogo,
   },
   {
     degree: 'High School Diploma',
@@ -20,6 +22,7 @@ const education = [
     period: 'Aug 2019 – Jun 2023',
     description: 'Maintained a high level of engagement across diverse academic and extracurricular platforms. As an active member of FBLA and Student Council, developed foundational skills in professional communication, project coordination, and peer advocacy. Commitment to versatility demonstrated through participation in Track and Field and Guitar Club, cultivating creative collaboration.',
     highlights: ['FBLA', 'Student Council', 'Track and Field', 'Guitar Club'],
+    logo: null,
   },
 ];
 
@@ -36,11 +39,17 @@ function EducationCard({ edu, index }: { edu: typeof education[0]; index: number
       className="bg-background rounded-2xl p-6 md:p-8 shadow-soft border border-border hover-lift"
     >
       <div className="flex flex-col md:flex-row gap-6">
-        {/* Logo placeholder box */}
+        {/* Logo box */}
         <div className="flex-shrink-0">
-          <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl border-2 border-dashed border-muted-foreground/30 bg-muted/20 flex items-center justify-center hover:border-primary/50 transition-colors">
-            <GraduationCap className="w-10 h-10 text-muted-foreground/50" />
-          </div>
+          {edu.logo ? (
+            <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl bg-white flex items-center justify-center p-2 border border-border">
+              <img src={edu.logo} alt={`${edu.institution} logo`} className="w-full h-full object-contain" />
+            </div>
+          ) : (
+            <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl border-2 border-dashed border-muted-foreground/30 bg-muted/20 flex items-center justify-center hover:border-primary/50 transition-colors">
+              <GraduationCap className="w-10 h-10 text-muted-foreground/50" />
+            </div>
+          )}
         </div>
 
         {/* Content */}
