@@ -4,13 +4,23 @@ import { useState } from 'react';
 const skillCategories = [
   {
     title: 'Programming Languages',
-    skills: ['Python', 'Java', 'SQL', 'JavaScript', 'TypeScript'],
+    skills: ['Python', 'Java', 'SQL', 'JavaScript', 'TypeScript', 'LaTeX'],
     color: 'hsl(220, 90%, 56%)', // Blue
   },
   {
     title: 'Frontend & Backend',
-    skills: ['React', 'Next.js', 'TailwindCSS', 'Node.js', 'MongoDB', 'PostgreSQL'],
+    skills: ['React', 'Next.js', 'TailwindCSS', 'Node.js', 'MongoDB', 'PostgreSQL', 'FastAPI'],
     color: 'hsl(142, 76%, 36%)', // Green
+  },
+  {
+    title: 'AI & Machine Learning',
+    skills: ['Machine Learning', 'Artificial Intelligence (AI)', 'Generative AI', 'AI Agents'],
+    color: 'hsl(280, 85%, 55%)', // Violet
+  },
+  {
+    title: 'Development Domains',
+    skills: ['Web Development', 'Application Development', 'Game Development'],
+    color: 'hsl(190, 90%, 45%)', // Cyan
   },
   {
     title: 'Tools & Platforms',
@@ -19,7 +29,7 @@ const skillCategories = [
   },
   {
     title: 'Core Competencies',
-    skills: ['Leadership', 'Decision Making', 'Time Management', 'Team Collaboration', 'Problem-solving'],
+    skills: ['Leadership', 'Decision Making', 'Time Management', 'Team Collaboration', 'Problem-solving', 'Cashiering'],
     color: 'hsl(25, 95%, 53%)', // Orange
   },
   {
