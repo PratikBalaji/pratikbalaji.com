@@ -1,6 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
-import { Mail, Phone, Send, Github, Linkedin, Twitter } from 'lucide-react';
+import { Mail, Phone, Send, Github, Linkedin, Instagram } from 'lucide-react';
 
 export default function Contact() {
   const ref = useRef(null);
@@ -21,8 +21,8 @@ export default function Contact() {
 
   const socials = [
     { icon: Github, href: 'https://github.com', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
-    { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
+    { icon: Linkedin, href: 'https://linkedin.com/in/pratikbalaji', label: 'LinkedIn' },
+    { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
   ];
 
   return (
