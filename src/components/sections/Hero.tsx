@@ -1,15 +1,33 @@
 import { motion } from 'framer-motion';
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useState, useEffect } from 'react';
+import WebGLFallback from '@/components/3d/WebGLFallback';
 
 const FloatingShapes = lazy(() => import('@/components/3d/FloatingShapes'));
 
 export default function Hero() {
+  const [useWebGL, setUseWebGL] = useState(false);
+
+  useEffect(() => {
+    // Check WebGL support
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      setUseWebGL(!!gl);
+    } catch {
+      setUseWebGL(false);
+    }
+  }, []);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* 3D Background */}
-      <Suspense fallback={null}>
-        <FloatingShapes />
-      </Suspense>
+      {/* 3D Background with fallback */}
+      {useWebGL ? (
+        <Suspense fallback={<WebGLFallback className="absolute inset-0 -z-10" variant="hero" />}>
+          <FloatingShapes />
+        </Suspense>
+      ) : (
+        <WebGLFallback className="absolute inset-0 -z-10" variant="hero" />
+      )}
       
       {/* Content */}
       <div className="container-tight relative z-10">

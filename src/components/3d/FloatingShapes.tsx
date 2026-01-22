@@ -1,7 +1,8 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, MeshTransmissionMaterial, Environment } from '@react-three/drei';
 import * as THREE from 'three';
+import WebGLFallback from './WebGLFallback';
 
 function Torus({ position, scale = 1 }: { position: [number, number, number]; scale?: number }) {
   const meshRef = useRef<THREE.Mesh>(null);
@@ -160,12 +161,37 @@ function Scene() {
 }
 
 export default function FloatingShapes() {
+  const [hasError, setHasError] = useState(false);
+  const [isWebGLSupported, setIsWebGLSupported] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      setIsWebGLSupported(!!gl);
+    } catch {
+      setIsWebGLSupported(false);
+    }
+  }, []);
+
+  if (isWebGLSupported === null) {
+    return <div className="absolute inset-0 -z-10" />;
+  }
+
+  if (!isWebGLSupported || hasError) {
+    return <WebGLFallback className="absolute inset-0 -z-10" variant="hero" />;
+  }
+
   return (
     <div className="absolute inset-0 -z-10">
       <Canvas
         camera={{ position: [0, 0, 10], fov: 45 }}
         dpr={[1, 2]}
-        gl={{ antialias: true, alpha: true }}
+        gl={{ antialias: true, alpha: true, powerPreference: 'low-power' }}
+        onCreated={({ gl }) => {
+          gl.setClearColor(0x000000, 0);
+        }}
+        onError={() => setHasError(true)}
       >
         <Scene />
       </Canvas>
