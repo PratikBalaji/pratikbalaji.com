@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
+import { ThemeToggle } from './ThemeToggle';
 
 export default function Navbar() {
   const navItems = [
@@ -45,12 +46,15 @@ export default function Navbar() {
             ))}
           </div>
           
-          <button
-            onClick={() => scrollToSection('#contact')}
-            className="px-5 py-2.5 bg-primary text-primary-foreground text-sm font-medium rounded-full hover:bg-primary/90 transition-colors"
-          >
-            Get in Touch
-          </button>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <button
+              onClick={() => scrollToSection('#contact')}
+              className="px-5 py-2.5 bg-primary text-primary-foreground text-sm font-medium rounded-full hover:bg-primary/90 transition-colors"
+            >
+              Get in Touch
+            </button>
+          </div>
         </div>
       </div>
     </motion.nav>
