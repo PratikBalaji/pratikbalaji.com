@@ -2,16 +2,20 @@ import { motion } from 'framer-motion';
 
 const skillCategories = [
   {
-    title: 'Frontend',
-    skills: ['React', 'TypeScript', 'Next.js', 'TailwindCSS', 'Three.js'],
+    title: 'Programming Languages',
+    skills: ['Python', 'Java', 'SQL', 'JavaScript', 'TypeScript'],
   },
   {
-    title: 'Backend',
-    skills: ['Node.js', 'Python', 'PostgreSQL', 'MongoDB', 'GraphQL'],
+    title: 'Frontend & Backend',
+    skills: ['React', 'Next.js', 'TailwindCSS', 'Node.js', 'MongoDB', 'PostgreSQL'],
   },
   {
-    title: 'Tools & DevOps',
-    skills: ['Git', 'Docker', 'AWS', 'CI/CD', 'Linux'],
+    title: 'Tools & Platforms',
+    skills: ['Git', 'Docker', 'AWS', 'Microsoft Office Suite', 'Customer Service Tools'],
+  },
+  {
+    title: 'Core Competencies',
+    skills: ['Leadership', 'Decision Making', 'Time Management', 'Team Collaboration', 'Problem-solving'],
   },
 ];
 
