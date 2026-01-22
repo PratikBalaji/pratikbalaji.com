@@ -17,6 +17,10 @@ const skillCategories = [
     title: 'Core Competencies',
     skills: ['Leadership', 'Decision Making', 'Time Management', 'Team Collaboration', 'Problem-solving'],
   },
+  {
+    title: 'Languages',
+    skills: ['Tamil (Fluent)', 'English (Fluent)', 'Hindi (Fluent)', 'Spanish (Novice)'],
+  },
 ];
 
 const allSkills = skillCategories.flatMap(cat => cat.skills);
