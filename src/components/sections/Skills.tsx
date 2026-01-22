@@ -1,7 +1,4 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef, Suspense, lazy } from 'react';
-
-const SkillsGlobe = lazy(() => import('@/components/3d/SkillsGlobe'));
+import { motion } from 'framer-motion';
 
 const skillCategories = [
   {
@@ -18,16 +15,16 @@ const skillCategories = [
   },
 ];
 
-export default function Skills() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+const allSkills = skillCategories.flatMap(cat => cat.skills);
 
+export default function Skills() {
   return (
-    <section id="skills" className="section-padding bg-secondary/30" ref={ref}>
+    <section id="skills" className="section-padding bg-secondary/30">
       <div className="container-tight">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
@@ -40,20 +37,79 @@ export default function Skills() {
         </motion.div>
         
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* 3D Globe */}
+          {/* Animated Globe Fallback - CSS only */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="order-2 lg:order-1"
+            className="order-2 lg:order-1 flex items-center justify-center"
           >
-            <Suspense fallback={
-              <div className="w-full h-[500px] bg-gradient-to-br from-secondary to-background rounded-3xl animate-pulse flex items-center justify-center">
-                <div className="w-32 h-32 rounded-full bg-foreground/10 animate-pulse" />
+            <div className="relative w-80 h-80">
+              {/* Rotating rings */}
+              <motion.div
+                animate={{ rotateY: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0"
+                style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
+              >
+                <div className="absolute inset-0 border-2 border-foreground/20 rounded-full" />
+              </motion.div>
+              <motion.div
+                animate={{ rotateX: 360 }}
+                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-8"
+              >
+                <div className="w-full h-full border border-foreground/15 rounded-full" />
+              </motion.div>
+              <motion.div
+                animate={{ rotate: -360 }}
+                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-16"
+              >
+                <div className="w-full h-full border border-foreground/10 rounded-full" />
+              </motion.div>
+              
+              {/* Skill nodes orbiting */}
+              {allSkills.slice(0, 8).map((skill, i) => {
+                const angle = (i / 8) * 360;
+                const radius = 130;
+                return (
+                  <motion.div
+                    key={skill}
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 30 + i * 2, repeat: Infinity, ease: "linear" }}
+                    className="absolute top-1/2 left-1/2"
+                    style={{ 
+                      width: radius * 2,
+                      height: radius * 2,
+                      marginLeft: -radius,
+                      marginTop: -radius
+                    }}
+                  >
+                    <div 
+                      className="absolute px-3 py-1.5 bg-background border border-border rounded-full text-xs font-medium shadow-sm"
+                      style={{
+                        top: '50%',
+                        left: '50%',
+                        transform: `rotate(${angle}deg) translateX(${radius}px) rotate(-${angle}deg) translate(-50%, -50%)`
+                      }}
+                    >
+                      {skill}
+                    </div>
+                  </motion.div>
+                );
+              })}
+              
+              {/* Center core */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <motion.div
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  className="w-16 h-16 bg-foreground rounded-full"
+                />
               </div>
-            }>
-              <SkillsGlobe />
-            </Suspense>
+            </div>
           </motion.div>
           
           {/* Skills List */}
@@ -62,7 +118,8 @@ export default function Skills() {
               <motion.div
                 key={category.title}
                 initial={{ opacity: 0, x: 50 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.6, delay: 0.3 + catIndex * 0.15 }}
               >
                 <h3 className="font-display text-xl font-bold mb-4">{category.title}</h3>
@@ -71,7 +128,8 @@ export default function Skills() {
                     <motion.span
                       key={skill}
                       initial={{ opacity: 0, scale: 0.8 }}
-                      animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
                       transition={{ duration: 0.4, delay: 0.4 + catIndex * 0.1 + skillIndex * 0.05 }}
                       whileHover={{ scale: 1.05, y: -2 }}
                       className="px-4 py-2 bg-background border border-border rounded-full text-sm font-medium shadow-soft cursor-default transition-shadow hover:shadow-medium"
