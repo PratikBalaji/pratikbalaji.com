@@ -47,11 +47,11 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="font-display text-5xl md:text-7xl lg:text-8xl font-bold leading-tight tracking-tight mb-6"
           >
-            Pratik builds
+            Pratik Balaji
             <br />
-            <span className="text-gradient">digital experiences</span>
+            <span className="text-gradient">builds digital</span>
             <br />
-            that matter.
+            experiences.
           </motion.h1>
           
           <motion.p
