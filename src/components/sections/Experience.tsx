@@ -1,6 +1,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Briefcase, Calendar, MapPin } from 'lucide-react';
+import yanItLogo from '@/assets/yan-it-logo.png';
 
 const experiences = [
   {
@@ -10,7 +11,7 @@ const experiences = [
     period: 'July 2025 – September 2025',
     description: 'Built Python pipelines to process IoT sensor data from MongoDB, monitor device health, and predict refill needs with machine learning (Linear Regression). Developed a FastAPI-based web service and dashboard (Chart.js) for real-time health status and refill trend visualization. Deployed solutions to Azure App Services with secure configuration and scalable design.',
     highlights: ['Python', 'MongoDB', 'FastAPI', 'Chart.js', 'Azure', 'Machine Learning'],
-    logo: null,
+    logo: yanItLogo,
   },
   {
     title: 'Customer Service Associate',
