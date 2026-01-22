@@ -4,28 +4,20 @@ import { Briefcase, Calendar, MapPin } from 'lucide-react';
 
 const experiences = [
   {
-    title: 'Software Developer',
-    company: 'Tech Company',
+    title: 'IoT Data Solutions Developer',
+    company: 'Yan IT Solution',
     location: 'Remote',
-    period: '2023 - Present',
-    description: 'Developing and maintaining full-stack applications using React, Node.js, and cloud technologies. Leading frontend architecture decisions and mentoring junior developers.',
-    highlights: ['React', 'TypeScript', 'Node.js', 'AWS'],
+    period: 'July 2025 – September 2025',
+    description: 'Built Python pipelines to process IoT sensor data from MongoDB, monitor device health, and predict refill needs with machine learning (Linear Regression). Developed a FastAPI-based web service and dashboard (Chart.js) for real-time health status and refill trend visualization. Deployed solutions to Azure App Services with secure configuration and scalable design.',
+    highlights: ['Python', 'MongoDB', 'FastAPI', 'Chart.js', 'Azure', 'Machine Learning'],
   },
   {
-    title: 'Frontend Developer',
-    company: 'Digital Agency',
-    location: 'New York, NY',
-    period: '2022 - 2023',
-    description: 'Built responsive web applications and interactive user interfaces. Collaborated with design teams to implement pixel-perfect designs.',
-    highlights: ['React', 'Vue.js', 'TailwindCSS', 'Figma'],
-  },
-  {
-    title: 'Junior Developer',
-    company: 'Startup Inc',
-    location: 'San Francisco, CA',
-    period: '2021 - 2022',
-    description: 'Started my journey in software development, working on various projects and learning best practices in modern web development.',
-    highlights: ['JavaScript', 'Python', 'PostgreSQL', 'Git'],
+    title: 'Customer Service Associate',
+    company: 'Regal Cinemas',
+    location: 'Downingtown, PA',
+    period: 'Aug 2023 – May 2024',
+    description: 'Operated registers for ticket and concession sales, maintaining accuracy and speed during peak hours. Prepared and served food while following strict health and safety regulations. Conducted theater inspections to maintain cleanliness, guest comfort, and safety standards.',
+    highlights: ['Customer Service', 'POS Systems', 'Food Safety', 'Team Collaboration'],
   },
 ];
 
