@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import Logo from './Logo';
 
 export default function Navbar() {
   const navItems = [
@@ -26,8 +27,9 @@ export default function Navbar() {
     >
       <div className="container-tight">
         <div className="flex items-center justify-between h-16 md:h-20">
-          <Link to="/" className="font-display text-xl font-bold tracking-tight">
-            Pratik
+          <Link to="/" className="flex items-center gap-3">
+            <Logo size="sm" />
+            <span className="font-display text-xl font-bold tracking-tight">Pratik Balaji</span>
           </Link>
           
           <div className="hidden md:flex items-center gap-8">

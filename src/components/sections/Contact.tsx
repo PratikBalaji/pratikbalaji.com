@@ -1,6 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
-import { Mail, MapPin, Send, Github, Linkedin, Twitter } from 'lucide-react';
+import { Mail, Phone, Send, Github, Linkedin, Twitter } from 'lucide-react';
 
 export default function Contact() {
   const ref = useRef(null);
@@ -69,15 +69,17 @@ export default function Contact() {
                 <div className="w-10 h-10 bg-primary-foreground/10 rounded-full flex items-center justify-center">
                   <Mail className="w-5 h-5" />
                 </div>
-                <a href="mailto:pratik@example.com" className="hover:underline">
-                  pratik@example.com
+                <a href="mailto:balajipratik8@gmail.com" className="hover:underline">
+                  balajipratik8@gmail.com
                 </a>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-primary-foreground/10 rounded-full flex items-center justify-center">
-                  <MapPin className="w-5 h-5" />
+                  <Phone className="w-5 h-5" />
                 </div>
-                <span>San Francisco, CA</span>
+                <a href="tel:+13464468717" className="hover:underline">
+                  (346) 446-8717
+                </a>
               </div>
             </motion.div>
             
