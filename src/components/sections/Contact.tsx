@@ -20,7 +20,7 @@ export default function Contact() {
   };
 
   const socials = [
-    { icon: Github, href: 'https://github.com', label: 'GitHub' },
+    { icon: Github, href: 'https://github.com/PratikBalaji', label: 'GitHub' },
     { icon: Linkedin, href: 'https://linkedin.com/in/pratikbalaji', label: 'LinkedIn' },
     { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
   ];
