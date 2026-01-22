@@ -2,6 +2,7 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Briefcase, Calendar, MapPin } from 'lucide-react';
 import yanItLogo from '@/assets/yan-it-logo.png';
+import regalLogo from '@/assets/regal-logo.png';
 
 const experiences = [
   {
@@ -20,7 +21,7 @@ const experiences = [
     period: 'Aug 2023 – May 2024',
     description: 'Operated registers for ticket and concession sales, maintaining accuracy and speed during peak hours. Prepared and served food while following strict health and safety regulations. Conducted theater inspections to maintain cleanliness, guest comfort, and safety standards.',
     highlights: ['Customer Service', 'POS Systems', 'Food Safety', 'Team Collaboration'],
-    logo: null,
+    logo: regalLogo,
   },
 ];
 
