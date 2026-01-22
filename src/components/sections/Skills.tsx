@@ -5,24 +5,34 @@ const skillCategories = [
   {
     title: 'Programming Languages',
     skills: ['Python', 'Java', 'SQL', 'JavaScript', 'TypeScript'],
+    color: 'hsl(220, 90%, 56%)', // Blue
   },
   {
     title: 'Frontend & Backend',
     skills: ['React', 'Next.js', 'TailwindCSS', 'Node.js', 'MongoDB', 'PostgreSQL'],
+    color: 'hsl(142, 76%, 36%)', // Green
   },
   {
     title: 'Tools & Platforms',
     skills: ['Git', 'Docker', 'AWS', 'Microsoft Office Suite', 'Customer Service Tools'],
+    color: 'hsl(262, 83%, 58%)', // Purple
   },
   {
     title: 'Core Competencies',
     skills: ['Leadership', 'Decision Making', 'Time Management', 'Team Collaboration', 'Problem-solving'],
+    color: 'hsl(25, 95%, 53%)', // Orange
   },
   {
     title: 'Languages',
     skills: ['Tamil (Fluent)', 'English (Fluent)', 'Hindi (Fluent)', 'Spanish (Novice)'],
+    color: 'hsl(340, 82%, 52%)', // Pink
   },
 ];
+
+const getActiveColor = (index: number | null) => {
+  if (index === null) return 'hsl(var(--foreground) / 0.2)';
+  return skillCategories[index].color;
+};
 
 export default function Skills() {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
@@ -59,28 +69,50 @@ export default function Skills() {
             className="order-2 lg:order-1 flex items-center justify-center"
           >
             <div className="relative w-80 h-80">
-              {/* Rotating rings */}
+              {/* Rotating rings with color transitions */}
               <motion.div
                 animate={{ rotateY: 360 }}
                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                 className="absolute inset-0"
                 style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
               >
-                <div className="absolute inset-0 border-2 border-foreground/20 rounded-full" />
+                <motion.div 
+                  className="absolute inset-0 border-2 rounded-full transition-colors duration-500"
+                  style={{ borderColor: getActiveColor(selectedCategory) }}
+                  animate={{ 
+                    boxShadow: selectedCategory !== null 
+                      ? `0 0 20px ${getActiveColor(selectedCategory)}40` 
+                      : 'none'
+                  }}
+                />
               </motion.div>
               <motion.div
                 animate={{ rotateX: 360 }}
                 transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
                 className="absolute inset-8"
               >
-                <div className="w-full h-full border border-foreground/15 rounded-full" />
+                <motion.div 
+                  className="w-full h-full border rounded-full transition-colors duration-500"
+                  style={{ 
+                    borderColor: selectedCategory !== null 
+                      ? `${getActiveColor(selectedCategory)}99` 
+                      : 'hsl(var(--foreground) / 0.15)'
+                  }}
+                />
               </motion.div>
               <motion.div
                 animate={{ rotate: -360 }}
                 transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
                 className="absolute inset-16"
               >
-                <div className="w-full h-full border border-foreground/10 rounded-full" />
+                <motion.div 
+                  className="w-full h-full border rounded-full transition-colors duration-500"
+                  style={{ 
+                    borderColor: selectedCategory !== null 
+                      ? `${getActiveColor(selectedCategory)}66` 
+                      : 'hsl(var(--foreground) / 0.1)'
+                  }}
+                />
               </motion.div>
               
               {/* Skill nodes orbiting - only show when a category is selected */}
@@ -135,9 +167,22 @@ export default function Skills() {
               {/* Center core with prompt text */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <motion.div
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  className="w-20 h-20 bg-foreground rounded-full flex items-center justify-center"
+                  animate={{ 
+                    scale: [1, 1.1, 1],
+                    backgroundColor: selectedCategory !== null 
+                      ? getActiveColor(selectedCategory)
+                      : 'hsl(var(--foreground))'
+                  }}
+                  transition={{ 
+                    scale: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+                    backgroundColor: { duration: 0.5 }
+                  }}
+                  className="w-20 h-20 rounded-full flex items-center justify-center"
+                  style={{
+                    boxShadow: selectedCategory !== null 
+                      ? `0 0 30px ${getActiveColor(selectedCategory)}60`
+                      : 'none'
+                  }}
                 >
                   {selectedCategory === null && (
                     <span className="text-background text-[10px] font-medium text-center px-1">
