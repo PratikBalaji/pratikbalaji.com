@@ -19,7 +19,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black text-white">
       {/* 3D Background with fallback */}
       {useWebGL ? (
         <Suspense fallback={<WebGLFallback className="absolute inset-0 -z-10" variant="hero" />}>
@@ -36,7 +36,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-sm md:text-base font-medium text-muted-foreground mb-4 uppercase tracking-widest"
+            className="text-sm md:text-base font-medium text-white/60 mb-4 uppercase tracking-widest"
           >
             Software Developer & Problem Solver
           </motion.p>
@@ -58,7 +58,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
+            className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto mb-10"
           >
             A passionate software developer specializing in creating elegant solutions
             and building innovative applications that push boundaries.
@@ -78,7 +78,7 @@ export default function Hero() {
             </button>
             <button
               onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="px-8 py-4 border border-border font-medium rounded-full hover:bg-secondary transition-all hover:scale-105"
+              className="px-8 py-4 border border-white/20 font-medium rounded-full hover:bg-white/10 transition-all hover:scale-105"
             >
               Get in Touch
             </button>
