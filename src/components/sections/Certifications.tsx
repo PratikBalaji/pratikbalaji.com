@@ -33,14 +33,14 @@ const certifications = [
     title: 'Intro to Data Science',
     issuer: 'Santander',
     year: '2024',
-    credentialId: 'SAN-DS-2024-XXXX',
+    credentialId: 'OA-2024-1204000684994',
     logo: santanderLogo,
   },
   {
     title: 'AI & Productivity',
     issuer: 'Google',
     year: '2024',
-    credentialId: 'GOOG-AIP-2024-XXXX',
+    credentialId: 'OA-2025-0205000790283',
     logo: googleLogo,
   },
   {
