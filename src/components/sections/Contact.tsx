@@ -9,10 +9,17 @@ export default function Contact() {
   const contactInfo = [
     { 
       icon: Mail, 
-      label: 'Email', 
+      label: 'Personal Email', 
       value: 'balajipratik8@gmail.com', 
       href: 'mailto:balajipratik8@gmail.com',
       color: 'from-rose-500 to-pink-600'
+    },
+    { 
+      icon: Mail, 
+      label: 'School Email', 
+      value: 'tur47507@temple.edu', 
+      href: 'mailto:tur47507@temple.edu',
+      color: 'from-red-600 to-rose-700'
     },
     { 
       icon: Phone, 
@@ -88,12 +95,11 @@ export default function Contact() {
           </motion.p>
         </div>
 
-        {/* Contact Cards */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="grid md:grid-cols-3 gap-6 mb-16"
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
         >
           {contactInfo.map((info, index) => (
             <motion.div
