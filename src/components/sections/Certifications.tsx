@@ -1,85 +1,78 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
-import { Award, ExternalLink } from 'lucide-react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { useRef, useState } from 'react';
 import whitehatjrLogo from '@/assets/whitehatjr-logo.png';
 import santanderLogo from '@/assets/santander-logo.png';
 import googleLogo from '@/assets/google-logo.png';
 import databricksLogo from '@/assets/databricks-logo.png';
 import outskillLogo from '@/assets/outskill-logo.png';
 
+type Category = 'All' | 'AI' | 'Development' | 'Data Science';
+
+const categories: Category[] = ['All', 'AI', 'Development', 'Data Science'];
+
 const certifications = [
   {
     title: 'Android/iOS Development',
     issuer: 'White Hat Jr',
-    year: '2020',
-    credentialId: 'WHJ-AID-2020-XXXX',
     logo: whitehatjrLogo,
+    category: 'Development' as Category,
   },
   {
     title: 'Game Development',
     issuer: 'White Hat Jr',
-    year: '2020',
-    credentialId: 'WHJ-GD-2020-XXXX',
     logo: whitehatjrLogo,
+    category: 'Development' as Category,
   },
   {
     title: 'Python Certification',
     issuer: 'Santander',
-    year: '2024',
-    credentialId: 'SAN-PY-2024-XXXX',
     logo: santanderLogo,
+    category: 'Development' as Category,
   },
   {
     title: 'Intro to Data Science',
     issuer: 'Santander',
-    year: '2024',
-    credentialId: 'OA-2024-1204000684994',
     logo: santanderLogo,
+    category: 'Data Science' as Category,
   },
   {
     title: 'AI & Productivity',
     issuer: 'Google',
-    year: '2024',
-    credentialId: 'OA-2025-0205000790283',
     logo: googleLogo,
+    category: 'AI' as Category,
   },
   {
     title: 'Generative AI',
     issuer: 'Santander',
-    year: '2025',
-    credentialId: 'SAN-GAI-2025-XXXX',
     logo: santanderLogo,
+    category: 'AI' as Category,
   },
   {
     title: 'Gen AI Fundamentals',
     issuer: 'Databricks',
-    year: '2025',
-    credentialId: 'DBX-GAI-2025-XXXX',
     logo: databricksLogo,
+    category: 'AI' as Category,
   },
   {
     title: 'Generative AI Mastermind Certificate',
     issuer: 'Outskill',
-    year: '2025',
-    credentialId: 'OSK-GAIM-2025-XXXX',
     logo: outskillLogo,
+    category: 'AI' as Category,
   },
 ];
 
 function CertificationCard({ certification, index }: { certification: typeof certifications[0]; index: number }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      layout
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.3, delay: index * 0.05 }}
       className="group"
     >
       <div className="bg-background rounded-2xl p-6 shadow-soft border border-border hover-lift h-full flex flex-col">
-        <div className="flex items-start gap-4 mb-4">
+        <div className="flex items-start gap-4">
           {/* Logo */}
           <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-white flex items-center justify-center p-2 border border-border overflow-hidden">
             <img 
@@ -97,7 +90,6 @@ function CertificationCard({ certification, index }: { certification: typeof cer
             <p className="text-muted-foreground text-sm">{certification.issuer}</p>
           </div>
         </div>
-        
       </div>
     </motion.div>
   );
@@ -106,6 +98,11 @@ function CertificationCard({ certification, index }: { certification: typeof cer
 export default function Certifications() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [activeCategory, setActiveCategory] = useState<Category>('All');
+
+  const filteredCertifications = activeCategory === 'All' 
+    ? certifications 
+    : certifications.filter(cert => cert.category === activeCategory);
 
   return (
     <section id="certifications" className="section-padding bg-secondary/30" ref={ref}>
@@ -114,7 +111,7 @@ export default function Certifications() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest mb-4">
             Professional Development
@@ -123,12 +120,40 @@ export default function Certifications() {
             Certifications
           </h2>
         </motion.div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {certifications.map((certification, index) => (
-            <CertificationCard key={certification.title + certification.issuer} certification={certification} index={index} />
+
+        {/* Filter Tabs */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex flex-wrap justify-center gap-2 mb-10"
+        >
+          {categories.map((category) => (
+            <button
+              key={category}
+              onClick={() => setActiveCategory(category)}
+              className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                activeCategory === category
+                  ? 'bg-primary text-primary-foreground shadow-md'
+                  : 'bg-background border border-border text-muted-foreground hover:text-foreground hover:border-primary/50'
+              }`}
+            >
+              {category}
+            </button>
           ))}
-        </div>
+        </motion.div>
+        
+        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <AnimatePresence mode="popLayout">
+            {filteredCertifications.map((certification, index) => (
+              <CertificationCard 
+                key={certification.title + certification.issuer} 
+                certification={certification} 
+                index={index} 
+              />
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   );
