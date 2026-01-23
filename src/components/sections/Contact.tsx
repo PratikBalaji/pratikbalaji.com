@@ -169,17 +169,6 @@ export default function Contact() {
           </div>
         </motion.div>
 
-        {/* Decorative element */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 1, delay: 0.8 }}
-          className="mt-16 text-center"
-        >
-          <p className="text-white/40 text-sm">
-            Looking forward to hearing from you! 🚀
-          </p>
-        </motion.div>
       </div>
     </section>
   );
