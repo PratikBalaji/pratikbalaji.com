@@ -62,7 +62,7 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" className="section-padding bg-primary text-primary-foreground" ref={ref}>
+    <section id="contact" className="section-padding bg-black text-white" ref={ref}>
       <div className="container-tight">
         {/* Header */}
         <div className="text-center mb-16">
@@ -70,7 +70,7 @@ export default function Contact() {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
-            className="text-sm font-medium text-primary-foreground/60 uppercase tracking-widest mb-4"
+            className="text-sm font-medium text-white/60 uppercase tracking-widest mb-4"
           >
             Get in Touch
           </motion.p>
@@ -88,7 +88,7 @@ export default function Contact() {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg text-primary-foreground/70 max-w-2xl mx-auto"
+            className="text-lg text-white/70 max-w-2xl mx-auto"
           >
             I'm always excited to connect with new people and explore opportunities.
             Whether you have a project in mind or just want to say hello, feel free to reach out.
@@ -112,20 +112,20 @@ export default function Contact() {
               {info.href ? (
                 <a 
                   href={info.href}
-                  className="block bg-primary-foreground/5 backdrop-blur border border-primary-foreground/10 rounded-2xl p-6 hover:bg-primary-foreground/10 transition-all duration-300 hover:-translate-y-1"
+                  className="block bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 hover:-translate-y-1"
                 >
                   <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${info.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                     <info.icon className="w-7 h-7 text-white" />
                   </div>
-                  <p className="text-sm text-primary-foreground/60 mb-1">{info.label}</p>
+                  <p className="text-sm text-white/60 mb-1">{info.label}</p>
                   <p className="font-semibold text-lg">{info.value}</p>
                 </a>
               ) : (
-                <div className="block bg-primary-foreground/5 backdrop-blur border border-primary-foreground/10 rounded-2xl p-6">
+                <div className="block bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6">
                   <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${info.color} flex items-center justify-center mb-4`}>
                     <info.icon className="w-7 h-7 text-white" />
                   </div>
-                  <p className="text-sm text-primary-foreground/60 mb-1">{info.label}</p>
+                  <p className="text-sm text-white/60 mb-1">{info.label}</p>
                   <p className="font-semibold text-lg">{info.value}</p>
                 </div>
               )}
@@ -154,14 +154,14 @@ export default function Contact() {
                 transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`group flex items-center gap-4 px-6 py-4 bg-primary-foreground/5 border border-primary-foreground/20 rounded-2xl transition-all duration-300 ${social.color} hover:text-white`}
+                className={`group flex items-center gap-4 px-6 py-4 bg-white/5 border border-white/20 rounded-2xl transition-all duration-300 ${social.color} hover:text-white`}
               >
-                <div className="w-12 h-12 rounded-xl bg-primary-foreground/10 group-hover:bg-white/20 flex items-center justify-center transition-colors">
+                <div className="w-12 h-12 rounded-xl bg-white/10 group-hover:bg-white/20 flex items-center justify-center transition-colors">
                   <social.icon className="w-6 h-6" />
                 </div>
                 <div className="text-left">
                   <p className="font-semibold">{social.label}</p>
-                  <p className="text-sm text-primary-foreground/60 group-hover:text-white/70">{social.description}</p>
+                  <p className="text-sm text-white/60 group-hover:text-white/70">{social.description}</p>
                 </div>
                 <ArrowUpRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity -mr-1" />
               </motion.a>
@@ -176,7 +176,7 @@ export default function Contact() {
           transition={{ duration: 1, delay: 0.8 }}
           className="mt-16 text-center"
         >
-          <p className="text-primary-foreground/40 text-sm">
+          <p className="text-white/40 text-sm">
             Looking forward to hearing from you! 🚀
           </p>
         </motion.div>
