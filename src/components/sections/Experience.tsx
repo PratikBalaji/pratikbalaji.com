@@ -6,6 +6,16 @@ import regalLogo from '@/assets/regal-logo.png';
 
 const experiences = [
   {
+    title: 'DJ Assistant',
+    company: 'Nataraj Beats',
+    location: 'Philadelphia, PA',
+    period: 'Mar 2025 – Present',
+    description: 'Supported live event setup, including sound system configuration, lighting, and playlist coordination. Assisted with mixing tracks and crowd engagement, enhancing the overall entertainment experience. Designed and launched a professional website for Nataraj Beats to showcase their services and enhance client engagement.',
+    highlights: ['Live Events', 'Sound Systems', 'Web Development', 'Client Engagement'],
+    logo: undefined,
+    link: 'https://natarajbeats.com/',
+  },
+  {
     title: 'IoT Data Solutions Developer',
     company: 'Yan IT Solution',
     location: 'Remote',
