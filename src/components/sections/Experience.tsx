@@ -1,15 +1,27 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Briefcase, MapPin, Calendar } from 'lucide-react';
+import { Briefcase, Calendar, MapPin } from 'lucide-react';
+import yanItLogo from '@/assets/yan-it-logo.png';
+import regalLogo from '@/assets/regal-logo.png';
 
 const experiences = [
   {
-    title: 'Software Developer Intern',
-    company: 'Tech Company',
-    location: 'Philadelphia, PA',
-    period: 'Summer 2024',
-    description: 'Developed and maintained web applications using modern technologies.',
-    highlights: ['React', 'TypeScript', 'Node.js'],
+    title: 'IoT Data Solutions Developer',
+    company: 'Yan IT Solution',
+    location: 'Remote',
+    period: 'July 2025 – September 2025',
+    description: 'Built Python pipelines to process IoT sensor data from MongoDB, monitor device health, and predict refill needs with machine learning (Linear Regression). Developed a FastAPI-based web service and dashboard (Chart.js) for real-time health status and refill trend visualization. Deployed solutions to Azure App Services with secure configuration and scalable design.',
+    highlights: ['Python', 'MongoDB', 'FastAPI', 'Chart.js', 'Azure', 'Machine Learning'],
+    logo: yanItLogo,
+  },
+  {
+    title: 'Customer Service Associate',
+    company: 'Regal Cinemas',
+    location: 'Downingtown, PA',
+    period: 'Aug 2023 – May 2024',
+    description: 'Operated registers for ticket and concession sales, maintaining accuracy and speed during peak hours. Prepared and served food while following strict health and safety regulations. Conducted theater inspections to maintain cleanliness, guest comfort, and safety standards.',
+    highlights: ['Customer Service', 'POS Systems', 'Food Safety', 'Team Collaboration'],
+    logo: regalLogo,
   },
 ];
 
@@ -20,80 +32,104 @@ function ExperienceCard({ experience, index }: { experience: typeof experiences[
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="relative bg-card rounded-2xl p-6 md:p-8 border border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg"
+      initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+      animate={isInView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.6, delay: index * 0.15 }}
+      className="relative"
     >
-      <div className="flex items-start gap-4">
-        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-          <Briefcase className="w-6 h-6 text-primary" />
-        </div>
-        
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-            <Calendar className="w-4 h-4" />
-            <span>{experience.period}</span>
-          </div>
-          
-          <h3 className="text-xl font-bold text-foreground mb-1">
-            {experience.title}
-          </h3>
-          
-          <div className="flex items-center gap-2 text-muted-foreground mb-3">
-            <span className="font-medium">{experience.company}</span>
-            <span>•</span>
-            <div className="flex items-center gap-1">
-              <MapPin className="w-3 h-3" />
-              <span className="text-sm">{experience.location}</span>
+      {/* Timeline line */}
+      <div className="absolute left-0 top-0 bottom-0 w-px bg-border hidden lg:block" style={{ left: '50%' }} />
+      
+      <div className={`lg:grid lg:grid-cols-2 lg:gap-12 ${index % 2 === 0 ? '' : 'lg:flex-row-reverse'}`}>
+        {/* Content */}
+        <div className={`${index % 2 === 0 ? 'lg:text-right lg:pr-12' : 'lg:col-start-2 lg:pl-12'}`}>
+          <div className="bg-background rounded-2xl p-6 md:p-8 shadow-soft border border-border hover-lift">
+            <div className="flex flex-col md:flex-row gap-6">
+              {/* Logo box */}
+              <div className="flex-shrink-0">
+                {experience.logo ? (
+                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl bg-white flex items-center justify-center p-2 border border-border">
+                    <img src={experience.logo} alt={`${experience.company} logo`} className="w-full h-full object-contain" />
+                  </div>
+                ) : (
+                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl border-2 border-dashed border-muted-foreground/30 bg-muted/20 flex items-center justify-center hover:border-primary/50 transition-colors">
+                    <Briefcase className="w-8 h-8 text-muted-foreground/50" />
+                  </div>
+                )}
+              </div>
+
+              {/* Text content */}
+              <div className="flex-1">
+                <div className="flex items-center gap-2 text-muted-foreground text-sm mb-2">
+                  <Calendar className="w-4 h-4" />
+                  <span>{experience.period}</span>
+                </div>
+                
+                <h3 className="font-display text-xl md:text-2xl font-bold mb-1">
+                  {experience.title}
+                </h3>
+                
+                <div className="flex items-center gap-4 text-muted-foreground mb-4">
+                  <div className="flex items-center gap-1.5">
+                    <Briefcase className="w-4 h-4" />
+                    <span>{experience.company}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <MapPin className="w-4 h-4" />
+                    <span>{experience.location}</span>
+                  </div>
+                </div>
+                
+                <p className="text-muted-foreground mb-4">
+                  {experience.description}
+                </p>
+                
+                <div className="flex flex-wrap gap-2">
+                  {experience.highlights.map((highlight) => (
+                    <span
+                      key={highlight}
+                      className="px-3 py-1 bg-secondary text-secondary-foreground text-sm rounded-full"
+                    >
+                      {highlight}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
-          
-          <p className="text-muted-foreground mb-4">
-            {experience.description}
-          </p>
-          
-          <div className="flex flex-wrap gap-2">
-            {experience.highlights.map((highlight, i) => (
-              <span
-                key={i}
-                className="px-3 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-full"
-              >
-                {highlight}
-              </span>
-            ))}
-          </div>
         </div>
+        
+        {/* Timeline dot */}
+        <div className="hidden lg:flex absolute left-1/2 top-8 -translate-x-1/2 w-4 h-4 bg-primary rounded-full border-4 border-background" />
       </div>
     </motion.div>
   );
 }
 
 export default function Experience() {
-  const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="experience" className="py-20 md:py-32 bg-background">
+    <section id="experience" className="section-padding" ref={ref}>
       <div className="container-tight">
         <motion.div
-          ref={sectionRef}
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-12 md:mb-16"
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
-            Experience
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Professional experience and internships
+          <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest mb-4">
+            Career Journey
           </p>
+          <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight">
+            Work Experience
+          </h2>
         </motion.div>
-
-        <div className="space-y-6">
+        
+        <div className="space-y-8 lg:space-y-12 relative">
           {experiences.map((experience, index) => (
-            <ExperienceCard key={index} experience={experience} index={index} />
+            <ExperienceCard key={experience.title} experience={experience} index={index} />
           ))}
         </div>
       </div>
