@@ -1,6 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Award, ExternalLink, Hash } from 'lucide-react';
+import { Award, ExternalLink } from 'lucide-react';
 import whitehatjrLogo from '@/assets/whitehatjr-logo.png';
 import santanderLogo from '@/assets/santander-logo.png';
 import googleLogo from '@/assets/google-logo.png';
@@ -98,15 +98,6 @@ function CertificationCard({ certification, index }: { certification: typeof cer
           </div>
         </div>
         
-        {/* Details */}
-        <div className="mt-auto">
-          <div className="flex items-center gap-2 text-sm">
-            <Hash className="w-4 h-4 text-muted-foreground" />
-            <span className="font-mono text-xs bg-secondary px-2 py-1 rounded">
-              {certification.credentialId}
-            </span>
-          </div>
-        </div>
       </div>
     </motion.div>
   );
