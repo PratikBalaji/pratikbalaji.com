@@ -59,13 +59,6 @@ export default function Contact() {
       color: 'hover:bg-[#0077B5] hover:border-[#0077B5]',
       description: 'Let\'s connect professionally'
     },
-    { 
-      icon: Mail, 
-      href: 'mailto:balajipratik8@gmail.com', 
-      label: 'Email',
-      color: 'hover:bg-rose-500 hover:border-rose-500',
-      description: 'Send me a message'
-    },
   ];
 
   return (
