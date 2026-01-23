@@ -123,7 +123,7 @@ export default function Experience() {
             Career Journey
           </p>
           <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight">
-            Work Experience
+            Experience
           </h2>
         </motion.div>
         
