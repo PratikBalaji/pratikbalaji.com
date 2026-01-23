@@ -1,173 +1,179 @@
 import { motion, useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
-import { Mail, Phone, Send, Github, Linkedin } from 'lucide-react';
+import { useRef } from 'react';
+import { Mail, Phone, MapPin, Github, Linkedin, ArrowUpRight } from 'lucide-react';
 
 export default function Contact() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
-    // Reset form
-    setFormData({ name: '', email: '', message: '' });
-  };
+  const contactInfo = [
+    { 
+      icon: Mail, 
+      label: 'Email', 
+      value: 'balajipratik8@gmail.com', 
+      href: 'mailto:balajipratik8@gmail.com',
+      color: 'from-rose-500 to-pink-600'
+    },
+    { 
+      icon: Phone, 
+      label: 'Phone', 
+      value: '(346) 446-8717', 
+      href: 'tel:+13464468717',
+      color: 'from-emerald-500 to-teal-600'
+    },
+    { 
+      icon: MapPin, 
+      label: 'Location', 
+      value: 'Philadelphia, PA', 
+      href: null,
+      color: 'from-amber-500 to-orange-600'
+    },
+  ];
 
   const socials = [
-    { icon: Github, href: 'https://github.com/PratikBalaji', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://linkedin.com/in/pratikbalaji', label: 'LinkedIn' },
-    { icon: Mail, href: 'mailto:balajipratik8@gmail.com', label: 'Email' },
+    { 
+      icon: Github, 
+      href: 'https://github.com/PratikBalaji', 
+      label: 'GitHub',
+      color: 'hover:bg-[#333] hover:border-[#333]',
+      description: 'Check out my projects'
+    },
+    { 
+      icon: Linkedin, 
+      href: 'https://linkedin.com/in/pratikbalaji', 
+      label: 'LinkedIn',
+      color: 'hover:bg-[#0077B5] hover:border-[#0077B5]',
+      description: 'Let\'s connect professionally'
+    },
+    { 
+      icon: Mail, 
+      href: 'mailto:balajipratik8@gmail.com', 
+      label: 'Email',
+      color: 'hover:bg-rose-500 hover:border-rose-500',
+      description: 'Send me a message'
+    },
   ];
 
   return (
     <section id="contact" className="section-padding bg-primary text-primary-foreground" ref={ref}>
       <div className="container-tight">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
-          {/* Left side */}
-          <div>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6 }}
-              className="text-sm font-medium text-primary-foreground/60 uppercase tracking-widest mb-4"
-            >
-              Get in Touch
-            </motion.p>
-            
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-6"
-            >
-              Let's work together on something great.
-            </motion.h2>
-            
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg text-primary-foreground/70 mb-8"
-            >
-              I'm always excited to connect with new people and explore opportunities.
-              Whether you have a project in mind or just want to say hello, feel free to reach out.
-            </motion.p>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="space-y-4 mb-8"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-primary-foreground/10 rounded-full flex items-center justify-center">
-                  <Mail className="w-5 h-5" />
-                </div>
-                <a href="mailto:balajipratik8@gmail.com" className="hover:underline">
-                  balajipratik8@gmail.com
-                </a>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-primary-foreground/10 rounded-full flex items-center justify-center">
-                  <Phone className="w-5 h-5" />
-                </div>
-                <a href="tel:+13464468717" className="hover:underline">
-                  (346) 446-8717
-                </a>
-              </div>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="flex gap-4"
-            >
-              {socials.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  className="w-12 h-12 bg-primary-foreground/10 rounded-full flex items-center justify-center hover:bg-primary-foreground/20 transition-colors"
-                  aria-label={social.label}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <social.icon className="w-5 h-5" />
-                </a>
-              ))}
-            </motion.div>
-          </div>
-          
-          {/* Right side - Form */}
-          <motion.form
-            initial={{ opacity: 0, x: 50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            onSubmit={handleSubmit}
-            className="bg-primary-foreground/5 backdrop-blur rounded-2xl p-6 md:p-8"
+        {/* Header */}
+        <div className="text-center mb-16">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            className="text-sm font-medium text-primary-foreground/60 uppercase tracking-widest mb-4"
           >
-            <div className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg focus:outline-none focus:border-primary-foreground/40 transition-colors placeholder:text-primary-foreground/40"
-                  placeholder="Your name"
-                  required
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg focus:outline-none focus:border-primary-foreground/40 transition-colors placeholder:text-primary-foreground/40"
-                  placeholder="your@email.com"
-                  required
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium mb-2">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  rows={5}
-                  className="w-full px-4 py-3 bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg focus:outline-none focus:border-primary-foreground/40 transition-colors placeholder:text-primary-foreground/40 resize-none"
-                  placeholder="Tell me about your project..."
-                  required
-                />
-              </div>
-              
-              <button
-                type="submit"
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-primary-foreground text-primary font-medium rounded-lg hover:bg-primary-foreground/90 transition-colors"
-              >
-                <Send className="w-5 h-5" />
-                Send Message
-              </button>
-            </div>
-          </motion.form>
+            Get in Touch
+          </motion.p>
+          
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-6"
+          >
+            Let's Connect
+          </motion.h2>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-lg text-primary-foreground/70 max-w-2xl mx-auto"
+          >
+            I'm always excited to connect with new people and explore opportunities.
+            Whether you have a project in mind or just want to say hello, feel free to reach out.
+          </motion.p>
         </div>
+
+        {/* Contact Cards */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="grid md:grid-cols-3 gap-6 mb-16"
+        >
+          {contactInfo.map((info, index) => (
+            <motion.div
+              key={info.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+              className="group"
+            >
+              {info.href ? (
+                <a 
+                  href={info.href}
+                  className="block bg-primary-foreground/5 backdrop-blur border border-primary-foreground/10 rounded-2xl p-6 hover:bg-primary-foreground/10 transition-all duration-300 hover:-translate-y-1"
+                >
+                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${info.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                    <info.icon className="w-7 h-7 text-white" />
+                  </div>
+                  <p className="text-sm text-primary-foreground/60 mb-1">{info.label}</p>
+                  <p className="font-semibold text-lg">{info.value}</p>
+                </a>
+              ) : (
+                <div className="block bg-primary-foreground/5 backdrop-blur border border-primary-foreground/10 rounded-2xl p-6">
+                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${info.color} flex items-center justify-center mb-4`}>
+                    <info.icon className="w-7 h-7 text-white" />
+                  </div>
+                  <p className="text-sm text-primary-foreground/60 mb-1">{info.label}</p>
+                  <p className="font-semibold text-lg">{info.value}</p>
+                </div>
+              )}
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Social Links */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="text-center"
+        >
+          <h3 className="font-display text-2xl font-bold mb-8">Find Me Online</h3>
+          
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+            {socials.map((social, index) => (
+              <motion.a
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`group flex items-center gap-4 px-6 py-4 bg-primary-foreground/5 border border-primary-foreground/20 rounded-2xl transition-all duration-300 ${social.color} hover:text-white`}
+              >
+                <div className="w-12 h-12 rounded-xl bg-primary-foreground/10 group-hover:bg-white/20 flex items-center justify-center transition-colors">
+                  <social.icon className="w-6 h-6" />
+                </div>
+                <div className="text-left">
+                  <p className="font-semibold">{social.label}</p>
+                  <p className="text-sm text-primary-foreground/60 group-hover:text-white/70">{social.description}</p>
+                </div>
+                <ArrowUpRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity -mr-1" />
+              </motion.a>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Decorative element */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ duration: 1, delay: 0.8 }}
+          className="mt-16 text-center"
+        >
+          <p className="text-primary-foreground/40 text-sm">
+            Looking forward to hearing from you! 🚀
+          </p>
+        </motion.div>
       </div>
     </section>
   );
