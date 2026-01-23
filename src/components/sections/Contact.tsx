@@ -1,6 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Mail, Phone, MapPin, ArrowUpRight } from 'lucide-react';
+import { Mail, Phone, MapPin, ArrowUpRight, Download } from 'lucide-react';
 
 // Official GitHub Logo Component
 const GitHubLogo = ({ className }: { className?: string }) => (
@@ -140,7 +140,7 @@ export default function Contact() {
           ))}
         </motion.div>
 
-        {/* Social Links */}
+        {/* Social Links & Resume */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -149,7 +149,7 @@ export default function Contact() {
         >
           <h3 className="font-display text-2xl font-bold mb-8">Find Me Online</h3>
           
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-8">
             {socials.map((social, index) => (
               <motion.a
                 key={social.label}
@@ -174,6 +174,21 @@ export default function Contact() {
               </motion.a>
             ))}
           </div>
+
+          {/* Download Resume Button */}
+          <motion.a
+            href="/PratikBalaji-Resume.pdf"
+            download="PratikBalaji-Resume.pdf"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.8 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-semibold rounded-2xl transition-all duration-300 shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40"
+          >
+            <Download className="w-5 h-5" />
+            Download Resume
+          </motion.a>
         </motion.div>
 
       </div>
