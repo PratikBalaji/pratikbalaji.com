@@ -3,18 +3,9 @@ import { useRef } from 'react';
 import { Briefcase, Calendar, MapPin } from 'lucide-react';
 import yanItLogo from '@/assets/yan-it-logo.png';
 import regalLogo from '@/assets/regal-logo.png';
+import natarajBeatsLogo from '@/assets/nataraj-beats-logo.png';
 
 const experiences = [
-  {
-    title: 'DJ Assistant',
-    company: 'Nataraj Beats',
-    location: 'Philadelphia, PA',
-    period: 'Mar 2025 – Present',
-    description: 'Supported live event setup, including sound system configuration, lighting, and playlist coordination. Assisted with mixing tracks and crowd engagement, enhancing the overall entertainment experience. Designed and launched a professional website for Nataraj Beats to showcase their services and enhance client engagement.',
-    highlights: ['Live Events', 'Sound Systems', 'Web Development', 'Client Engagement'],
-    logo: undefined,
-    link: 'https://natarajbeats.com/',
-  },
   {
     title: 'IoT Data Solutions Developer',
     company: 'Yan IT Solution',
@@ -23,6 +14,16 @@ const experiences = [
     description: 'Built Python pipelines to process IoT sensor data from MongoDB, monitor device health, and predict refill needs with machine learning (Linear Regression). Developed a FastAPI-based web service and dashboard (Chart.js) for real-time health status and refill trend visualization. Deployed solutions to Azure App Services with secure configuration and scalable design.',
     highlights: ['Python', 'MongoDB', 'FastAPI', 'Chart.js', 'Azure', 'Machine Learning'],
     logo: yanItLogo,
+  },
+  {
+    title: 'DJ Assistant',
+    company: 'Nataraj Beats',
+    location: 'Philadelphia, PA',
+    period: 'Mar 2025 – December 2025',
+    description: 'Supported live event setup, including sound system configuration, lighting, and playlist coordination. Assisted with mixing tracks and crowd engagement, enhancing the overall entertainment experience. Designed and launched a professional website for Nataraj Beats to showcase their services and enhance client engagement.',
+    highlights: ['Live Events', 'Sound Systems', 'Web Development', 'Client Engagement'],
+    logo: natarajBeatsLogo,
+    link: 'https://natarajbeats.com/',
   },
   {
     title: 'Customer Service Associate',
