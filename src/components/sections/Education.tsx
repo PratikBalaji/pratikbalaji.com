@@ -11,8 +11,8 @@ const education = [
     institution: 'Temple University',
     location: 'Philadelphia, PA',
     period: 'January 2026 – Present',
-    description: 'Data science undergraduate at Temple University with a concentration in Computational Analytics. Technically proficient in leveraging statistical methods and algorithmic approaches to derive insights from complex datasets. A collaborative team player with strong communication skills developed through competitive participation in Temple Taanam and the Badminton Club. Eager to apply analytical rigor and computational skills to solve real-world data challenges.',
-    highlights: ['Statistical Methods', 'Algorithmic Approaches', 'Data Analysis', 'Temple Taanam', 'Badminton Club'],
+    description: 'Data science undergraduate at Temple University with a concentration in Computational Analytics. Technically proficient in leveraging statistical methods and algorithmic approaches to derive insights from complex datasets. A collaborative team player with strong communication skills developed through competitive participation in the Research Scholar Club and the Badminton Club. Eager to apply analytical rigor and computational skills to solve real-world data challenges.',
+    highlights: ['Statistical Methods', 'Algorithmic Approaches', 'Data Analysis', 'Research Scholar Club', 'Badminton Club'],
     logo: templeLogo,
   },
   {
