@@ -89,19 +89,19 @@ export default function Hero() {
               href="https://github.com/PratikBalaji"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center justify-center w-12 h-12 rounded-full bg-white/10 border border-white/20 hover:bg-[#333] hover:border-[#333] transition-all duration-300 hover:scale-110"
+              className="group flex items-center justify-center w-12 h-12 rounded-full bg-white/10 border border-white/20 hover:bg-[#333] hover:border-[#333] hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all duration-300 hover:scale-110"
               aria-label="GitHub"
             >
-              <GitHubLogo className="w-5 h-5" />
+              <GitHubLogo className="w-5 h-5 group-hover:animate-pulse" />
             </a>
             <a
               href="https://linkedin.com/in/pratikbalaji"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center justify-center w-12 h-12 rounded-full bg-white/10 border border-white/20 hover:bg-[#0077B5] hover:border-[#0077B5] transition-all duration-300 hover:scale-110"
+              className="group flex items-center justify-center w-12 h-12 rounded-full bg-white/10 border border-white/20 hover:bg-[#0077B5] hover:border-[#0077B5] hover:shadow-[0_0_20px_rgba(0,119,181,0.6)] transition-all duration-300 hover:scale-110"
               aria-label="LinkedIn"
             >
-              <LinkedInLogo className="w-5 h-5" />
+              <LinkedInLogo className="w-5 h-5 group-hover:animate-pulse" />
             </a>
           </motion.div>
           
