@@ -7,7 +7,7 @@ import natarajBeatsLogo from '@/assets/nataraj-beats-logo.png';
 
 const experiences = [
   {
-    title: 'IoT Data Solutions Developer',
+    title: 'IoT Python Developer',
     company: 'Yan IT Solution',
     location: 'Remote',
     period: 'July 2025 – September 2025',
