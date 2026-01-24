@@ -21,7 +21,7 @@ export default function Navbar() {
     { label: 'Experience', href: '#experience' },
     { label: 'Certifications', href: '#certifications' },
     { label: 'Skills', href: '#skills' },
-    { label: 'GitHub', href: '#github' },
+    { label: 'Projects', href: '#github' },
     { label: 'Contact', href: '#contact' },
   ];
 
