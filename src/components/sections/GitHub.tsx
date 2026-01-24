@@ -369,7 +369,7 @@ export default function GitHub() {
           className="text-center mt-10"
         >
           <a
-            href={`https://github.com/${GITHUB_USERNAME}`}
+            href="https://github.com/PratikBalaji?tab=repositories"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
