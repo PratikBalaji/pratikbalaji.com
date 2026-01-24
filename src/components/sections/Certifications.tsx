@@ -61,6 +61,12 @@ const certifications: Certification[] = [
     category: 'AI',
   },
   {
+    title: 'AI Agent Fundamentals',
+    issuer: 'Databricks',
+    logo: databricksLogo,
+    category: 'AI',
+  },
+  {
     title: 'Generative AI Mastermind Certificate',
     issuer: 'Outskill',
     logo: outskillLogo,
