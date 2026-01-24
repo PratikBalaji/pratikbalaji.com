@@ -6,8 +6,9 @@ import santanderLogo from '@/assets/santander-logo.png';
 import googleLogo from '@/assets/google-logo.png';
 import databricksLogo from '@/assets/databricks-logo.png';
 import outskillLogo from '@/assets/outskill-logo.png';
+import linkedinLogo from '@/assets/linkedin-logo.png';
 
-type Category = 'AI' | 'Development' | 'Data Science';
+type Category = 'AI' | 'Development' | 'Data Science' | 'Database';
 
 interface Certification {
   title: string;
@@ -72,6 +73,12 @@ const certifications: Certification[] = [
     logo: outskillLogo,
     category: 'AI',
   },
+  {
+    title: 'SQL Essential Training',
+    issuer: 'LinkedIn',
+    logo: linkedinLogo,
+    category: 'Database',
+  },
 ];
 
 const folderColors: Record<Category, { bg: string; accent: string; tab: string }> = {
@@ -89,6 +96,11 @@ const folderColors: Record<Category, { bg: string; accent: string; tab: string }
     bg: 'from-amber-500/20 to-orange-600/20', 
     accent: 'border-amber-500/50',
     tab: 'bg-amber-500'
+  },
+  'Database': { 
+    bg: 'from-blue-500/20 to-cyan-600/20', 
+    accent: 'border-blue-500/50',
+    tab: 'bg-blue-500'
   },
 };
 
@@ -227,7 +239,7 @@ function CertificationFolder({ category, certs }: { category: Category; certs: C
 export default function Certifications() {
   const ref = useRef(null);
 
-  const categories: Category[] = ['AI', 'Development', 'Data Science'];
+  const categories: Category[] = ['AI', 'Development', 'Data Science', 'Database'];
   
   const getCertsByCategory = (category: Category) => 
     certifications.filter(cert => cert.category === category);
