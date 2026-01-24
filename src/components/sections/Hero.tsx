@@ -46,14 +46,20 @@ export default function Hero() {
       {/* Content */}
       <div className="container-tight relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-sm md:text-base font-medium text-white/60 mb-4 uppercase tracking-widest"
+            className="flex justify-center mb-4"
           >
-            Open for Opportunities
-          </motion.p>
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-sm font-medium uppercase tracking-widest">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              Open for Opportunities
+            </span>
+          </motion.div>
           
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
