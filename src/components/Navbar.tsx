@@ -34,13 +34,14 @@ export default function Navbar() {
   };
 
   return (
-    <>
-      <motion.nav
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="fixed top-0 left-0 right-0 z-50 bg-background/60 backdrop-blur-xl"
-      >
+    <motion.div
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+      className="fixed top-0 left-0 right-0 z-50"
+    >
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-transparent pointer-events-none" />
+      <nav className="relative">
         <div className="container-tight">
         <div className="flex items-center justify-between h-16 md:h-20">
           <Link to="/" className="flex items-center gap-3">
@@ -105,9 +106,7 @@ export default function Navbar() {
           </div>
         </div>
         </div>
-      </motion.nav>
-      {/* Gradient fade below navbar */}
-      <div className="fixed top-16 md:top-20 left-0 right-0 h-8 bg-gradient-to-b from-background/40 to-transparent pointer-events-none z-40" />
-    </>
+      </nav>
+    </motion.div>
   );
 }
