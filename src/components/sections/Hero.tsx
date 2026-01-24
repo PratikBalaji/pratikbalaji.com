@@ -52,7 +52,7 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-sm md:text-base font-medium text-white/60 mb-4 uppercase tracking-widest"
           >
-            Software Developer & Problem Solver
+            Data Science Major & Aspiring AI Generalist
           </motion.p>
           
           <motion.h1
@@ -74,8 +74,8 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto mb-8"
           >
-            A passionate software developer specializing in creating elegant solutions
-            and building innovative applications that push boundaries.
+            A passionate Data Science student specializing in AI, machine learning,
+            and building intelligent applications that push boundaries.
           </motion.p>
 
           {/* Social Links */}
