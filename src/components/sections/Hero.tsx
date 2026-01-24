@@ -52,7 +52,7 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-sm md:text-base font-medium text-white/60 mb-4 uppercase tracking-widest"
           >
-            Data Science Major & Aspiring AI Generalist
+            Open for Opportunities
           </motion.p>
           
           <motion.h1
