@@ -20,7 +20,7 @@ const education = [
     concentration: null,
     institution: 'Downingtown East High School',
     location: 'Downingtown, PA',
-    period: 'Aug 2019 – Jun 2023',
+    period: null,
     description: 'Maintained a high level of engagement across diverse academic and extracurricular platforms. As an active member of FBLA and Student Council, developed foundational skills in professional communication, project coordination, and peer advocacy. Commitment to versatility demonstrated through participation in Track and Field and Guitar Club, cultivating creative collaboration.',
     highlights: ['FBLA', 'Student Council', 'Track and Field', 'Guitar Club'],
     logo: downingtownLogo,
@@ -55,10 +55,12 @@ function EducationCard({ edu, index }: { edu: typeof education[0]; index: number
 
         {/* Content */}
         <div className="flex-1">
-          <div className="flex items-center gap-2 text-muted-foreground text-sm mb-2">
-            <Calendar className="w-4 h-4" />
-            <span>{edu.period}</span>
-          </div>
+          {edu.period && (
+            <div className="flex items-center gap-2 text-muted-foreground text-sm mb-2">
+              <Calendar className="w-4 h-4" />
+              <span>{edu.period}</span>
+            </div>
+          )}
           
           <h3 className="font-display text-xl md:text-2xl font-bold mb-1">
             {edu.degree}
