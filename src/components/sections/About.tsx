@@ -82,7 +82,7 @@ export default function About() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-6"
             >
-              Crafting solutions through strategic thinking and clean code.
+              Bridging data science and AI to build intelligent solutions.
             </motion.h2>
             
             <motion.p
@@ -92,9 +92,9 @@ export default function About() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="text-lg text-muted-foreground mb-6"
             >
-              As a dedicated software developer, I collaborate closely with teams 
-              to build seamless, user-centered applications. I serve as a reliable 
-              partner in bringing innovative ideas to life through technology.
+              I'm a student at Temple University's College of Science and Technology, 
+              pursuing a degree in Data Science with a specialization in Computational 
+              Analytics. My passion lies at the intersection of data and artificial intelligence.
             </motion.p>
             
             <motion.p
@@ -104,9 +104,9 @@ export default function About() {
               transition={{ duration: 0.6, delay: 0.5 }}
               className="text-lg text-muted-foreground mb-8"
             >
-              With expertise in full-stack development, I specialize in creating 
-              scalable applications using modern technologies. My approach combines 
-              technical excellence with a deep understanding of user needs.
+              As an aspiring AI Generalist, I'm eager to work closely with machine learning 
+              and AI technologies—exploring everything from generative models to intelligent 
+              agents. I thrive on turning complex data into actionable insights and innovative applications.
             </motion.p>
             
             <motion.div
@@ -117,12 +117,12 @@ export default function About() {
               className="flex flex-wrap gap-4"
             >
               <div className="px-6 py-3 bg-background rounded-full shadow-soft border border-border">
-                <span className="font-display font-semibold">5+</span>
-                <span className="text-muted-foreground ml-2">Projects Completed</span>
+                <span className="font-display font-semibold">AI/ML</span>
+                <span className="text-muted-foreground ml-2">Focused</span>
               </div>
               <div className="px-6 py-3 bg-background rounded-full shadow-soft border border-border">
-                <span className="font-display font-semibold">3+</span>
-                <span className="text-muted-foreground ml-2">Years Experience</span>
+                <span className="font-display font-semibold">Data Science</span>
+                <span className="text-muted-foreground ml-2">Major</span>
               </div>
             </motion.div>
           </div>
