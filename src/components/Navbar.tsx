@@ -45,7 +45,7 @@ export default function Navbar() {
         <div className="container-tight">
         <div className="flex items-center justify-between h-16 md:h-20">
           <Link to="/" className="flex items-center">
-            <Logo size="md" />
+            <Logo size="lg" />
           </Link>
           
           <div className="hidden md:flex items-center gap-8">
