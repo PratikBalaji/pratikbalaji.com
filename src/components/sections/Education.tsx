@@ -22,7 +22,7 @@ const education = [
     location: 'Downingtown, PA',
     period: null,
     description: 'Maintained a high level of engagement across diverse academic and extracurricular platforms. As an active member of FBLA and Student Council, developed foundational skills in professional communication, project coordination, and peer advocacy. Commitment to versatility demonstrated through participation in Track and Field and Guitar Club, cultivating creative collaboration.',
-    highlights: ['FBLA', 'Student Council', 'Track and Field', 'Guitar Club'],
+    highlights: ['FBLA', 'Student Council', 'Track and Field'],
     logo: downingtownLogo,
   },
 ];
