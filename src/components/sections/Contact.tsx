@@ -31,8 +31,8 @@ export default function Contact() {
     { 
       icon: Mail, 
       label: 'School Email', 
-      value: 'tur47507@temple.edu', 
-      href: 'mailto:tur47507@temple.edu',
+      value: 'pratik.balaji@temple.edu', 
+      href: 'mailto:pratik.balaji@temple.edu',
       color: 'from-red-600 to-rose-700'
     },
     { 
