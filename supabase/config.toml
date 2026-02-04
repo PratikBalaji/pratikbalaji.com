@@ -1,1 +1,4 @@
 project_id = "qdmjybkvyktygoilroil"
+
+[functions.github-contributions]
+verify_jwt = false

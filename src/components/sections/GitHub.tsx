@@ -1,6 +1,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef, useEffect, useState } from 'react';
 import { ExternalLink, GitFork, Star, Calendar } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 const GITHUB_USERNAME = 'PratikBalaji';
 
@@ -227,59 +228,27 @@ export default function GitHub() {
   useEffect(() => {
     const fetchGitHubData = async () => {
       try {
-        // Fetch repositories
+        // Fetch repositories from GitHub REST API
         const reposResponse = await fetch(
           `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`
         );
         const reposData = await reposResponse.json();
         setRepos(reposData.filter((repo: Repository) => !repo.name.includes('.github')));
 
-        // Fetch contribution events and generate calendar data
-        const eventsResponse = await fetch(
-          `https://api.github.com/users/${GITHUB_USERNAME}/events?per_page=100`
-        );
-        const eventsData = await eventsResponse.json();
+        // Fetch real contribution data from our edge function using GraphQL API
+        const { data, error } = await supabase.functions.invoke('github-contributions', {
+          body: { username: GITHUB_USERNAME },
+        });
 
-        // Generate contribution calendar from events
-        const today = new Date();
-        const oneYearAgo = new Date(today);
-        oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-
-        // Create a map of dates to contribution counts
-        const contributionMap = new Map<string, number>();
-        
-        if (Array.isArray(eventsData)) {
-          eventsData.forEach((event: { type: string; created_at: string }) => {
-            if (['PushEvent', 'CreateEvent', 'PullRequestEvent', 'IssuesEvent'].includes(event.type)) {
-              const date = new Date(event.created_at).toISOString().split('T')[0];
-              contributionMap.set(date, (contributionMap.get(date) || 0) + 1);
-            }
-          });
+        if (error) {
+          console.error('Error fetching contributions:', error);
+          return;
         }
 
-        // Generate all days in the past year
-        const days: ContributionDay[] = [];
-        const currentDate = new Date(oneYearAgo);
-        
-        // Start from the beginning of the week
-        currentDate.setDate(currentDate.getDate() - currentDate.getDay());
-        
-        while (currentDate <= today) {
-          const dateStr = currentDate.toISOString().split('T')[0];
-          const count = contributionMap.get(dateStr) || 0;
-          let level: 0 | 1 | 2 | 3 | 4 = 0;
-          
-          if (count > 0) level = 1;
-          if (count > 2) level = 2;
-          if (count > 5) level = 3;
-          if (count > 10) level = 4;
-          
-          days.push({ date: dateStr, count, level });
-          currentDate.setDate(currentDate.getDate() + 1);
+        if (data?.contributions) {
+          setContributions(data.contributions);
+          setTotalContributions(data.totalContributions || 0);
         }
-
-        setContributions(days);
-        setTotalContributions(Array.from(contributionMap.values()).reduce((a, b) => a + b, 0));
       } catch (error) {
         console.error('Error fetching GitHub data:', error);
       } finally {
