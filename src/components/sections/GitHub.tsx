@@ -1,9 +1,16 @@
 import { motion, useInView } from 'framer-motion';
-import { useRef, useEffect, useState } from 'react';
-import { ExternalLink, GitFork, Star, Calendar } from 'lucide-react';
+import { useRef, useEffect, useState, useCallback } from 'react';
+import { ExternalLink, GitFork, Star, Calendar, RefreshCw } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
 const GITHUB_USERNAME = 'PratikBalaji';
+const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+
+// Parse date string without timezone issues
+function parseDateString(dateStr: string): Date {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
 
 interface Repository {
   id: number;
@@ -70,7 +77,7 @@ function ContributionCalendar({ contributions }: { contributions: ContributionDa
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-  // Get month labels for the calendar
+  // Get month labels for the calendar - fixed to use local date parsing
   const getMonthLabels = () => {
     const labels: { month: string; index: number }[] = [];
     let lastMonth = -1;
@@ -78,7 +85,8 @@ function ContributionCalendar({ contributions }: { contributions: ContributionDa
     weeks.forEach((week, weekIndex) => {
       const firstDay = week[0];
       if (firstDay) {
-        const date = new Date(firstDay.date);
+        // Use local date parsing to avoid timezone issues
+        const date = parseDateString(firstDay.date);
         const month = date.getMonth();
         if (month !== lastMonth) {
           labels.push({ month: months[month], index: weekIndex });
@@ -223,41 +231,58 @@ export default function GitHub() {
   const [repos, setRepos] = useState<Repository[]>([]);
   const [contributions, setContributions] = useState<ContributionDay[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [totalContributions, setTotalContributions] = useState(0);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+
+  const fetchGitHubData = useCallback(async (isRefresh = false) => {
+    try {
+      if (isRefresh) {
+        setRefreshing(true);
+      }
+
+      // Fetch repositories from GitHub REST API
+      const reposResponse = await fetch(
+        `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`
+      );
+      const reposData = await reposResponse.json();
+      setRepos(reposData.filter((repo: Repository) => !repo.name.includes('.github')));
+
+      // Fetch real contribution data from our edge function using GraphQL API
+      const { data, error } = await supabase.functions.invoke('github-contributions', {
+        body: { username: GITHUB_USERNAME },
+      });
+
+      if (error) {
+        console.error('Error fetching contributions:', error);
+        return;
+      }
+
+      if (data?.contributions) {
+        setContributions(data.contributions);
+        setTotalContributions(data.totalContributions || 0);
+        setLastUpdated(new Date());
+      }
+    } catch (error) {
+      console.error('Error fetching GitHub data:', error);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchGitHubData = async () => {
-      try {
-        // Fetch repositories from GitHub REST API
-        const reposResponse = await fetch(
-          `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`
-        );
-        const reposData = await reposResponse.json();
-        setRepos(reposData.filter((repo: Repository) => !repo.name.includes('.github')));
-
-        // Fetch real contribution data from our edge function using GraphQL API
-        const { data, error } = await supabase.functions.invoke('github-contributions', {
-          body: { username: GITHUB_USERNAME },
-        });
-
-        if (error) {
-          console.error('Error fetching contributions:', error);
-          return;
-        }
-
-        if (data?.contributions) {
-          setContributions(data.contributions);
-          setTotalContributions(data.totalContributions || 0);
-        }
-      } catch (error) {
-        console.error('Error fetching GitHub data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
+    // Initial fetch
     fetchGitHubData();
-  }, []);
+
+    // Set up auto-refresh interval
+    const intervalId = setInterval(() => {
+      fetchGitHubData(true);
+    }, REFRESH_INTERVAL);
+
+    // Cleanup on unmount
+    return () => clearInterval(intervalId);
+  }, [fetchGitHubData]);
 
   return (
     <section id="github" className="section-padding" ref={ref}>
@@ -286,16 +311,62 @@ export default function GitHub() {
           <div className="flex items-center gap-2 mb-6">
             <Calendar className="w-5 h-5 text-primary" />
             <h3 className="font-semibold text-lg">Contribution Activity</h3>
-            {totalContributions > 0 && (
-              <span className="text-sm text-muted-foreground ml-auto">
-                {totalContributions} contributions in the last year
-              </span>
-            )}
+            <div className="ml-auto flex items-center gap-3">
+              {totalContributions > 0 && (
+                <span className="text-sm text-muted-foreground">
+                  {totalContributions} contributions in the last year
+                </span>
+              )}
+              {lastUpdated && (
+                <span className="text-xs text-muted-foreground hidden sm:inline">
+                  Updated {lastUpdated.toLocaleTimeString()}
+                </span>
+              )}
+              <button
+                onClick={() => fetchGitHubData(true)}
+                disabled={refreshing}
+                className="p-1.5 rounded-md hover:bg-muted transition-colors disabled:opacity-50"
+                title="Refresh contributions"
+              >
+                <RefreshCw className={`w-4 h-4 text-muted-foreground ${refreshing ? 'animate-spin' : ''}`} />
+              </button>
+            </div>
           </div>
           
           {loading ? (
-            <div className="h-32 flex items-center justify-center">
-              <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            <div className="w-full overflow-x-auto pb-2">
+              <div className="min-w-[750px]">
+                {/* Month labels skeleton */}
+                <div className="flex mb-1 ml-8 gap-8">
+                  {[...Array(12)].map((_, i) => (
+                    <div key={i} className="h-3 w-6 bg-muted rounded animate-pulse" />
+                  ))}
+                </div>
+                
+                <div className="flex gap-1">
+                  {/* Day labels skeleton */}
+                  <div className="flex flex-col gap-[3px] mr-1">
+                    {[...Array(7)].map((_, i) => (
+                      <div key={i} className="h-[12px] w-6 bg-muted rounded animate-pulse" />
+                    ))}
+                  </div>
+                  
+                  {/* Calendar grid skeleton */}
+                  <div className="flex gap-[3px]">
+                    {[...Array(52)].map((_, weekIndex) => (
+                      <div key={weekIndex} className="flex flex-col gap-[3px]">
+                        {[...Array(7)].map((_, dayIndex) => (
+                          <div
+                            key={dayIndex}
+                            className="w-[12px] h-[12px] rounded-sm bg-muted animate-pulse"
+                            style={{ animationDelay: `${(weekIndex * 7 + dayIndex) * 5}ms` }}
+                          />
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           ) : (
             <ContributionCalendar contributions={contributions} />
