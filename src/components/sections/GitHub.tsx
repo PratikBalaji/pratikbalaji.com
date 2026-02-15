@@ -5,7 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 const GITHUB_USERNAME = 'PratikBalaji';
 const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
-const FEATURED_REPOS = ['StartupSuccess_Prediction', 'BMI-Index-Calc-Python-Learning'];
+const FEATURED_REPOS = ['StartupSuccess_Prediction', 'BMI-Index-Calc-Python-learning'];
 
 // Parse date string without timezone issues
 function parseDateString(dateStr: string): Date {
