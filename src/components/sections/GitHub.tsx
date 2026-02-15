@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 const GITHUB_USERNAME = 'PratikBalaji';
 const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+const FEATURED_REPOS = ['StartupSuccess_Prediction', 'BMI-Index-Calc-Python-Learning'];
 
 // Parse date string without timezone issues
 function parseDateString(dateStr: string): Date {
@@ -22,6 +23,7 @@ interface Repository {
   language: string | null;
   updated_at: string;
   topics: string[];
+  readme: string | null;
 }
 
 interface ContributionDay {
@@ -181,9 +183,15 @@ function RepoCard({ repo, index }: { repo: Repository; index: number }) {
           <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
         </div>
         
-        <p className="text-sm text-muted-foreground mb-4 line-clamp-2 min-h-[40px]">
-          {repo.description || 'No description available'}
-        </p>
+        {repo.readme ? (
+          <div className="text-sm text-muted-foreground mb-4 max-h-[200px] overflow-y-auto whitespace-pre-wrap break-words font-mono text-xs leading-relaxed scrollbar-thin">
+            {repo.readme}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground mb-4">
+            {repo.description || 'No description available'}
+          </p>
+        )}
         
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
           {repo.language && (
@@ -241,12 +249,22 @@ export default function GitHub() {
         setRefreshing(true);
       }
 
-      // Fetch repositories from GitHub REST API
-      const reposResponse = await fetch(
-        `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`
-      );
-      const reposData = await reposResponse.json();
-      setRepos(reposData.filter((repo: Repository) => !repo.name.includes('.github')));
+      // Fetch only featured repositories with their READMEs
+      const repoPromises = FEATURED_REPOS.map(async (repoName) => {
+        const [repoRes, readmeRes] = await Promise.all([
+          fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${repoName}`),
+          fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${repoName}/readme`),
+        ]);
+        const repoData = await repoRes.json();
+        let readme: string | null = null;
+        if (readmeRes.ok) {
+          const readmeData = await readmeRes.json();
+          readme = atob(readmeData.content);
+        }
+        return { ...repoData, readme };
+      });
+      const reposData = await Promise.all(repoPromises);
+      setRepos(reposData);
 
       // Fetch real contribution data from our edge function using GraphQL API
       const { data, error } = await supabase.functions.invoke('github-contributions', {
@@ -387,14 +405,14 @@ export default function GitHub() {
           </h3>
           
           {loading ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-40 bg-muted rounded-xl animate-pulse" />
+            <div className="grid md:grid-cols-2 gap-4">
+              {[...Array(2)].map((_, i) => (
+                <div key={i} className="h-60 bg-muted rounded-xl animate-pulse" />
               ))}
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {repos.slice(0, 6).map((repo, index) => (
+            <div className="grid md:grid-cols-2 gap-4">
+              {repos.map((repo, index) => (
                 <RepoCard key={repo.id} repo={repo} index={index} />
               ))}
             </div>
