@@ -73,12 +73,13 @@ export default function Navbar() {
             </div>
             
             <div className="flex items-center gap-3">
-              <button
-                onClick={() => scrollToSection('#contact')}
-                className="hidden md:block px-5 py-2.5 text-sm font-medium rounded-full border border-border bg-card text-foreground hover:border-accent hover:text-accent hover:shadow-[var(--electric-glow)] transition-all duration-300"
-              >
-                Get in Touch
-              </button>
+              <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full border border-border/40 bg-card/50 text-muted-foreground text-xs font-medium">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+                </span>
+                Philadelphia, PA
+              </div>
               
               <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger asChild>
@@ -103,12 +104,13 @@ export default function Navbar() {
                         {item.label}
                       </button>
                     ))}
-                    <button
-                      onClick={() => scrollToSection('#contact')}
-                      className="mt-4 px-5 py-2.5 bg-accent text-accent-foreground text-sm font-medium rounded-full hover:bg-accent/90 transition-colors"
-                    >
-                      Get in Touch
-                    </button>
+                    <div className="mt-4 flex items-center gap-2 px-4 py-2.5 rounded-full border border-border/40 bg-card/50 text-muted-foreground text-sm">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+                      </span>
+                      Philadelphia, PA
+                    </div>
                   </nav>
                 </SheetContent>
               </Sheet>

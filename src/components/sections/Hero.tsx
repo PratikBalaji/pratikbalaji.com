@@ -213,7 +213,7 @@ export default function Hero() {
               onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
               className="px-8 py-4 bg-card text-foreground font-medium rounded-full border border-border hover:border-accent hover:shadow-[var(--electric-glow)] hover:scale-105 transition-all duration-300"
             >
-              Get in Touch
+              Hire Me
             </MagneticButton>
           </motion.div>
         </motion.div>
