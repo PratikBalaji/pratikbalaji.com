@@ -7,6 +7,7 @@ import Certifications from '@/components/sections/Certifications';
 import Skills from '@/components/sections/Skills';
 import GitHub from '@/components/sections/GitHub';
 import Contact from '@/components/sections/Contact';
+import Guestbook from '@/components/sections/Guestbook';
 import Footer from '@/components/Footer';
 
 const Index = () => {
@@ -20,6 +21,7 @@ const Index = () => {
       <Certifications />
       <Skills />
       <GitHub />
+      <Guestbook />
       <Contact />
       <Footer />
     </main>
