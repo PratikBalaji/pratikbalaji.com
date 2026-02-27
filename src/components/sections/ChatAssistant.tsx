@@ -109,7 +109,7 @@ export default function ChatAssistant() {
       {/* FAB with fancy PB logo */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full flex items-center justify-center"
+        className="fixed bottom-6 right-6 z-50 w-[72px] h-[72px] rounded-full flex items-center justify-center"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >
@@ -120,9 +120,9 @@ export default function ChatAssistant() {
               initial={{ rotate: -90, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
               exit={{ rotate: 90, opacity: 0 }}
-              className="w-14 h-14 rounded-full bg-card border border-border flex items-center justify-center shadow-lg"
+              className="w-[64px] h-[64px] rounded-full bg-card border-2 border-border flex items-center justify-center shadow-lg"
             >
-              <X className="w-6 h-6 text-foreground" />
+              <X className="w-7 h-7 text-foreground" />
             </motion.div>
           ) : (
             <motion.div
@@ -130,8 +130,12 @@ export default function ChatAssistant() {
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.5, opacity: 0 }}
+              className="relative"
             >
-              <PBLogo className="w-14 h-14" />
+              <div className="absolute -inset-1 rounded-full bg-accent/20 blur-lg animate-pulse" />
+              <div className="relative w-[64px] h-[64px] rounded-full border-2 border-accent/50 bg-gradient-to-br from-accent via-accent/80 to-accent/60 flex items-center justify-center shadow-[0_0_25px_hsl(var(--accent)/0.5)]">
+                <span className="font-display font-black text-accent-foreground text-lg tracking-tighter">PB</span>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
