@@ -161,13 +161,13 @@ export default function Hero() {
           >
             <button
               onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}
-              className="px-8 py-4 bg-white text-black font-medium rounded-full hover:bg-white/90 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+              className="px-8 py-4 bg-white/[0.12] text-white font-medium rounded-full border border-white/[0.15] backdrop-blur-md shadow-[0_0_20px_rgba(255,255,255,0.06)] hover:bg-electric hover:text-white hover:border-electric hover:shadow-[var(--electric-glow)] hover:scale-105 transition-all duration-300"
             >
               View My Work
             </button>
             <button
               onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="px-8 py-4 border border-white/[0.15] font-medium rounded-full hover:bg-white/[0.06] transition-all duration-300 hover:scale-105"
+              className="px-8 py-4 bg-white/[0.04] text-white/80 font-medium rounded-full border border-white/[0.12] backdrop-blur-md shadow-[0_0_15px_rgba(255,255,255,0.03)] hover:border-electric hover:text-white hover:shadow-[var(--electric-glow)] hover:scale-105 transition-all duration-300"
             >
               Get in Touch
             </button>
