@@ -4,7 +4,6 @@ import { Briefcase, Calendar, MapPin, BarChart3, Code2 } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
 import TiltCard from '@/components/TiltCard';
 import yanItLogo from '@/assets/yan-it-logo.png';
-import regalLogo from '@/assets/regal-logo.png';
 import natarajBeatsLogo from '@/assets/nataraj-beats-logo.png';
 
 type ViewMode = 'technical' | 'business';
@@ -32,17 +31,6 @@ const experiences = [
     businessHighlights: ['Client Growth +40%', 'Brand Development', 'Digital Transformation', 'Revenue Pipeline'],
     logo: natarajBeatsLogo,
     link: 'https://natarajbeats.com/',
-  },
-  {
-    title: 'Customer Service Associate',
-    company: 'Regal Cinemas',
-    location: 'Downingtown, PA',
-    period: 'Aug 2023 – May 2024',
-    technical: 'Operated registers for ticket and concession sales, maintaining accuracy and speed during peak hours. Prepared and served food while following strict health and safety regulations. Conducted theater inspections to maintain cleanliness, guest comfort, and safety standards.',
-    business: 'Situation: High-volume cinema requiring consistent customer satisfaction. Task: Deliver fast, accurate service during peak hours. Action: Mastered POS systems and compliance protocols; led theater inspections. Result: Maintained 99%+ transaction accuracy and zero food safety incidents during tenure.',
-    technicalHighlights: ['Customer Service', 'POS Systems', 'Food Safety', 'Team Collaboration'],
-    businessHighlights: ['99%+ Accuracy', 'Zero Incidents', 'Peak Performance', 'Compliance Excellence'],
-    logo: regalLogo,
   },
 ];
 

@@ -91,7 +91,7 @@ export default function Contact() {
       <div className="container-tight">
         <div className="text-center mb-16">
           <ScrollReveal>
-            <p className="text-sm font-medium text-accent uppercase tracking-widest mb-4">Get in Touch</p>
+            <p className="text-sm font-medium text-accent uppercase tracking-widest mb-4">Hire Me</p>
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
             <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-6 text-foreground">Let's Connect</h2>
