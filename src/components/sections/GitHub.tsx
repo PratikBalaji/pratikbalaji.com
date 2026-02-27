@@ -176,9 +176,9 @@ function RepoCard({ repo, index }: { repo: Repository; index: number }) {
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="group block"
     >
-      <div className="h-full bg-background rounded-xl p-5 border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+      <div className="h-full bg-card rounded-xl p-5 border border-border/60 transition-all duration-300 hover:border-electric/50 hover:shadow-[var(--electric-glow)] hover:-translate-y-1">
         <div className="flex items-start justify-between mb-3">
-          <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors truncate pr-2">
+          <h3 className="font-semibold text-foreground group-hover:text-electric transition-colors truncate pr-2">
             {repo.name}
           </h3>
           <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
@@ -222,7 +222,7 @@ function RepoCard({ repo, index }: { repo: Repository; index: number }) {
             {repo.topics.slice(0, 3).map((topic) => (
               <span
                 key={topic}
-                className="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full"
+                className="px-2 py-0.5 bg-electric/10 text-electric text-xs rounded-full"
               >
                 {topic}
               </span>
@@ -320,10 +320,10 @@ export default function GitHub() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-background rounded-2xl p-6 border border-border shadow-soft mb-12"
+          className="bg-card rounded-2xl p-6 border border-border/60 hover:border-electric/30 transition-all duration-300 mb-12"
         >
           <div className="flex items-center gap-2 mb-6">
-            <Calendar className="w-5 h-5 text-primary" />
+            <Calendar className="w-5 h-5 text-electric" />
             <h3 className="font-semibold text-lg">Contribution Activity</h3>
             <div className="ml-auto flex items-center gap-3">
               {totalContributions > 0 && (
