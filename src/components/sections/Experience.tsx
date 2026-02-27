@@ -68,7 +68,7 @@ function ExperienceCard({ experience, index }: { experience: typeof experiences[
               {/* Text content */}
               <div className="flex-1">
                 <div className="flex items-center gap-2 text-muted-foreground text-sm mb-2">
-                  <Calendar className="w-4 h-4" />
+                  <Calendar className="w-4 h-4 text-electric" />
                   <span>{experience.period}</span>
                 </div>
                 
@@ -78,11 +78,11 @@ function ExperienceCard({ experience, index }: { experience: typeof experiences[
                 
                 <div className="flex items-center gap-4 text-muted-foreground mb-4">
                   <div className="flex items-center gap-1.5">
-                    <Briefcase className="w-4 h-4" />
+                    <Briefcase className="w-4 h-4 text-electric" />
                     <span>{experience.company}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <MapPin className="w-4 h-4" />
+                    <MapPin className="w-4 h-4 text-electric" />
                     <span>{experience.location}</span>
                   </div>
                 </div>
@@ -107,7 +107,7 @@ function ExperienceCard({ experience, index }: { experience: typeof experiences[
         </div>
         
         {/* Timeline dot */}
-        <div className="hidden lg:flex absolute left-1/2 top-8 -translate-x-1/2 w-4 h-4 bg-primary rounded-full border-4 border-background" />
+        <div className="hidden lg:flex absolute left-1/2 top-8 -translate-x-1/2 w-4 h-4 bg-electric rounded-full border-4 border-background shadow-[var(--electric-glow)]" />
       </div>
     </ScrollReveal>
   );

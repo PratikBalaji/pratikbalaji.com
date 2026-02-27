@@ -36,6 +36,9 @@
 
     --radius: 0.5rem;
 
+    --electric: 230 90% 56%;
+    --electric-glow: 0 0 20px hsl(230 90% 56% / 0.3);
+
     /* Custom tokens */
     --gradient-hero: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(0 0% 96%) 100%);
     --gradient-dark: linear-gradient(135deg, hsl(0 0% 5%) 0%, hsl(0 0% 15%) 100%);
@@ -86,6 +89,9 @@
     --border: 0 0% 20%;
     --input: 0 0% 20%;
     --ring: 0 0% 83.1%;
+
+    --electric: 230 85% 62%;
+    --electric-glow: 0 0 20px hsl(230 85% 62% / 0.4);
     
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
@@ -179,7 +185,9 @@
 
   .link-underline::after {
     content: '';
-    @apply absolute w-full h-0.5 bottom-0 left-0 bg-foreground origin-bottom-right;
+    @apply absolute w-full h-0.5 bottom-0 left-0 origin-bottom-right;
+    background-color: hsl(var(--electric));
+    transform: scaleX(0);
     transform: scaleX(0);
     transition: transform 0.3s ease-out;
   }
