@@ -1,6 +1,6 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import { GraduationCap, Calendar, MapPin } from 'lucide-react';
+import ScrollReveal from '@/components/ScrollReveal';
 import templeLogo from '@/assets/temple-logo.png';
 import downingtownLogo from '@/assets/downingtown-logo.png';
 
@@ -28,17 +28,9 @@ const education = [
 ];
 
 function EducationCard({ edu, index }: { edu: typeof education[0]; index: number }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay: index * 0.2 }}
-      className="bg-background rounded-2xl p-6 md:p-8 shadow-soft border border-border hover-lift"
-    >
+    <ScrollReveal delay={index * 0.15} duration={0.7}>
+      <div className="bg-background rounded-2xl p-6 md:p-8 shadow-soft border border-border hover-lift">
       <div className="flex flex-col md:flex-row gap-6">
         {/* Logo box */}
         <div className="flex-shrink-0">
@@ -99,30 +91,23 @@ function EducationCard({ edu, index }: { edu: typeof education[0]; index: number
           </div>
         </div>
       </div>
-    </motion.div>
+      </div>
+    </ScrollReveal>
   );
 }
 
 export default function Education() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section id="education" className="section-padding bg-muted/30" ref={ref}>
+    <section id="education" className="section-padding bg-muted/30">
       <div className="container-tight">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        <ScrollReveal className="text-center mb-16">
           <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest mb-4">
             Academic Background
           </p>
           <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight">
             Education
           </h2>
-        </motion.div>
+        </ScrollReveal>
         
         <div className="space-y-8">
           {education.map((edu, index) => (

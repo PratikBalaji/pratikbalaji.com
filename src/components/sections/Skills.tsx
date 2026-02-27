@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
+import ScrollReveal from '@/components/ScrollReveal';
 
 const skillCategories = [
   {
@@ -54,20 +55,14 @@ export default function Skills() {
   return (
     <section id="skills" className="section-padding bg-secondary/30">
       <div className="container-tight">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        <ScrollReveal className="text-center mb-16">
           <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest mb-4">
             Technical Expertise
           </p>
           <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight">
             Skills & Technologies
           </h2>
-        </motion.div>
+        </ScrollReveal>
         
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Animated Globe */}

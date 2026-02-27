@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { Folder, FolderOpen, ExternalLink } from 'lucide-react';
+import ScrollReveal from '@/components/ScrollReveal';
 import whitehatjrLogo from '@/assets/whitehatjr-logo.png';
 import santanderLogo from '@/assets/santander-logo.png';
 import googleLogo from '@/assets/google-logo.png';
@@ -247,13 +248,7 @@ export default function Certifications() {
   return (
     <section id="certifications" className="section-padding bg-secondary/30" ref={ref}>
       <div className="container-tight">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        <ScrollReveal className="text-center mb-16">
           <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest mb-4">
             Professional Development
           </p>
@@ -261,22 +256,20 @@ export default function Certifications() {
             Certifications
           </h2>
           <p className="text-muted-foreground">Hover over a folder to explore certificates</p>
-        </motion.div>
+        </ScrollReveal>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6">
           {categories.map((category, index) => (
-            <motion.div
+            <ScrollReveal
               key={category}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.15 }}
+              delay={index * 0.15}
+              duration={0.6}
             >
               <CertificationFolder 
                 category={category} 
                 certs={getCertsByCategory(category)} 
               />
-            </motion.div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { motion, useInView } from 'framer-motion';
+import ScrollReveal from '@/components/ScrollReveal';
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { ExternalLink, GitFork, Star, Calendar, RefreshCw } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -305,19 +306,14 @@ export default function GitHub() {
   return (
     <section id="github" className="section-padding" ref={ref}>
       <div className="container-tight">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        <ScrollReveal className="text-center mb-16">
           <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest mb-4">
             Open Source
           </p>
           <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight">
             GitHub Activity
           </h2>
-        </motion.div>
+        </ScrollReveal>
 
         {/* Contribution Calendar */}
         <motion.div
