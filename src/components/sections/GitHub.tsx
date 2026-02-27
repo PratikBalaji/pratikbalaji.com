@@ -7,7 +7,12 @@ import { supabase } from '@/integrations/supabase/client';
 
 const GITHUB_USERNAME = 'PratikBalaji';
 const REFRESH_INTERVAL = 5 * 60 * 1000;
-const FEATURED_REPOS = ['StartupSuccess_Prediction'];
+
+interface DBProject {
+  id: string; name: string; description: string; url: string | null;
+  homepage: string | null; language: string | null; topics: string[];
+  stargazers_count: number; forks_count: number; sort_order: number;
+}
 
 function parseDateString(dateStr: string): Date {
   const [year, month, day] = dateStr.split('-').map(Number);
@@ -174,29 +179,30 @@ function RepoCard({ repo, index }: { repo: Repository; index: number }) {
 export default function GitHub() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [repos, setRepos] = useState<Repository[]>([]);
+  const [dbProjects, setDbProjects] = useState<DBProject[]>([]);
   const [contributions, setContributions] = useState<ContributionDay[]>([]);
   const [loading, setLoading] = useState(true);
+  const [projectsLoading, setProjectsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [totalContributions, setTotalContributions] = useState(0);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
+  // Fetch projects from DB
+  useEffect(() => {
+    async function fetchProjects() {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .order('sort_order');
+      if (!error && data) setDbProjects(data as DBProject[]);
+      setProjectsLoading(false);
+    }
+    fetchProjects();
+  }, []);
+
   const fetchGitHubData = useCallback(async (isRefresh = false) => {
     try {
       if (isRefresh) setRefreshing(true);
-      const repoPromises = FEATURED_REPOS.map(async (repoName) => {
-        const [repoRes, readmeRes] = await Promise.all([
-          fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${repoName}`),
-          fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${repoName}/readme`),
-        ]);
-        const repoData = await repoRes.json();
-        let readme: string | null = null;
-        if (readmeRes.ok) { const readmeData = await readmeRes.json(); readme = atob(readmeData.content); }
-        return { ...repoData, readme };
-      });
-      const reposData = await Promise.all(repoPromises);
-      setRepos(reposData);
-
       const { data, error } = await supabase.functions.invoke('github-contributions', {
         body: { username: GITHUB_USERNAME },
       });
@@ -287,13 +293,43 @@ export default function GitHub() {
             </svg>
             Highlighted Projects
           </h3>
-          {loading ? (
+          {projectsLoading ? (
             <div className="grid md:grid-cols-2 gap-4">
-              {[...Array(2)].map((_, i) => (<div key={i} className="h-60 bg-muted rounded-xl animate-pulse" />))}
+              {[...Array(2)].map((_, i) => (
+                <div key={i} className="bg-card rounded-xl border border-border p-5 animate-pulse">
+                  <div className="h-5 w-40 bg-muted rounded mb-3" />
+                  <div className="space-y-2 mb-4">
+                    <div className="h-4 w-full bg-muted rounded" />
+                    <div className="h-4 w-3/4 bg-muted rounded" />
+                    <div className="h-4 w-1/2 bg-muted rounded" />
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="h-6 w-16 bg-muted rounded-full" />
+                    <div className="h-6 w-16 bg-muted rounded-full" />
+                  </div>
+                </div>
+              ))}
             </div>
           ) : (
             <div className="grid md:grid-cols-2 gap-4">
-              {repos.map((repo, index) => (<RepoCard key={repo.id} repo={repo} index={index} />))}
+              {dbProjects.map((project, index) => (
+                <RepoCard
+                  key={project.id}
+                  repo={{
+                    id: index,
+                    name: project.name,
+                    description: project.description,
+                    html_url: project.url || '#',
+                    stargazers_count: project.stargazers_count,
+                    forks_count: project.forks_count,
+                    language: project.language,
+                    updated_at: '',
+                    topics: project.topics || [],
+                    readme: null,
+                  }}
+                  index={index}
+                />
+              ))}
             </div>
           )}
         </motion.div>
