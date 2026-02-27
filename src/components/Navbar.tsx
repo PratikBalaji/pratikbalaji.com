@@ -53,7 +53,7 @@ export default function Navbar() {
               <button
                 key={item.label}
                 onClick={() => scrollToSection(item.href)}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors link-underline"
+                className="text-sm font-medium text-muted-foreground hover:text-electric transition-colors link-underline"
               >
                 {item.label}
               </button>
@@ -64,7 +64,7 @@ export default function Navbar() {
             <ThemeToggle />
             <button
               onClick={() => scrollToSection('#contact')}
-              className="hidden md:block px-5 py-2.5 bg-primary text-primary-foreground text-sm font-medium rounded-full hover:bg-primary/90 transition-colors"
+              className="hidden md:block px-5 py-2.5 bg-primary text-primary-foreground text-sm font-medium rounded-full hover:bg-primary/90 border border-transparent hover:border-electric hover:shadow-[var(--electric-glow)] transition-all duration-300"
             >
               Get in Touch
             </button>
@@ -88,7 +88,7 @@ export default function Navbar() {
                     <button
                       key={item.label}
                       onClick={() => scrollToSection(item.href)}
-                      className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors text-left py-2"
+                      className="text-lg font-medium text-muted-foreground hover:text-electric transition-colors text-left py-2"
                     >
                       {item.label}
                     </button>

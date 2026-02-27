@@ -49,7 +49,7 @@ function EducationCard({ edu, index }: { edu: typeof education[0]; index: number
         <div className="flex-1">
           {edu.period && (
             <div className="flex items-center gap-2 text-muted-foreground text-sm mb-2">
-              <Calendar className="w-4 h-4" />
+              <Calendar className="w-4 h-4 text-electric" />
               <span>{edu.period}</span>
             </div>
           )}
@@ -66,11 +66,11 @@ function EducationCard({ edu, index }: { edu: typeof education[0]; index: number
           
           <div className="flex items-center gap-4 text-muted-foreground mb-4">
             <div className="flex items-center gap-1.5">
-              <GraduationCap className="w-4 h-4" />
+              <GraduationCap className="w-4 h-4 text-electric" />
               <span>{edu.institution}</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <MapPin className="w-4 h-4" />
+              <MapPin className="w-4 h-4 text-electric" />
               <span>{edu.location}</span>
             </div>
           </div>
