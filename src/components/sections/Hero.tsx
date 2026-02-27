@@ -1,8 +1,4 @@
 import { motion } from 'framer-motion';
-import { Suspense, lazy, useState, useEffect } from 'react';
-import WebGLFallback from '@/components/3d/WebGLFallback';
-
-const FloatingShapes = lazy(() => import('@/components/3d/FloatingShapes'));
 
 // Official GitHub Logo Component
 const GitHubLogo = ({ className }: { className?: string }) => (
@@ -19,30 +15,72 @@ const LinkedInLogo = ({ className }: { className?: string }) => (
 );
 
 export default function Hero() {
-  const [useWebGL, setUseWebGL] = useState(false);
-
-  useEffect(() => {
-    // Check WebGL support
-    try {
-      const canvas = document.createElement('canvas');
-      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-      setUseWebGL(!!gl);
-    } catch {
-      setUseWebGL(false);
-    }
-  }, []);
-
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black text-white">
-      {/* 3D Background with fallback */}
-      {useWebGL ? (
-        <Suspense fallback={<WebGLFallback className="absolute inset-0 -z-10" variant="hero" />}>
-          <FloatingShapes />
-        </Suspense>
-      ) : (
-        <WebGLFallback className="absolute inset-0 -z-10" variant="hero" />
-      )}
-      
+      {/* Ambient glowing orbs background */}
+      <div className="absolute inset-0 -z-10">
+        {/* Primary large orb - center */}
+        <motion.div
+          animate={{
+            x: [0, 30, -20, 0],
+            y: [0, -40, 20, 0],
+            scale: [1, 1.15, 0.95, 1],
+          }}
+          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] md:w-[700px] md:h-[700px] rounded-full"
+          style={{
+            background: 'radial-gradient(circle, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 40%, transparent 70%)',
+          }}
+        />
+
+        {/* Secondary orb - upper left */}
+        <motion.div
+          animate={{
+            x: [0, 60, -30, 0],
+            y: [0, -30, 50, 0],
+            scale: [1, 1.2, 0.9, 1],
+          }}
+          transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-[15%] left-[10%] w-[350px] h-[350px] rounded-full"
+          style={{
+            background: 'radial-gradient(circle, rgba(180,180,200,0.07) 0%, rgba(150,150,170,0.03) 40%, transparent 70%)',
+          }}
+        />
+
+        {/* Tertiary orb - lower right */}
+        <motion.div
+          animate={{
+            x: [0, -50, 40, 0],
+            y: [0, 40, -20, 0],
+            scale: [1, 0.9, 1.1, 1],
+          }}
+          transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute bottom-[10%] right-[5%] w-[400px] h-[400px] rounded-full"
+          style={{
+            background: 'radial-gradient(circle, rgba(200,200,220,0.06) 0%, rgba(180,180,200,0.02) 40%, transparent 70%)',
+          }}
+        />
+
+        {/* Small accent orb */}
+        <motion.div
+          animate={{
+            x: [0, 40, -20, 0],
+            y: [0, -60, 30, 0],
+            opacity: [0.5, 0.8, 0.4, 0.5],
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-[30%] right-[25%] w-[200px] h-[200px] rounded-full"
+          style={{
+            background: 'radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%)',
+          }}
+        />
+
+        {/* Subtle grain overlay */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E")`,
+        }} />
+      </div>
+
       {/* Content */}
       <div className="container-tight relative z-10">
         <div className="max-w-4xl mx-auto text-center">
@@ -52,10 +90,10 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="flex justify-center mb-4"
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 border border-primary/40 text-white text-sm font-medium uppercase tracking-widest">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.06] border border-white/[0.12] text-white/80 text-sm font-medium uppercase tracking-widest backdrop-blur-sm">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
               </span>
               Open for Opportunities
             </span>
@@ -69,16 +107,20 @@ export default function Hero() {
           >
             Pratik Balaji
             <br />
-            <span className="text-gradient">builds digital</span>
+            <span className="text-transparent bg-clip-text hero-gradient-text">
+              builds digital
+            </span>
             <br />
-            experiences.
+            <span className="text-transparent bg-clip-text hero-gradient-text">
+              experiences.
+            </span>
           </motion.h1>
           
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto mb-8"
+            className="text-lg md:text-xl text-white/50 max-w-2xl mx-auto mb-8"
           >
             A passionate Data Science student specializing in AI, machine learning,
             and building intelligent applications that push boundaries.
@@ -95,7 +137,7 @@ export default function Hero() {
               href="https://github.com/PratikBalaji"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center justify-center w-12 h-12 rounded-full bg-white/10 border border-white/20 hover:bg-[#333] hover:border-[#333] hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all duration-300 hover:scale-110"
+              className="group flex items-center justify-center w-12 h-12 rounded-full bg-white/[0.06] border border-white/[0.12] hover:bg-white/[0.12] hover:border-white/[0.25] hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all duration-300 hover:scale-110"
               aria-label="GitHub"
             >
               <GitHubLogo className="w-5 h-5 group-hover:animate-pulse" />
@@ -104,7 +146,7 @@ export default function Hero() {
               href="https://linkedin.com/in/pratikbalaji"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center justify-center w-12 h-12 rounded-full bg-white/10 border border-white/20 hover:bg-[#0077B5] hover:border-[#0077B5] hover:shadow-[0_0_20px_rgba(0,119,181,0.6)] transition-all duration-300 hover:scale-110"
+              className="group flex items-center justify-center w-12 h-12 rounded-full bg-white/[0.06] border border-white/[0.12] hover:bg-[#0077B5]/20 hover:border-[#0077B5]/50 hover:shadow-[0_0_20px_rgba(0,119,181,0.3)] transition-all duration-300 hover:scale-110"
               aria-label="LinkedIn"
             >
               <LinkedInLogo className="w-5 h-5 group-hover:animate-pulse" />
@@ -119,21 +161,19 @@ export default function Hero() {
           >
             <button
               onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}
-              className="px-8 py-4 bg-primary text-primary-foreground font-medium rounded-full hover:bg-primary/90 transition-all hover:scale-105"
+              className="px-8 py-4 bg-white text-black font-medium rounded-full hover:bg-white/90 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
             >
               View My Work
             </button>
             <button
               onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="px-8 py-4 border border-white/20 font-medium rounded-full hover:bg-white/10 transition-all hover:scale-105"
+              className="px-8 py-4 border border-white/[0.15] font-medium rounded-full hover:bg-white/[0.06] transition-all duration-300 hover:scale-105"
             >
               Get in Touch
             </button>
           </motion.div>
         </div>
       </div>
-      
-      {/* Scroll indicator */}
     </section>
   );
 }
