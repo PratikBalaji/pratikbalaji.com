@@ -1,103 +1,70 @@
 import { motion, useInView } from 'framer-motion';
 import ScrollReveal from '@/components/ScrollReveal';
+import TiltCard from '@/components/TiltCard';
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { ExternalLink, GitFork, Star, Calendar, RefreshCw } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
 const GITHUB_USERNAME = 'PratikBalaji';
-const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+const REFRESH_INTERVAL = 5 * 60 * 1000;
 const FEATURED_REPOS = ['StartupSuccess_Prediction'];
 
-// Parse date string without timezone issues
 function parseDateString(dateStr: string): Date {
   const [year, month, day] = dateStr.split('-').map(Number);
   return new Date(year, month - 1, day);
 }
 
 interface Repository {
-  id: number;
-  name: string;
-  description: string | null;
-  html_url: string;
-  stargazers_count: number;
-  forks_count: number;
-  language: string | null;
-  updated_at: string;
-  topics: string[];
-  readme: string | null;
+  id: number; name: string; description: string | null; html_url: string;
+  stargazers_count: number; forks_count: number; language: string | null;
+  updated_at: string; topics: string[]; readme: string | null;
 }
 
 interface ContributionDay {
-  date: string;
-  count: number;
-  level: 0 | 1 | 2 | 3 | 4;
+  date: string; count: number; level: 0 | 1 | 2 | 3 | 4;
 }
 
 const languageColors: Record<string, string> = {
-  TypeScript: 'bg-blue-500',
-  JavaScript: 'bg-yellow-400',
-  Python: 'bg-green-500',
-  Java: 'bg-orange-500',
-  HTML: 'bg-red-500',
-  CSS: 'bg-purple-500',
-  Jupyter: 'bg-orange-400',
-  'Jupyter Notebook': 'bg-orange-400',
-  Go: 'bg-cyan-500',
-  Rust: 'bg-amber-600',
-  C: 'bg-gray-500',
-  'C++': 'bg-pink-500',
-  Ruby: 'bg-red-600',
-  PHP: 'bg-indigo-400',
-  Swift: 'bg-orange-400',
-  Kotlin: 'bg-purple-400',
-  Dart: 'bg-blue-400',
-  Shell: 'bg-green-400',
+  TypeScript: 'bg-blue-500', JavaScript: 'bg-yellow-400', Python: 'bg-green-500',
+  Java: 'bg-orange-500', HTML: 'bg-red-500', CSS: 'bg-purple-500',
+  Jupyter: 'bg-orange-400', 'Jupyter Notebook': 'bg-orange-400',
 };
 
 function ContributionCalendar({ contributions }: { contributions: ContributionDay[] }) {
   const weeks: ContributionDay[][] = [];
   let currentWeek: ContributionDay[] = [];
-
   contributions.forEach((day, index) => {
     currentWeek.push(day);
     if (currentWeek.length === 7 || index === contributions.length - 1) {
-      weeks.push(currentWeek);
-      currentWeek = [];
+      weeks.push(currentWeek); currentWeek = [];
     }
   });
 
   const getLevelColor = (level: number) => {
     switch (level) {
-      case 0: return 'bg-muted hover:bg-muted/80';
-      case 1: return 'bg-primary/30 hover:bg-primary/40';
-      case 2: return 'bg-primary/50 hover:bg-primary/60';
-      case 3: return 'bg-primary/70 hover:bg-primary/80';
-      case 4: return 'bg-primary hover:bg-primary/90';
-      default: return 'bg-muted';
+      case 0: return 'bg-secondary hover:bg-muted';
+      case 1: return 'bg-accent/20 hover:bg-accent/30';
+      case 2: return 'bg-accent/40 hover:bg-accent/50';
+      case 3: return 'bg-accent/60 hover:bg-accent/70';
+      case 4: return 'bg-accent hover:bg-accent/90';
+      default: return 'bg-secondary';
     }
   };
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-  // Get month labels for the calendar - fixed to use local date parsing
   const getMonthLabels = () => {
     const labels: { month: string; index: number }[] = [];
     let lastMonth = -1;
-    
     weeks.forEach((week, weekIndex) => {
       const firstDay = week[0];
       if (firstDay) {
-        // Use local date parsing to avoid timezone issues
         const date = parseDateString(firstDay.date);
         const month = date.getMonth();
-        if (month !== lastMonth) {
-          labels.push({ month: months[month], index: weekIndex });
-          lastMonth = month;
-        }
+        if (month !== lastMonth) { labels.push({ month: months[month], index: weekIndex }); lastMonth = month; }
       }
     });
-    
     return labels;
   };
 
@@ -106,21 +73,15 @@ function ContributionCalendar({ contributions }: { contributions: ContributionDa
   return (
     <div className="w-full overflow-x-auto pb-2">
       <div className="min-w-[750px]">
-        {/* Month labels */}
         <div className="flex mb-1 ml-8">
           {monthLabels.map(({ month, index }) => (
-            <div
-              key={`${month}-${index}`}
-              className="text-xs text-muted-foreground"
-              style={{ marginLeft: index === 0 ? 0 : `${(index - (monthLabels[monthLabels.indexOf({ month, index }) - 1]?.index || 0)) * 14 - 20}px` }}
-            >
+            <div key={`${month}-${index}`} className="text-xs text-muted-foreground"
+              style={{ marginLeft: index === 0 ? 0 : `${(index - (monthLabels[monthLabels.indexOf({ month, index }) - 1]?.index || 0)) * 14 - 20}px` }}>
               {month}
             </div>
           ))}
         </div>
-        
         <div className="flex gap-1">
-          {/* Day labels */}
           <div className="flex flex-col gap-[3px] mr-1">
             {days.map((day, i) => (
               <div key={day} className="h-[12px] text-[10px] text-muted-foreground leading-[12px]">
@@ -128,31 +89,21 @@ function ContributionCalendar({ contributions }: { contributions: ContributionDa
               </div>
             ))}
           </div>
-          
-          {/* Calendar grid */}
           <div className="flex gap-[3px]">
             {weeks.map((week, weekIndex) => (
               <div key={weekIndex} className="flex flex-col gap-[3px]">
                 {week.map((day) => (
-                  <div
-                    key={day.date}
-                    className={`w-[12px] h-[12px] rounded-sm ${getLevelColor(day.level)} transition-colors cursor-pointer`}
-                    title={`${day.date}: ${day.count} contributions`}
-                  />
+                  <div key={day.date} className={`w-[12px] h-[12px] rounded-sm ${getLevelColor(day.level)} transition-colors cursor-pointer`}
+                    title={`${day.date}: ${day.count} contributions`} />
                 ))}
               </div>
             ))}
           </div>
         </div>
-        
-        {/* Legend */}
         <div className="flex items-center justify-end gap-1 mt-3 text-xs text-muted-foreground">
           <span>Less</span>
           {[0, 1, 2, 3, 4].map((level) => (
-            <div
-              key={level}
-              className={`w-[12px] h-[12px] rounded-sm ${getLevelColor(level)}`}
-            />
+            <div key={level} className={`w-[12px] h-[12px] rounded-sm ${getLevelColor(level)}`} />
           ))}
           <span>More</span>
         </div>
@@ -173,63 +124,49 @@ function RepoCard({ repo, index }: { repo: Repository; index: number }) {
       rel="noopener noreferrer"
       initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      transition={{ type: 'spring', stiffness: 100, damping: 20, delay: index * 0.1 }}
       className="group block"
     >
-      <div className="h-full bg-card rounded-xl p-5 border border-border/60 transition-all duration-300 hover:border-electric/50 hover:shadow-[var(--electric-glow)] hover:-translate-y-1">
-        <div className="flex items-start justify-between mb-3">
-          <h3 className="font-semibold text-foreground group-hover:text-electric transition-colors truncate pr-2">
-            {repo.name}
-          </h3>
-          <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
-        </div>
-        
-        {repo.readme ? (
-          <div className="text-sm text-muted-foreground mb-4 max-h-[200px] overflow-y-auto whitespace-pre-wrap break-words font-mono text-xs leading-relaxed scrollbar-thin">
-            {repo.readme}
+      <TiltCard className="relative rounded-xl">
+        <div className="h-full bg-card rounded-xl p-5 border border-border transition-all duration-300 group-hover:border-accent/40">
+          <div className="flex items-start justify-between mb-3">
+            <h3 className="font-semibold text-foreground group-hover:text-accent transition-colors truncate pr-2">
+              {repo.name}
+            </h3>
+            <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
           </div>
-        ) : (
-          <p className="text-sm text-muted-foreground mb-4">
-            {repo.description || 'No description available'}
-          </p>
-        )}
-        
-        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-          {repo.language && (
-            <div className="flex items-center gap-1.5">
-              <span className={`w-3 h-3 rounded-full ${languageColors[repo.language] || 'bg-gray-400'}`} />
-              <span>{repo.language}</span>
+          {repo.readme ? (
+            <div className="text-sm text-muted-foreground mb-4 max-h-[200px] overflow-y-auto whitespace-pre-wrap break-words font-mono text-xs leading-relaxed">
+              {repo.readme}
             </div>
+          ) : (
+            <p className="text-sm text-muted-foreground mb-4">{repo.description || 'No description available'}</p>
           )}
-          
-          {repo.stargazers_count > 0 && (
-            <div className="flex items-center gap-1">
-              <Star className="w-4 h-4" />
-              <span>{repo.stargazers_count}</span>
-            </div>
-          )}
-          
-          {repo.forks_count > 0 && (
-            <div className="flex items-center gap-1">
-              <GitFork className="w-4 h-4" />
-              <span>{repo.forks_count}</span>
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            {repo.language && (
+              <div className="flex items-center gap-1.5">
+                <span className={`w-3 h-3 rounded-full ${languageColors[repo.language] || 'bg-gray-400'}`} />
+                <span>{repo.language}</span>
+              </div>
+            )}
+            {repo.stargazers_count > 0 && (
+              <div className="flex items-center gap-1"><Star className="w-4 h-4" /><span>{repo.stargazers_count}</span></div>
+            )}
+            {repo.forks_count > 0 && (
+              <div className="flex items-center gap-1"><GitFork className="w-4 h-4" /><span>{repo.forks_count}</span></div>
+            )}
+          </div>
+          {repo.topics && repo.topics.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-3">
+              {repo.topics.slice(0, 3).map((topic) => (
+                <span key={topic} className="px-2 py-0.5 bg-accent/10 text-accent text-xs rounded-full border border-accent/20">
+                  {topic}
+                </span>
+              ))}
             </div>
           )}
         </div>
-
-        {repo.topics && repo.topics.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mt-3">
-            {repo.topics.slice(0, 3).map((topic) => (
-              <span
-                key={topic}
-                className="px-2 py-0.5 bg-electric/10 text-electric text-xs rounded-full"
-              >
-                {topic}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
+      </TiltCard>
     </motion.a>
   );
 }
@@ -246,11 +183,7 @@ export default function GitHub() {
 
   const fetchGitHubData = useCallback(async (isRefresh = false) => {
     try {
-      if (isRefresh) {
-        setRefreshing(true);
-      }
-
-      // Fetch only featured repositories with their READMEs
+      if (isRefresh) setRefreshing(true);
       const repoPromises = FEATURED_REPOS.map(async (repoName) => {
         const [repoRes, readmeRes] = await Promise.all([
           fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${repoName}`),
@@ -258,26 +191,16 @@ export default function GitHub() {
         ]);
         const repoData = await repoRes.json();
         let readme: string | null = null;
-        if (readmeRes.ok) {
-          const readmeData = await readmeRes.json();
-          readme = atob(readmeData.content);
-        }
+        if (readmeRes.ok) { const readmeData = await readmeRes.json(); readme = atob(readmeData.content); }
         return { ...repoData, readme };
       });
       const reposData = await Promise.all(repoPromises);
       setRepos(reposData);
 
-      // Fetch real contribution data from our edge function using GraphQL API
       const { data, error } = await supabase.functions.invoke('github-contributions', {
         body: { username: GITHUB_USERNAME },
       });
-
-      if (error) {
-        console.error('Error fetching contributions:', error);
-        return;
-      }
-
-      if (data?.contributions) {
+      if (!error && data?.contributions) {
         setContributions(data.contributions);
         setTotalContributions(data.totalContributions || 0);
         setLastUpdated(new Date());
@@ -285,96 +208,62 @@ export default function GitHub() {
     } catch (error) {
       console.error('Error fetching GitHub data:', error);
     } finally {
-      setLoading(false);
-      setRefreshing(false);
+      setLoading(false); setRefreshing(false);
     }
   }, []);
 
   useEffect(() => {
-    // Initial fetch
     fetchGitHubData();
-
-    // Set up auto-refresh interval
-    const intervalId = setInterval(() => {
-      fetchGitHubData(true);
-    }, REFRESH_INTERVAL);
-
-    // Cleanup on unmount
+    const intervalId = setInterval(() => fetchGitHubData(true), REFRESH_INTERVAL);
     return () => clearInterval(intervalId);
   }, [fetchGitHubData]);
 
   return (
-    <section id="github" className="section-padding" ref={ref}>
+    <section id="github" className="section-padding bg-background" ref={ref}>
       <div className="container-tight">
         <ScrollReveal className="text-center mb-16">
-          <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest mb-4">
-            Open Source
-          </p>
-          <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight">
-            GitHub Activity
-          </h2>
+          <p className="text-sm font-medium text-accent uppercase tracking-widest mb-4">Open Source</p>
+          <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground">GitHub Activity</h2>
         </ScrollReveal>
 
-        {/* Contribution Calendar */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-card rounded-2xl p-6 border border-border/60 hover:border-electric/30 transition-all duration-300 mb-12"
+          transition={{ type: 'spring', stiffness: 100, damping: 20, delay: 0.2 }}
+          className="bg-card rounded-2xl p-6 border border-border hover:border-accent/30 transition-all duration-300 mb-12"
         >
           <div className="flex items-center gap-2 mb-6">
-            <Calendar className="w-5 h-5 text-electric" />
-            <h3 className="font-semibold text-lg">Contribution Activity</h3>
+            <Calendar className="w-5 h-5 text-accent" />
+            <h3 className="font-semibold text-lg text-foreground">Contribution Activity</h3>
             <div className="ml-auto flex items-center gap-3">
               {totalContributions > 0 && (
-                <span className="text-sm text-muted-foreground">
-                  {totalContributions} contributions in the last year
-                </span>
+                <span className="text-sm text-muted-foreground">{totalContributions} contributions in the last year</span>
               )}
               {lastUpdated && (
-                <span className="text-xs text-muted-foreground hidden sm:inline">
-                  Updated {lastUpdated.toLocaleTimeString()}
-                </span>
+                <span className="text-xs text-muted-foreground hidden sm:inline">Updated {lastUpdated.toLocaleTimeString()}</span>
               )}
-              <button
-                onClick={() => fetchGitHubData(true)}
-                disabled={refreshing}
-                className="p-1.5 rounded-md hover:bg-muted transition-colors disabled:opacity-50"
-                title="Refresh contributions"
-              >
+              <button onClick={() => fetchGitHubData(true)} disabled={refreshing}
+                className="p-1.5 rounded-md hover:bg-muted transition-colors disabled:opacity-50">
                 <RefreshCw className={`w-4 h-4 text-muted-foreground ${refreshing ? 'animate-spin' : ''}`} />
               </button>
             </div>
           </div>
-          
           {loading ? (
             <div className="w-full overflow-x-auto pb-2">
               <div className="min-w-[750px]">
-                {/* Month labels skeleton */}
                 <div className="flex mb-1 ml-8 gap-8">
-                  {[...Array(12)].map((_, i) => (
-                    <div key={i} className="h-3 w-6 bg-muted rounded animate-pulse" />
-                  ))}
+                  {[...Array(12)].map((_, i) => (<div key={i} className="h-3 w-6 bg-muted rounded animate-pulse" />))}
                 </div>
-                
                 <div className="flex gap-1">
-                  {/* Day labels skeleton */}
                   <div className="flex flex-col gap-[3px] mr-1">
-                    {[...Array(7)].map((_, i) => (
-                      <div key={i} className="h-[12px] w-6 bg-muted rounded animate-pulse" />
-                    ))}
+                    {[...Array(7)].map((_, i) => (<div key={i} className="h-[12px] w-6 bg-muted rounded animate-pulse" />))}
                   </div>
-                  
-                  {/* Calendar grid skeleton */}
                   <div className="flex gap-[3px]">
                     {[...Array(52)].map((_, weekIndex) => (
                       <div key={weekIndex} className="flex flex-col gap-[3px]">
                         {[...Array(7)].map((_, dayIndex) => (
-                          <div
-                            key={dayIndex}
-                            className="w-[12px] h-[12px] rounded-sm bg-muted animate-pulse"
-                            style={{ animationDelay: `${(weekIndex * 7 + dayIndex) * 5}ms` }}
-                          />
+                          <div key={dayIndex} className="w-[12px] h-[12px] rounded-sm bg-muted animate-pulse"
+                            style={{ animationDelay: `${(weekIndex * 7 + dayIndex) * 5}ms` }} />
                         ))}
                       </div>
                     ))}
@@ -387,47 +276,36 @@ export default function GitHub() {
           )}
         </motion.div>
 
-        {/* Highlighted Projects */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          transition={{ type: 'spring', stiffness: 100, damping: 20, delay: 0.3 }}
         >
-          <h3 className="font-semibold text-lg mb-6 flex items-center gap-2">
-            <svg className="w-5 h-5 text-primary" viewBox="0 0 16 16" fill="currentColor">
+          <h3 className="font-semibold text-lg mb-6 flex items-center gap-2 text-foreground">
+            <svg className="w-5 h-5 text-accent" viewBox="0 0 16 16" fill="currentColor">
               <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z" />
             </svg>
             Highlighted Projects
           </h3>
-          
           {loading ? (
             <div className="grid md:grid-cols-2 gap-4">
-              {[...Array(2)].map((_, i) => (
-                <div key={i} className="h-60 bg-muted rounded-xl animate-pulse" />
-              ))}
+              {[...Array(2)].map((_, i) => (<div key={i} className="h-60 bg-muted rounded-xl animate-pulse" />))}
             </div>
           ) : (
             <div className="grid md:grid-cols-2 gap-4">
-              {repos.map((repo, index) => (
-                <RepoCard key={repo.id} repo={repo} index={index} />
-              ))}
+              {repos.map((repo, index) => (<RepoCard key={repo.id} repo={repo} index={index} />))}
             </div>
           )}
         </motion.div>
 
-        {/* View More Link */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.5 }}
           className="text-center mt-10"
         >
-          <a
-            href="https://github.com/PratikBalaji?tab=repositories"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
-          >
+          <a href="https://github.com/PratikBalaji?tab=repositories" target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-accent hover:underline font-medium">
             View all repositories on GitHub
             <ExternalLink className="w-4 h-4" />
           </a>

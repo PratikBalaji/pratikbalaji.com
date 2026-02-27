@@ -12,10 +12,10 @@ interface ScrollRevealProps {
 }
 
 const directionMap = {
-  up: { y: 40 },
-  down: { y: -40 },
-  left: { x: 40 },
-  right: { x: -40 },
+  up: { y: 1 },
+  down: { y: -1 },
+  left: { x: 1 },
+  right: { x: -1 },
 };
 
 export default function ScrollReveal({
@@ -23,26 +23,28 @@ export default function ScrollReveal({
   className,
   delay = 0,
   direction = 'up',
-  distance,
-  duration = 0.7,
+  distance = 30,
+  duration,
   once = true,
 }: ScrollRevealProps) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once, margin: '-80px' });
+  const isInView = useInView(ref, { once, margin: '-60px' });
 
-  const offset = directionMap[direction];
-  const d = distance ?? Object.values(offset)[0];
-  const axis = 'x' in offset ? 'x' : 'y';
+  const dir = directionMap[direction];
+  const axis = 'x' in dir ? 'x' : 'y';
+  const offset = dir[axis as 'x' | 'y']! * distance;
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, [axis]: d }}
-      animate={isInView ? { opacity: 1, [axis]: 0 } : { opacity: 0, [axis]: d }}
+      initial={{ opacity: 0, [axis]: offset }}
+      animate={isInView ? { opacity: 1, [axis]: 0 } : { opacity: 0, [axis]: offset }}
       transition={{
-        duration,
+        type: 'spring',
+        stiffness: 100,
+        damping: 20,
         delay,
-        ease: [0.25, 0.1, 0.25, 1],
+        ...(duration ? { duration } : {}),
       }}
       className={className}
     >
