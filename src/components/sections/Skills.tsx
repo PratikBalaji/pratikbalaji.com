@@ -1,33 +1,47 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ScrollReveal from '@/components/ScrollReveal';
+import { supabase } from '@/integrations/supabase/client';
 
-const skillCategories = [
-  { title: 'Programming Languages', skills: ['Python', 'Java', 'SQL', 'JavaScript', 'TypeScript', 'LaTeX'] },
-  { title: 'Frontend & Backend', skills: ['React', 'Next.js', 'TailwindCSS', 'Node.js', 'MongoDB', 'PostgreSQL', 'FastAPI'] },
-  { title: 'AI & Machine Learning', skills: ['Machine Learning', 'Artificial Intelligence (AI)', 'Generative AI', 'AI Agents'] },
-  { title: 'Development Domains', skills: ['Web Development', 'Application Development', 'Game Development'] },
-  { title: 'Tools & Platforms', skills: ['Git', 'Docker', 'AWS', 'Microsoft Office Suite', 'Customer Service Tools'] },
-  { title: 'Core Competencies', skills: ['Leadership', 'Decision Making', 'Time Management', 'Team Collaboration', 'Problem-solving', 'Cashiering'] },
-  { title: 'Languages', skills: ['Tamil (Fluent)', 'English (Fluent)', 'Hindi (Fluent)', 'Spanish (Novice)'] },
-];
+type Skill = { id: string; category: string; name: string; sort_order: number };
+type SkillCategory = { title: string; skills: string[] };
 
 export default function Skills() {
+  const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-  const displayedSkills = selectedCategory !== null ? skillCategories[selectedCategory].skills : [];
+
+  useEffect(() => {
+    async function fetchSkills() {
+      const { data, error } = await supabase
+        .from('skills')
+        .select('*')
+        .order('sort_order');
+
+      if (!error && data) {
+        const grouped: Record<string, string[]> = {};
+        const order: string[] = [];
+        (data as Skill[]).forEach(s => {
+          if (!grouped[s.category]) { grouped[s.category] = []; order.push(s.category); }
+          grouped[s.category].push(s.name);
+        });
+        setSkillCategories(order.map(cat => ({ title: cat, skills: grouped[cat] })));
+      }
+      setLoading(false);
+    }
+    fetchSkills();
+  }, []);
+
+  const displayedSkills = selectedCategory !== null ? skillCategories[selectedCategory]?.skills || [] : [];
 
   return (
     <section id="skills" className="section-padding bg-background">
       <div className="container-tight">
         <ScrollReveal className="text-center mb-16">
-          <p className="text-sm font-medium text-accent uppercase tracking-widest mb-4">
-            Technical Expertise
-          </p>
-          <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground">
-            Skills & Technologies
-          </h2>
+          <p className="text-sm font-medium text-accent uppercase tracking-widest mb-4">Technical Expertise</p>
+          <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground">Skills & Technologies</h2>
         </ScrollReveal>
-        
+
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Animated Globe */}
           <motion.div
@@ -38,74 +52,28 @@ export default function Skills() {
             className="order-2 lg:order-1 flex items-center justify-center"
           >
             <div className="relative w-80 h-80">
-              <motion.div
-                animate={{ rotateY: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0"
-                style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
-              >
-                <motion.div
-                  className="absolute inset-0 border rounded-full transition-colors duration-500"
-                  style={{
-                    borderColor: selectedCategory !== null ? 'hsl(270 100% 64%)' : 'hsl(0 0% 14%)',
-                    boxShadow: selectedCategory !== null ? '0 0 20px hsl(270 100% 64% / 0.3)' : 'none',
-                  }}
-                />
+              <motion.div animate={{ rotateY: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute inset-0" style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}>
+                <motion.div className="absolute inset-0 border rounded-full transition-colors duration-500" style={{ borderColor: selectedCategory !== null ? 'hsl(270 100% 64%)' : 'hsl(0 0% 14%)', boxShadow: selectedCategory !== null ? '0 0 20px hsl(270 100% 64% / 0.3)' : 'none' }} />
               </motion.div>
-              <motion.div
-                animate={{ rotateX: 360 }}
-                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-8"
-              >
-                <div
-                  className="w-full h-full border rounded-full transition-colors duration-500"
-                  style={{ borderColor: selectedCategory !== null ? 'hsl(270 100% 64% / 0.6)' : 'hsl(0 0% 14%)' }}
-                />
+              <motion.div animate={{ rotateX: 360 }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }} className="absolute inset-8">
+                <div className="w-full h-full border rounded-full transition-colors duration-500" style={{ borderColor: selectedCategory !== null ? 'hsl(270 100% 64% / 0.6)' : 'hsl(0 0% 14%)' }} />
               </motion.div>
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-16"
-              >
-                <div
-                  className="w-full h-full border rounded-full transition-colors duration-500"
-                  style={{ borderColor: selectedCategory !== null ? 'hsl(270 100% 64% / 0.4)' : 'hsl(0 0% 14%)' }}
-                />
+              <motion.div animate={{ rotate: -360 }} transition={{ duration: 25, repeat: Infinity, ease: "linear" }} className="absolute inset-16">
+                <div className="w-full h-full border rounded-full transition-colors duration-500" style={{ borderColor: selectedCategory !== null ? 'hsl(270 100% 64% / 0.4)' : 'hsl(0 0% 14%)' }} />
               </motion.div>
-              
+
               <AnimatePresence mode="wait">
                 {displayedSkills.length > 0 && (
-                  <motion.div
-                    key={selectedCategory}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                    className="absolute inset-0"
-                  >
+                  <motion.div key={selectedCategory} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} transition={{ type: 'spring', stiffness: 200, damping: 20 }} className="absolute inset-0">
                     {displayedSkills.map((skill, i) => {
                       const angle = (i / displayedSkills.length) * 360;
                       const radius = 130;
                       return (
-                        <motion.div
-                          key={skill}
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={{ opacity: 1, scale: 1, rotate: 360 }}
-                          transition={{
-                            opacity: { duration: 0.3, delay: i * 0.05 },
-                            scale: { type: 'spring', stiffness: 300, damping: 20, delay: i * 0.05 },
-                            rotate: { duration: 30 + i * 2, repeat: Infinity, ease: "linear" }
-                          }}
-                          className="absolute top-1/2 left-1/2"
-                          style={{ width: radius * 2, height: radius * 2, marginLeft: -radius, marginTop: -radius }}
-                        >
-                          <div
-                            className="absolute px-3 py-1.5 bg-card border border-border rounded-full text-xs font-medium text-foreground whitespace-nowrap"
-                            style={{
-                              top: '50%', left: '50%',
-                              transform: `rotate(${angle}deg) translateX(${radius}px) rotate(-${angle}deg) translate(-50%, -50%)`
-                            }}
-                          >
+                        <motion.div key={skill} initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1, rotate: 360 }}
+                          transition={{ opacity: { duration: 0.3, delay: i * 0.05 }, scale: { type: 'spring', stiffness: 300, damping: 20, delay: i * 0.05 }, rotate: { duration: 30 + i * 2, repeat: Infinity, ease: "linear" } }}
+                          className="absolute top-1/2 left-1/2" style={{ width: radius * 2, height: radius * 2, marginLeft: -radius, marginTop: -radius }}>
+                          <div className="absolute px-3 py-1.5 bg-card border border-border rounded-full text-xs font-medium text-foreground whitespace-nowrap"
+                            style={{ top: '50%', left: '50%', transform: `rotate(${angle}deg) translateX(${radius}px) rotate(-${angle}deg) translate(-50%, -50%)` }}>
                             {skill}
                           </div>
                         </motion.div>
@@ -114,75 +82,64 @@ export default function Skills() {
                   </motion.div>
                 )}
               </AnimatePresence>
-              
+
               <div className="absolute inset-0 flex items-center justify-center">
-                <motion.div
-                  animate={{
-                    scale: [1, 1.1, 1],
-                    backgroundColor: selectedCategory !== null ? 'hsl(270 100% 64%)' : 'hsl(0 0% 92%)',
-                  }}
-                  transition={{
-                    scale: { duration: 3, repeat: Infinity, ease: "easeInOut" },
-                    backgroundColor: { duration: 0.5 }
-                  }}
-                  className="w-20 h-20 rounded-full flex items-center justify-center"
-                  style={{
-                    boxShadow: selectedCategory !== null ? '0 0 30px hsl(270 100% 64% / 0.5)' : 'none'
-                  }}
-                >
-                  {selectedCategory === null && (
-                    <span className="text-background text-[10px] font-medium text-center px-1">Click a category</span>
-                  )}
+                <motion.div animate={{ scale: [1, 1.1, 1], backgroundColor: selectedCategory !== null ? 'hsl(270 100% 64%)' : 'hsl(0 0% 92%)' }}
+                  transition={{ scale: { duration: 3, repeat: Infinity, ease: "easeInOut" }, backgroundColor: { duration: 0.5 } }}
+                  className="w-20 h-20 rounded-full flex items-center justify-center" style={{ boxShadow: selectedCategory !== null ? '0 0 30px hsl(270 100% 64% / 0.5)' : 'none' }}>
+                  {selectedCategory === null && <span className="text-background text-[10px] font-medium text-center px-1">Click a category</span>}
                 </motion.div>
               </div>
             </div>
           </motion.div>
-          
+
           {/* Skills List */}
           <div className="order-1 lg:order-2 space-y-4">
-            {skillCategories.map((category, catIndex) => (
-              <motion.div
-                key={category.title}
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ type: 'spring', stiffness: 100, damping: 20, delay: catIndex * 0.08 }}
-                onClick={() => setSelectedCategory(selectedCategory === catIndex ? null : catIndex)}
-                className={`cursor-pointer p-5 rounded-xl border transition-all duration-300 hover:-translate-y-1 ${
-                  selectedCategory === catIndex
-                    ? 'bg-card border-accent shadow-[var(--electric-glow)]'
-                    : 'bg-card border-border hover:border-accent/40 hover:shadow-[var(--electric-glow)]'
-                }`}
-              >
-                <h3 className={`font-display text-lg font-bold mb-4 transition-colors ${
-                  selectedCategory === catIndex ? 'text-accent' : 'text-foreground'
-                }`}>
-                  {category.title}
-                  {selectedCategory === catIndex && (
-                    <span className="ml-2 text-xs font-normal text-muted-foreground">(active)</span>
-                  )}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {category.skills.map((skill, skillIndex) => (
-                    <motion.span
-                      key={skill}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ type: 'spring', stiffness: 200, damping: 20, delay: catIndex * 0.05 + skillIndex * 0.03 }}
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      className={`px-3 py-1.5 bg-secondary border rounded-full text-sm font-medium cursor-pointer transition-all hover:border-accent/40 ${
-                        selectedCategory === catIndex
-                          ? 'border-accent/30 text-foreground'
-                          : 'border-border text-muted-foreground'
-                      }`}
-                    >
-                      {skill}
-                    </motion.span>
-                  ))}
+            {loading ? (
+              Array.from({ length: 7 }).map((_, i) => (
+                <div key={i} className="bg-card border border-border rounded-xl p-5 animate-pulse">
+                  <div className="h-5 w-40 bg-muted rounded mb-4" />
+                  <div className="flex flex-wrap gap-2">
+                    {Array.from({ length: 4 }).map((_, j) => (
+                      <div key={j} className="h-7 w-20 bg-muted rounded-full" />
+                    ))}
+                  </div>
                 </div>
-              </motion.div>
-            ))}
+              ))
+            ) : (
+              skillCategories.map((category, catIndex) => (
+                <motion.div
+                  key={category.title}
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ type: 'spring', stiffness: 100, damping: 20, delay: catIndex * 0.08 }}
+                  onClick={() => setSelectedCategory(selectedCategory === catIndex ? null : catIndex)}
+                  className={`cursor-pointer p-5 rounded-xl border transition-all duration-300 hover:-translate-y-1 ${
+                    selectedCategory === catIndex
+                      ? 'bg-card border-accent shadow-[var(--electric-glow)]'
+                      : 'bg-card border-border hover:border-accent/40 hover:shadow-[var(--electric-glow)]'
+                  }`}
+                >
+                  <h3 className={`font-display text-lg font-bold mb-4 transition-colors ${selectedCategory === catIndex ? 'text-accent' : 'text-foreground'}`}>
+                    {category.title}
+                    {selectedCategory === catIndex && <span className="ml-2 text-xs font-normal text-muted-foreground">(active)</span>}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {category.skills.map((skill, skillIndex) => (
+                      <motion.span key={skill} initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
+                        transition={{ type: 'spring', stiffness: 200, damping: 20, delay: catIndex * 0.05 + skillIndex * 0.03 }}
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        className={`px-3 py-1.5 bg-secondary border rounded-full text-sm font-medium cursor-pointer transition-all hover:border-accent/40 ${
+                          selectedCategory === catIndex ? 'border-accent/30 text-foreground' : 'border-border text-muted-foreground'
+                        }`}>
+                        {skill}
+                      </motion.span>
+                    ))}
+                  </div>
+                </motion.div>
+              ))
+            )}
           </div>
         </div>
       </div>

@@ -83,6 +83,75 @@ export type Database = {
         }
         Relationships: []
       }
+      projects: {
+        Row: {
+          created_at: string
+          description: string
+          forks_count: number | null
+          homepage: string | null
+          id: string
+          language: string | null
+          name: string
+          sort_order: number | null
+          stargazers_count: number | null
+          topics: string[] | null
+          url: string | null
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          forks_count?: number | null
+          homepage?: string | null
+          id?: string
+          language?: string | null
+          name: string
+          sort_order?: number | null
+          stargazers_count?: number | null
+          topics?: string[] | null
+          url?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          forks_count?: number | null
+          homepage?: string | null
+          id?: string
+          language?: string | null
+          name?: string
+          sort_order?: number | null
+          stargazers_count?: number | null
+          topics?: string[] | null
+          url?: string | null
+        }
+        Relationships: []
+      }
+      skills: {
+        Row: {
+          category: string
+          created_at: string
+          icon: string | null
+          id: string
+          name: string
+          sort_order: number | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          icon?: string | null
+          id?: string
+          name: string
+          sort_order?: number | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          icon?: string | null
+          id?: string
+          name?: string
+          sort_order?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

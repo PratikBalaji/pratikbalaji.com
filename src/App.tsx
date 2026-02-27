@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import CustomCursor from "@/components/CustomCursor";
 import NoiseOverlay from "@/components/NoiseOverlay";
+import ChatAssistant from "@/components/sections/ChatAssistant";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
@@ -17,7 +18,9 @@ const App = () => (
       <TooltipProvider>
         <CustomCursor />
         <NoiseOverlay />
+        <ChatAssistant />
         <Toaster />
+        <Sonner />
         <Sonner />
         <BrowserRouter>
           <Routes>
