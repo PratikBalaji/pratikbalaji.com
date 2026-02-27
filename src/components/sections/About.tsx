@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import ScrollReveal from '@/components/ScrollReveal';
 
 export default function About() {
   return (
@@ -6,11 +7,7 @@ export default function About() {
       <div className="container-tight">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Animated sphere fallback - no WebGL */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+          <ScrollReveal direction="left" delay={0.2} duration={0.8}
             className="aspect-square max-w-md mx-auto lg:max-w-none flex items-center justify-center"
           >
             <div className="relative w-full h-full flex items-center justify-center">
@@ -61,61 +58,39 @@ export default function About() {
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-foreground/40 rounded-full" />
               </motion.div>
             </div>
-          </motion.div>
+          </ScrollReveal>
           
           {/* Content */}
           <div>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-sm font-medium text-muted-foreground uppercase tracking-widest mb-4"
-            >
-              About Me
-            </motion.p>
+            <ScrollReveal delay={0.1}>
+              <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest mb-4">
+                About Me
+              </p>
+            </ScrollReveal>
             
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-6"
-            >
-              Bridging data science and AI to build intelligent solutions.
-            </motion.h2>
+            <ScrollReveal delay={0.2}>
+              <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-6">
+                Bridging data science and AI to build intelligent solutions.
+              </h2>
+            </ScrollReveal>
             
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-lg text-muted-foreground mb-6"
-            >
-              I'm a student at Temple University's College of Science and Technology, 
-              pursuing a degree in Data Science with a specialization in Computational 
-              Analytics. My passion lies at the intersection of data and artificial intelligence.
-            </motion.p>
+            <ScrollReveal delay={0.3}>
+              <p className="text-lg text-muted-foreground mb-6">
+                I'm a student at Temple University's College of Science and Technology, 
+                pursuing a degree in Data Science with a specialization in Computational 
+                Analytics. My passion lies at the intersection of data and artificial intelligence.
+              </p>
+            </ScrollReveal>
             
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="text-lg text-muted-foreground mb-8"
-            >
-              As an aspiring AI Generalist, I'm eager to work closely with machine learning 
-              and AI technologies—exploring everything from generative models to intelligent 
-              agents. I thrive on turning complex data into actionable insights and innovative applications.
-            </motion.p>
+            <ScrollReveal delay={0.4}>
+              <p className="text-lg text-muted-foreground mb-8">
+                As an aspiring AI Generalist, I'm eager to work closely with machine learning 
+                and AI technologies—exploring everything from generative models to intelligent 
+                agents. I thrive on turning complex data into actionable insights and innovative applications.
+              </p>
+            </ScrollReveal>
             
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="flex flex-wrap gap-4"
-            >
+            <ScrollReveal delay={0.5} className="flex flex-wrap gap-4">
               <div className="px-6 py-3 bg-background rounded-full shadow-soft border border-border">
                 <span className="font-display font-semibold">AI/ML</span>
                 <span className="text-muted-foreground ml-2">Focused</span>
@@ -124,7 +99,7 @@ export default function About() {
                 <span className="font-display font-semibold">Data Science</span>
                 <span className="text-muted-foreground ml-2">Major</span>
               </div>
-            </motion.div>
+            </ScrollReveal>
           </div>
         </div>
       </div>

@@ -1,6 +1,5 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
 import { Briefcase, Calendar, MapPin } from 'lucide-react';
+import ScrollReveal from '@/components/ScrollReveal';
 import yanItLogo from '@/assets/yan-it-logo.png';
 import regalLogo from '@/assets/regal-logo.png';
 import natarajBeatsLogo from '@/assets/nataraj-beats-logo.png';
@@ -37,15 +36,12 @@ const experiences = [
 ];
 
 function ExperienceCard({ experience, index }: { experience: typeof experiences[0]; index: number }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-      animate={isInView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.6, delay: index * 0.15 }}
+    <ScrollReveal
+      delay={index * 0.15}
+      direction={index % 2 === 0 ? 'left' : 'right'}
+      distance={50}
+      duration={0.7}
       className="relative"
     >
       {/* Timeline line */}
@@ -113,30 +109,22 @@ function ExperienceCard({ experience, index }: { experience: typeof experiences[
         {/* Timeline dot */}
         <div className="hidden lg:flex absolute left-1/2 top-8 -translate-x-1/2 w-4 h-4 bg-primary rounded-full border-4 border-background" />
       </div>
-    </motion.div>
+    </ScrollReveal>
   );
 }
 
 export default function Experience() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section id="experience" className="section-padding" ref={ref}>
+    <section id="experience" className="section-padding">
       <div className="container-tight">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        <ScrollReveal className="text-center mb-16">
           <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest mb-4">
             Career Journey
           </p>
           <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight">
             Experience
           </h2>
-        </motion.div>
+        </ScrollReveal>
         
         <div className="space-y-8 lg:space-y-12 relative">
           {experiences.map((experience, index) => (

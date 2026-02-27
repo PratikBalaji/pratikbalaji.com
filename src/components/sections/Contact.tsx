@@ -1,4 +1,5 @@
 import { motion, useInView } from 'framer-motion';
+import ScrollReveal from '@/components/ScrollReveal';
 import { useRef } from 'react';
 import { Mail, Phone, MapPin, ArrowUpRight, ExternalLink } from 'lucide-react';
 
@@ -73,33 +74,24 @@ export default function Contact() {
       <div className="container-tight">
         {/* Header */}
         <div className="text-center mb-16">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="text-sm font-medium text-white/60 uppercase tracking-widest mb-4"
-          >
-            Get in Touch
-          </motion.p>
+          <ScrollReveal>
+            <p className="text-sm font-medium text-white/60 uppercase tracking-widest mb-4">
+              Get in Touch
+            </p>
+          </ScrollReveal>
           
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-6"
-          >
-            Let's Connect
-          </motion.h2>
+          <ScrollReveal delay={0.1}>
+            <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-6">
+              Let's Connect
+            </h2>
+          </ScrollReveal>
           
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg text-white/70 max-w-2xl mx-auto"
-          >
-            I'm always excited to connect with new people and explore opportunities.
-            Whether you have a project in mind or just want to say hello, feel free to reach out.
-          </motion.p>
+          <ScrollReveal delay={0.2}>
+            <p className="text-lg text-white/70 max-w-2xl mx-auto">
+              I'm always excited to connect with new people and explore opportunities.
+              Whether you have a project in mind or just want to say hello, feel free to reach out.
+            </p>
+          </ScrollReveal>
         </div>
 
         <motion.div
