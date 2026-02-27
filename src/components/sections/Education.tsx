@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
 import { GraduationCap, Calendar, MapPin } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
+import TiltCard from '@/components/TiltCard';
 import templeLogo from '@/assets/temple-logo.png';
 import downingtownLogo from '@/assets/downingtown-logo.png';
 
@@ -29,82 +29,80 @@ const education = [
 
 function EducationCard({ edu, index }: { edu: typeof education[0]; index: number }) {
   return (
-    <ScrollReveal delay={index * 0.15} duration={0.7}>
-      <div className="bg-background rounded-2xl p-6 md:p-8 shadow-soft border border-border hover-lift">
-      <div className="flex flex-col md:flex-row gap-6">
-        {/* Logo box */}
-        <div className="flex-shrink-0">
-          {edu.logo ? (
-            <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl bg-white flex items-center justify-center p-2 border border-border">
-              <img src={edu.logo} alt={`${edu.institution} logo`} className="w-full h-full object-contain" />
+    <ScrollReveal delay={index * 0.15}>
+      <TiltCard className="relative rounded-2xl">
+        <div className="bg-card rounded-2xl p-6 md:p-8 border border-border hover:border-accent/40 transition-all duration-300">
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-shrink-0">
+              {edu.logo ? (
+                <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl bg-muted flex items-center justify-center p-2 border border-border">
+                  <img src={edu.logo} alt={`${edu.institution} logo`} className="w-full h-full object-contain" />
+                </div>
+              ) : (
+                <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl border-2 border-dashed border-border bg-muted/20 flex items-center justify-center">
+                  <GraduationCap className="w-10 h-10 text-muted-foreground" />
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl border-2 border-dashed border-muted-foreground/30 bg-muted/20 flex items-center justify-center hover:border-primary/50 transition-colors">
-              <GraduationCap className="w-10 h-10 text-muted-foreground/50" />
-            </div>
-          )}
-        </div>
 
-        {/* Content */}
-        <div className="flex-1">
-          {edu.period && (
-            <div className="flex items-center gap-2 text-muted-foreground text-sm mb-2">
-              <Calendar className="w-4 h-4 text-electric" />
-              <span>{edu.period}</span>
+            <div className="flex-1">
+              {edu.period && (
+                <div className="flex items-center gap-2 text-muted-foreground text-sm mb-2">
+                  <Calendar className="w-4 h-4 text-accent" />
+                  <span>{edu.period}</span>
+                </div>
+              )}
+              
+              <h3 className="font-display text-xl md:text-2xl font-bold mb-1 text-foreground">
+                {edu.degree}
+              </h3>
+              
+              {edu.concentration && (
+                <p className="text-accent font-medium mb-2">
+                  {edu.concentration}
+                </p>
+              )}
+              
+              <div className="flex items-center gap-4 text-muted-foreground mb-4">
+                <div className="flex items-center gap-1.5">
+                  <GraduationCap className="w-4 h-4 text-accent" />
+                  <span>{edu.institution}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <MapPin className="w-4 h-4 text-accent" />
+                  <span>{edu.location}</span>
+                </div>
+              </div>
+              
+              <p className="text-muted-foreground mb-4">{edu.description}</p>
+              
+              <div className="flex flex-wrap gap-2">
+                {edu.highlights.map((highlight) => (
+                  <span
+                    key={highlight}
+                    className="px-3 py-1 bg-secondary text-muted-foreground text-sm rounded-full border border-border"
+                  >
+                    {highlight}
+                  </span>
+                ))}
+              </div>
             </div>
-          )}
-          
-          <h3 className="font-display text-xl md:text-2xl font-bold mb-1">
-            {edu.degree}
-          </h3>
-          
-          {edu.concentration && (
-            <p className="text-primary font-medium mb-2">
-              {edu.concentration}
-            </p>
-          )}
-          
-          <div className="flex items-center gap-4 text-muted-foreground mb-4">
-            <div className="flex items-center gap-1.5">
-              <GraduationCap className="w-4 h-4 text-electric" />
-              <span>{edu.institution}</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <MapPin className="w-4 h-4 text-electric" />
-              <span>{edu.location}</span>
-            </div>
-          </div>
-          
-          <p className="text-muted-foreground mb-4">
-            {edu.description}
-          </p>
-          
-          <div className="flex flex-wrap gap-2">
-            {edu.highlights.map((highlight) => (
-              <span
-                key={highlight}
-                className="px-3 py-1 bg-secondary text-secondary-foreground text-sm rounded-full"
-              >
-                {highlight}
-              </span>
-            ))}
           </div>
         </div>
-      </div>
-      </div>
+      </TiltCard>
     </ScrollReveal>
   );
 }
 
 export default function Education() {
   return (
-    <section id="education" className="section-padding bg-muted/30">
+    <section id="education" className="section-padding bg-background">
       <div className="container-tight">
         <ScrollReveal className="text-center mb-16">
-          <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest mb-4">
+          <p className="text-sm font-medium text-accent uppercase tracking-widest mb-4">
             Academic Background
           </p>
-          <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight">
+          <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground">
             Education
           </h2>
         </ScrollReveal>
