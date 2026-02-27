@@ -1,7 +1,16 @@
 import { motion, useInView } from 'framer-motion';
 import ScrollReveal from '@/components/ScrollReveal';
-import { useRef } from 'react';
-import { Mail, Phone, MapPin, ArrowUpRight } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { Mail, Phone, MapPin, ArrowUpRight, Loader2, Send, CheckCircle } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/hooks/use-toast';
+import { z } from 'zod';
+
+const contactSchema = z.object({
+  name: z.string().trim().min(1, 'Name is required').max(100, 'Name must be under 100 characters'),
+  email: z.string().trim().email('Invalid email address').max(255, 'Email too long'),
+  message: z.string().trim().min(1, 'Message is required').max(1000, 'Message must be under 1000 characters'),
+});
 
 const GitHubLogo = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -18,6 +27,52 @@ const LinkedInLogo = ({ className }: { className?: string }) => (
 export default function Contact() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors({});
+
+    const result = contactSchema.safeParse(formData);
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      result.error.errors.forEach(err => {
+        if (err.path[0]) fieldErrors[err.path[0] as string] = err.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from('contact_messages').insert({
+        name: result.data.name,
+        email: result.data.email,
+        message: result.data.message,
+      });
+
+      if (error) throw error;
+
+      setIsSuccess(true);
+      setFormData({ name: '', email: '', message: '' });
+      toast({
+        title: '✨ Message sent!',
+        description: "Thanks for reaching out. I'll get back to you soon!",
+      });
+      setTimeout(() => setIsSuccess(false), 3000);
+    } catch {
+      toast({
+        title: 'Something went wrong',
+        description: 'Please try again or email me directly.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const contactInfo = [
     { icon: Mail, label: 'Personal Email', value: 'balajipratik8@gmail.com', href: 'mailto:balajipratik8@gmail.com' },
@@ -49,6 +104,7 @@ export default function Contact() {
           </ScrollReveal>
         </div>
 
+        {/* Contact Info Cards */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -85,6 +141,87 @@ export default function Contact() {
           ))}
         </motion.div>
 
+        {/* Contact Form */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ type: 'spring', stiffness: 100, damping: 20, delay: 0.4 }}
+          className="max-w-2xl mx-auto mb-16"
+        >
+          <div className="bg-card border border-border rounded-2xl p-8">
+            <h3 className="font-display text-2xl font-bold mb-6 text-foreground">Send a Message</h3>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-muted-foreground mb-2">Name</label>
+                <input
+                  id="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
+                  className="w-full bg-secondary border border-border rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all"
+                  placeholder="Your name"
+                  maxLength={100}
+                />
+                {errors.name && <p className="text-destructive text-sm mt-1">{errors.name}</p>}
+              </div>
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-muted-foreground mb-2">Email</label>
+                <input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={e => setFormData(p => ({ ...p, email: e.target.value }))}
+                  className="w-full bg-secondary border border-border rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all"
+                  placeholder="your@email.com"
+                  maxLength={255}
+                />
+                {errors.email && <p className="text-destructive text-sm mt-1">{errors.email}</p>}
+              </div>
+              <div>
+                <label htmlFor="message" className="block text-sm font-medium text-muted-foreground mb-2">Message</label>
+                <textarea
+                  id="message"
+                  value={formData.message}
+                  onChange={e => setFormData(p => ({ ...p, message: e.target.value }))}
+                  rows={5}
+                  className="w-full bg-secondary border border-border rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all resize-none"
+                  placeholder="What's on your mind?"
+                  maxLength={1000}
+                />
+                <div className="flex justify-between mt-1">
+                  {errors.message && <p className="text-destructive text-sm">{errors.message}</p>}
+                  <p className="text-muted-foreground text-xs ml-auto">{formData.message.length}/1000</p>
+                </div>
+              </div>
+              <motion.button
+                type="submit"
+                disabled={isSubmitting}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full flex items-center justify-center gap-2 bg-accent text-accent-foreground font-semibold py-3.5 rounded-xl transition-all duration-300 hover:shadow-[var(--electric-glow)] disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Sending...
+                  </>
+                ) : isSuccess ? (
+                  <>
+                    <CheckCircle className="w-5 h-5" />
+                    Sent!
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5" />
+                    Send Message
+                  </>
+                )}
+              </motion.button>
+            </form>
+          </div>
+        </motion.div>
+
+        {/* Socials */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
