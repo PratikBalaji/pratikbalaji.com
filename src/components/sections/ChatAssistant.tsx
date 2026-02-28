@@ -1,14 +1,17 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Loader2, X, User, Square } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import AudioVisualizer from '@/components/voice/AudioVisualizer';
 import VoiceMicButton from '@/components/voice/VoiceMicButton';
 import { useVoiceAgent } from '@/hooks/useVoiceAgent';
+import RAGVisualization from '@/components/chat/RAGVisualization';
 
 type Msg = { role: 'user' | 'assistant'; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-assistant`;
+const INITIAL_MSG: Msg = { role: 'assistant', content: "Hi! I'm Pratik's AI Resume Assistant. Ask me about his skills, experience, projects — or just hold the mic and talk to me!" };
+const IDLE_RESET_MS = 2 * 60 * 1000; // 2 minutes
 
 function PBLogo({ className }: { className?: string }) {
   return (
@@ -23,35 +26,42 @@ function PBLogo({ className }: { className?: string }) {
 
 export default function ChatAssistant() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Msg[]>([
-    { role: 'assistant', content: "Hi! I'm Pratik's AI Resume Assistant. Ask me about his skills, experience, projects — or just hold the mic and talk to me!" },
-  ]);
+  const [messages, setMessages] = useState<Msg[]>([INITIAL_MSG]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [ragQuery, setRagQuery] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const lastClosedRef = useRef<number>(Date.now());
+  const pendingSendRef = useRef<Msg[] | null>(null);
 
   const { isListening, isProcessing, isSpeaking, analyser, startListening, stopListening, stopSpeaking } = useVoiceAgent(messages, setMessages, setIsLoading);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, ragQuery]);
 
   useEffect(() => {
     if (isOpen) inputRef.current?.focus();
   }, [isOpen]);
 
-  const send = async () => {
-    const trimmed = input.trim();
-    if (!trimmed || isLoading) return;
+  const handleToggle = useCallback(() => {
+    if (isOpen) {
+      stopSpeaking();
+      lastClosedRef.current = Date.now();
+    } else {
+      // Reset chat if idle for 2+ minutes
+      if (Date.now() - lastClosedRef.current > IDLE_RESET_MS) {
+        setMessages([INITIAL_MSG]);
+        setRagQuery(null);
+      }
+    }
+    setIsOpen(prev => !prev);
+  }, [isOpen, stopSpeaking]);
 
-    const userMsg: Msg = { role: 'user', content: trimmed };
-    setMessages(prev => [...prev, userMsg]);
-    setInput('');
+  const streamResponse = useCallback(async (allMessages: Msg[]) => {
     setIsLoading(true);
-
     let assistantSoFar = '';
-    const allMessages = [...messages, userMsg];
 
     try {
       const resp = await fetch(CHAT_URL, {
@@ -107,16 +117,53 @@ export default function ChatAssistant() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  const send = useCallback(() => {
+    const trimmed = input.trim();
+    if (!trimmed || isLoading || ragQuery) return;
+
+    const userMsg: Msg = { role: 'user', content: trimmed };
+    const allMessages = [...messages, userMsg];
+    setMessages(allMessages);
+    setInput('');
+    pendingSendRef.current = allMessages;
+    setRagQuery(trimmed);
+  }, [input, isLoading, ragQuery, messages]);
+
+  const handleRAGComplete = useCallback(() => {
+    setRagQuery(null);
+    if (pendingSendRef.current) {
+      streamResponse(pendingSendRef.current);
+      pendingSendRef.current = null;
+    }
+  }, [streamResponse]);
+
+  const renderLink = useCallback(({ href, children }: { href?: string; children?: React.ReactNode }) => {
+    let finalHref = href || '';
+    // Fix resume PDF links to use current origin
+    if (finalHref.includes('PratikBalaji-Resume.pdf')) {
+      finalHref = '/PratikBalaji-Resume.pdf';
+    }
+    return (
+      <a
+        href={finalHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={(e) => {
+          e.preventDefault();
+          window.open(finalHref, '_blank', 'noopener,noreferrer');
+        }}
+        className="cursor-pointer"
+      >{children}</a>
+    );
+  }, []);
 
   return (
     <>
       {/* FAB */}
       <motion.button
-        onClick={() => {
-          if (isOpen) stopSpeaking();
-          setIsOpen(!isOpen);
-        }}
+        onClick={handleToggle}
         className="fixed bottom-6 right-6 z-50 w-[72px] h-[72px] rounded-full flex items-center justify-center"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
@@ -165,7 +212,9 @@ export default function ChatAssistant() {
               <div className="flex-1">
                 <p className="font-display font-bold text-sm text-foreground">JARVIS · AI Agent</p>
                 <p className="text-xs text-muted-foreground">
-                  {isListening ? (
+                  {ragQuery ? (
+                    <span className="text-accent font-mono text-[10px]">RAG Pipeline active…</span>
+                  ) : isListening ? (
                     <span className="text-accent animate-pulse">● Listening...</span>
                   ) : isProcessing ? (
                     <span className="text-accent">Processing voice...</span>
@@ -176,7 +225,6 @@ export default function ChatAssistant() {
                   )}
                 </p>
               </div>
-              {/* Stop speaking button */}
               <AnimatePresence>
                 {isSpeaking && (
                   <motion.button
@@ -231,22 +279,7 @@ export default function ChatAssistant() {
                       : 'bg-secondary text-foreground rounded-bl-md prose prose-sm prose-invert max-w-none [&_a]:text-accent [&_a]:underline [&_a]:font-medium [&_p]:my-1 [&_ul]:my-1 [&_li]:my-0.5'
                   }`}>
                     {msg.role === 'assistant' ? (
-                      <ReactMarkdown
-                        components={{
-                          a: ({ href, children }) => (
-                            <a
-                              href={href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                if (href) window.open(href, '_blank', 'noopener,noreferrer');
-                              }}
-                              className="cursor-pointer"
-                            >{children}</a>
-                          ),
-                        }}
-                      >{msg.content}</ReactMarkdown>
+                      <ReactMarkdown components={{ a: renderLink }}>{msg.content}</ReactMarkdown>
                     ) : msg.content}
                   </div>
                   {msg.role === 'user' && (
@@ -256,7 +289,16 @@ export default function ChatAssistant() {
                   )}
                 </motion.div>
               ))}
-              {isLoading && messages[messages.length - 1]?.role === 'user' && (
+
+              {/* RAG Visualization */}
+              <AnimatePresence>
+                {ragQuery && (
+                  <RAGVisualization query={ragQuery} onComplete={handleRAGComplete} />
+                )}
+              </AnimatePresence>
+
+              {/* Loading dots (only when streaming, not during RAG) */}
+              {isLoading && !ragQuery && messages[messages.length - 1]?.role === 'user' && (
                 <div className="flex gap-2">
                   <PBLogo className="w-7 h-7 flex-shrink-0" />
                   <div className="bg-secondary rounded-2xl rounded-bl-md px-4 py-3">
@@ -281,7 +323,7 @@ export default function ChatAssistant() {
                   placeholder="Ask about Pratik..."
                   className="flex-1 bg-secondary border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all"
                   maxLength={500}
-                  disabled={isLoading || isListening}
+                  disabled={isLoading || isListening || !!ragQuery}
                 />
                 <VoiceMicButton
                   isListening={isListening}
@@ -291,7 +333,7 @@ export default function ChatAssistant() {
                 />
                 <motion.button
                   type="submit"
-                  disabled={isLoading || !input.trim() || isListening}
+                  disabled={isLoading || !input.trim() || isListening || !!ragQuery}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="w-10 h-10 rounded-xl bg-accent text-accent-foreground flex items-center justify-center disabled:opacity-50 transition-all"
