@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Loader2, X, User } from 'lucide-react';
+import { Send, Loader2, X, User, Square } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import AudioVisualizer from '@/components/voice/AudioVisualizer';
 import VoiceMicButton from '@/components/voice/VoiceMicButton';
@@ -31,7 +31,7 @@ export default function ChatAssistant() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { isListening, isProcessing, analyser, startListening, stopListening } = useVoiceAgent(messages, setMessages, setIsLoading);
+  const { isListening, isProcessing, isSpeaking, analyser, startListening, stopListening, stopSpeaking } = useVoiceAgent(messages, setMessages, setIsLoading);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -113,7 +113,10 @@ export default function ChatAssistant() {
     <>
       {/* FAB */}
       <motion.button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          if (isOpen) stopSpeaking();
+          setIsOpen(!isOpen);
+        }}
         className="fixed bottom-6 right-6 z-50 w-[72px] h-[72px] rounded-full flex items-center justify-center"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
@@ -166,11 +169,28 @@ export default function ChatAssistant() {
                     <span className="text-accent animate-pulse">● Listening...</span>
                   ) : isProcessing ? (
                     <span className="text-accent">Processing voice...</span>
+                  ) : isSpeaking ? (
+                    <span className="text-accent">● Speaking...</span>
                   ) : (
                     'Type or hold mic to speak'
                   )}
                 </p>
               </div>
+              {/* Stop speaking button */}
+              <AnimatePresence>
+                {isSpeaking && (
+                  <motion.button
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    onClick={stopSpeaking}
+                    className="w-8 h-8 rounded-lg bg-destructive/15 hover:bg-destructive/25 border border-destructive/30 flex items-center justify-center transition-colors"
+                    title="Stop speaking"
+                  >
+                    <Square className="w-3.5 h-3.5 text-destructive fill-destructive" />
+                  </motion.button>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* Voice Visualizer Overlay */}
