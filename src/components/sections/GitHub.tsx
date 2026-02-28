@@ -1,10 +1,12 @@
 import { motion, useInView } from 'framer-motion';
 import ScrollReveal from '@/components/ScrollReveal';
 import TiltCard from '@/components/TiltCard';
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect, useState, useCallback, lazy, Suspense } from 'react';
 import { ExternalLink, GitFork, Star, Calendar, RefreshCw } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { useWebGL } from '@/hooks/useWebGL';
 
+const ContributionCity = lazy(() => import('@/components/3d/ContributionCity'));
 const GITHUB_USERNAME = 'PratikBalaji';
 const REFRESH_INTERVAL = 5 * 60 * 1000;
 
@@ -186,6 +188,7 @@ export default function GitHub() {
   const [refreshing, setRefreshing] = useState(false);
   const [totalContributions, setTotalContributions] = useState(0);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const isWebGL = useWebGL();
 
   // Fetch projects from DB
   useEffect(() => {
@@ -255,28 +258,17 @@ export default function GitHub() {
             </div>
           </div>
           {loading ? (
-            <div className="w-full overflow-x-auto pb-2">
-              <div className="min-w-[750px]">
-                <div className="flex mb-1 ml-8 gap-8">
-                  {[...Array(12)].map((_, i) => (<div key={i} className="h-3 w-6 bg-muted rounded animate-pulse" />))}
-                </div>
-                <div className="flex gap-1">
-                  <div className="flex flex-col gap-[3px] mr-1">
-                    {[...Array(7)].map((_, i) => (<div key={i} className="h-[12px] w-6 bg-muted rounded animate-pulse" />))}
-                  </div>
-                  <div className="flex gap-[3px]">
-                    {[...Array(52)].map((_, weekIndex) => (
-                      <div key={weekIndex} className="flex flex-col gap-[3px]">
-                        {[...Array(7)].map((_, dayIndex) => (
-                          <div key={dayIndex} className="w-[12px] h-[12px] rounded-sm bg-muted animate-pulse"
-                            style={{ animationDelay: `${(weekIndex * 7 + dayIndex) * 5}ms` }} />
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+            <div className="w-full h-[400px] rounded-xl bg-muted/20 animate-pulse flex items-center justify-center">
+              <div className="text-muted-foreground text-sm font-mono">Loading contribution data...</div>
             </div>
+          ) : isWebGL ? (
+            <Suspense fallback={
+              <div className="w-full h-[400px] rounded-xl bg-black flex items-center justify-center border border-border">
+                <div className="text-emerald-400/60 text-sm font-mono animate-pulse">Initializing 3D city...</div>
+              </div>
+            }>
+              <ContributionCity contributions={contributions} />
+            </Suspense>
           ) : (
             <ContributionCalendar contributions={contributions} />
           )}
