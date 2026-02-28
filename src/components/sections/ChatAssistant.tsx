@@ -1,17 +1,20 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Loader2, X, User, Square } from 'lucide-react';
+import { Send, Loader2, X, User, Square, Cloud, Cpu } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import AudioVisualizer from '@/components/voice/AudioVisualizer';
 import VoiceMicButton from '@/components/voice/VoiceMicButton';
 import { useVoiceAgent } from '@/hooks/useVoiceAgent';
+import { useEdgeLLM } from '@/hooks/useEdgeLLM';
 import RAGVisualization from '@/components/chat/RAGVisualization';
+import EdgeTerminal from '@/components/chat/EdgeTerminal';
+import { Switch } from '@/components/ui/switch';
 
 type Msg = { role: 'user' | 'assistant'; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-assistant`;
 const INITIAL_MSG: Msg = { role: 'assistant', content: "Hi! I'm Pratik's AI Resume Assistant. Ask me about his skills, experience, projects — or just hold the mic and talk to me!" };
-const IDLE_RESET_MS = 2 * 60 * 1000; // 2 minutes
+const IDLE_RESET_MS = 2 * 60 * 1000;
 
 function PBLogo({ className }: { className?: string }) {
   return (
@@ -30,12 +33,14 @@ export default function ChatAssistant() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [ragQuery, setRagQuery] = useState<string | null>(null);
+  const [edgeMode, setEdgeMode] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const lastClosedRef = useRef<number>(Date.now());
   const pendingSendRef = useRef<Msg[] | null>(null);
 
   const { isListening, isProcessing, isSpeaking, analyser, startListening, stopListening, stopSpeaking } = useVoiceAgent(messages, setMessages, setIsLoading);
+  const { isModelLoaded, isModelLoading, logs, tokensPerSec, loadModel, unloadModel, chat: edgeChat } = useEdgeLLM();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -45,12 +50,18 @@ export default function ChatAssistant() {
     if (isOpen) inputRef.current?.focus();
   }, [isOpen]);
 
+  // Auto-load model when switching to edge mode
+  useEffect(() => {
+    if (edgeMode && !isModelLoaded && !isModelLoading) {
+      loadModel();
+    }
+  }, [edgeMode, isModelLoaded, isModelLoading, loadModel]);
+
   const handleToggle = useCallback(() => {
     if (isOpen) {
       stopSpeaking();
       lastClosedRef.current = Date.now();
     } else {
-      // Reset chat if idle for 2+ minutes
       if (Date.now() - lastClosedRef.current > IDLE_RESET_MS) {
         setMessages([INITIAL_MSG]);
         setRagQuery(null);
@@ -59,7 +70,14 @@ export default function ChatAssistant() {
     setIsOpen(prev => !prev);
   }, [isOpen, stopSpeaking]);
 
-  const streamResponse = useCallback(async (allMessages: Msg[]) => {
+  const handleEdgeToggle = useCallback((checked: boolean) => {
+    setEdgeMode(checked);
+    if (!checked) {
+      // Switching back to cloud — no need to unload, keep cached
+    }
+  }, []);
+
+  const streamCloudResponse = useCallback(async (allMessages: Msg[]) => {
     setIsLoading(true);
     let assistantSoFar = '';
 
@@ -119,6 +137,29 @@ export default function ChatAssistant() {
     }
   }, []);
 
+  const streamEdgeResponse = useCallback(async (allMessages: Msg[]) => {
+    setIsLoading(true);
+    let assistantSoFar = '';
+
+    const systemMsg = { role: 'system' as const, content: "You are Pratik Balaji's AI resume assistant. Answer questions about his skills, experience, and projects concisely." };
+    const chatMessages = [systemMsg, ...allMessages.filter((_, i) => i > 0).map(m => ({ role: m.role as 'user' | 'assistant', content: m.content }))];
+
+    await edgeChat(
+      chatMessages,
+      (delta) => {
+        assistantSoFar += delta;
+        setMessages(prev => {
+          const last = prev[prev.length - 1];
+          if (last?.role === 'assistant' && prev.length > 1) {
+            return prev.map((m, i) => i === prev.length - 1 ? { ...m, content: assistantSoFar } : m);
+          }
+          return [...prev, { role: 'assistant', content: assistantSoFar }];
+        });
+      },
+      () => setIsLoading(false),
+    );
+  }, [edgeChat]);
+
   const send = useCallback(() => {
     const trimmed = input.trim();
     if (!trimmed || isLoading || ragQuery) return;
@@ -127,21 +168,27 @@ export default function ChatAssistant() {
     const allMessages = [...messages, userMsg];
     setMessages(allMessages);
     setInput('');
-    pendingSendRef.current = allMessages;
-    setRagQuery(trimmed);
-  }, [input, isLoading, ragQuery, messages]);
+
+    if (edgeMode) {
+      // Edge mode: skip RAG, go straight to local model
+      streamEdgeResponse(allMessages);
+    } else {
+      // Cloud mode: show RAG visualization first
+      pendingSendRef.current = allMessages;
+      setRagQuery(trimmed);
+    }
+  }, [input, isLoading, ragQuery, messages, edgeMode, streamEdgeResponse]);
 
   const handleRAGComplete = useCallback(() => {
     setRagQuery(null);
     if (pendingSendRef.current) {
-      streamResponse(pendingSendRef.current);
+      streamCloudResponse(pendingSendRef.current);
       pendingSendRef.current = null;
     }
-  }, [streamResponse]);
+  }, [streamCloudResponse]);
 
   const renderLink = useCallback(({ href, children }: { href?: string; children?: React.ReactNode }) => {
     let finalHref = href || '';
-    // Fix resume PDF links to use current origin
     if (finalHref.includes('PratikBalaji-Resume.pdf')) {
       finalHref = '/PratikBalaji-Resume.pdf';
     }
@@ -207,11 +254,11 @@ export default function ChatAssistant() {
             className="fixed bottom-24 right-6 z-50 w-[400px] max-w-[calc(100vw-48px)] h-[560px] max-h-[75vh] bg-card border border-border rounded-2xl shadow-strong flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center gap-3 px-5 py-4 border-b border-border bg-secondary/50">
+            <div className="flex items-center gap-3 px-5 py-3 border-b border-border bg-secondary/50">
               <PBLogo className="w-9 h-9" />
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <p className="font-display font-bold text-sm text-foreground">JARVIS · AI Agent</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground truncate">
                   {ragQuery ? (
                     <span className="text-accent font-mono text-[10px]">RAG Pipeline active…</span>
                   ) : isListening ? (
@@ -220,6 +267,8 @@ export default function ChatAssistant() {
                     <span className="text-accent">Processing voice...</span>
                   ) : isSpeaking ? (
                     <span className="text-accent">● Speaking...</span>
+                  ) : edgeMode ? (
+                    <span className="font-mono text-[10px]">{isModelLoaded ? '🟢 Edge ready' : isModelLoading ? '⏳ Loading model...' : '⚡ Edge Compute'}</span>
                   ) : (
                     'Type or hold mic to speak'
                   )}
@@ -240,6 +289,30 @@ export default function ChatAssistant() {
                 )}
               </AnimatePresence>
             </div>
+
+            {/* Compute Mode Toggle */}
+            <div className="flex items-center justify-between px-5 py-2 border-b border-border bg-muted/30">
+              <div className="flex items-center gap-2 text-xs">
+                <Cloud className={`w-3.5 h-3.5 ${!edgeMode ? 'text-accent' : 'text-muted-foreground'}`} />
+                <span className={`font-medium ${!edgeMode ? 'text-foreground' : 'text-muted-foreground'}`}>Cloud</span>
+              </div>
+              <Switch
+                checked={edgeMode}
+                onCheckedChange={handleEdgeToggle}
+                className="data-[state=checked]:bg-accent"
+              />
+              <div className="flex items-center gap-2 text-xs">
+                <span className={`font-medium ${edgeMode ? 'text-foreground' : 'text-muted-foreground'}`}>Edge</span>
+                <Cpu className={`w-3.5 h-3.5 ${edgeMode ? 'text-accent' : 'text-muted-foreground'}`} />
+              </div>
+            </div>
+
+            {/* Edge Terminal */}
+            <AnimatePresence>
+              {edgeMode && logs.length > 0 && (
+                <EdgeTerminal logs={logs} tokensPerSec={tokensPerSec} isLoading={isModelLoading} />
+              )}
+            </AnimatePresence>
 
             {/* Voice Visualizer Overlay */}
             <AnimatePresence>
@@ -290,14 +363,14 @@ export default function ChatAssistant() {
                 </motion.div>
               ))}
 
-              {/* RAG Visualization */}
+              {/* RAG Visualization (cloud mode only) */}
               <AnimatePresence>
-                {ragQuery && (
+                {ragQuery && !edgeMode && (
                   <RAGVisualization query={ragQuery} onComplete={handleRAGComplete} />
                 )}
               </AnimatePresence>
 
-              {/* Loading dots (only when streaming, not during RAG) */}
+              {/* Loading dots */}
               {isLoading && !ragQuery && messages[messages.length - 1]?.role === 'user' && (
                 <div className="flex gap-2">
                   <PBLogo className="w-7 h-7 flex-shrink-0" />
@@ -320,10 +393,10 @@ export default function ChatAssistant() {
                   ref={inputRef}
                   value={input}
                   onChange={e => setInput(e.target.value)}
-                  placeholder="Ask about Pratik..."
+                  placeholder={edgeMode ? 'Ask locally (no network)...' : 'Ask about Pratik...'}
                   className="flex-1 bg-secondary border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all"
                   maxLength={500}
-                  disabled={isLoading || isListening || !!ragQuery}
+                  disabled={isLoading || isListening || !!ragQuery || (edgeMode && isModelLoading)}
                 />
                 <VoiceMicButton
                   isListening={isListening}
@@ -333,7 +406,7 @@ export default function ChatAssistant() {
                 />
                 <motion.button
                   type="submit"
-                  disabled={isLoading || !input.trim() || isListening || !!ragQuery}
+                  disabled={isLoading || !input.trim() || isListening || !!ragQuery || (edgeMode && !isModelLoaded)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="w-10 h-10 rounded-xl bg-accent text-accent-foreground flex items-center justify-center disabled:opacity-50 transition-all"
