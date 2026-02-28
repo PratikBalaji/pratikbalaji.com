@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -48,9 +48,8 @@
     --shadow-medium: 0 8px 40px hsla(270, 100%, 64%, 0.08);
     --shadow-strong: 0 20px 60px hsla(270, 100%, 64%, 0.12);
 
-    --font-display: 'Inter', sans-serif;
+    --font-display: 'Space Grotesk', sans-serif;
     --font-body: 'Inter', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
 
     --sidebar-background: 0 0% 4%;
     --sidebar-foreground: 0 0% 92%;
@@ -123,10 +122,6 @@
   
   .font-body {
     font-family: var(--font-body);
-  }
-
-  .font-mono {
-    font-family: var(--font-mono);
   }
 
   .text-gradient {
