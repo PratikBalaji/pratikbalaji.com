@@ -163,10 +163,10 @@ export default function About() {
         <ScrollReveal className="text-center mb-16">
           <p className="text-sm font-medium text-accent uppercase tracking-widest mb-4 font-mono">
             <Zap className="w-3.5 h-3.5 inline mr-1.5 -mt-0.5" />
-            Live Telemetry
+            About Me
           </p>
           <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground">
-            Quantified Self
+            About Me
           </h2>
           <p className="text-muted-foreground mt-3 max-w-lg mx-auto text-sm">
             Real-time mission control. Live data streams from my daily workflow.
