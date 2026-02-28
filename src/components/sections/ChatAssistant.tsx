@@ -234,7 +234,16 @@ export default function ChatAssistant() {
                       <ReactMarkdown
                         components={{
                           a: ({ href, children }) => (
-                            <a href={href} target="_blank" rel="noopener noreferrer">{children}</a>
+                            <a
+                              href={href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                if (href) window.open(href, '_blank', 'noopener,noreferrer');
+                              }}
+                              className="cursor-pointer"
+                            >{children}</a>
                           ),
                         }}
                       >{msg.content}</ReactMarkdown>
