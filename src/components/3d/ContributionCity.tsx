@@ -3,6 +3,51 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Html } from '@react-three/drei';
 import * as THREE from 'three';
 
+// Floating ambient particles
+function AmbientParticles({ count = 200 }: { count?: number }) {
+  const meshRef = useRef<THREE.Points>(null);
+
+  const [positions, sizes] = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    const sz = new Float32Array(count);
+    for (let i = 0; i < count; i++) {
+      pos[i * 3] = (Math.random() - 0.3) * 70;
+      pos[i * 3 + 1] = Math.random() * 12;
+      pos[i * 3 + 2] = (Math.random() - 0.3) * 20;
+      sz[i] = Math.random() * 0.08 + 0.02;
+    }
+    return [pos, sz];
+  }, [count]);
+
+  useFrame((_, delta) => {
+    if (!meshRef.current) return;
+    const posArr = meshRef.current.geometry.attributes.position.array as Float32Array;
+    for (let i = 0; i < count; i++) {
+      posArr[i * 3 + 1] += delta * (0.15 + sizes[i] * 2);
+      if (posArr[i * 3 + 1] > 14) posArr[i * 3 + 1] = -1;
+    }
+    meshRef.current.geometry.attributes.position.needsUpdate = true;
+  });
+
+  return (
+    <points ref={meshRef}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} count={count} />
+        <bufferAttribute attach="attributes-size" args={[sizes, 1]} count={count} />
+      </bufferGeometry>
+      <pointsMaterial
+        color="#00ff55"
+        size={0.12}
+        transparent
+        opacity={0.5}
+        sizeAttenuation
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+      />
+    </points>
+  );
+}
+
 interface ContributionDay {
   date: string;
   count: number;
@@ -179,6 +224,7 @@ function CityScene({ contributions }: { contributions: ContributionDay[] }) {
 
       <Ground />
       <GridLines />
+      <AmbientParticles count={250} />
 
       {buildings.map(({ day, x, z, height }, i) => (
         <Building
