@@ -163,7 +163,6 @@ export default function About() {
         <ScrollReveal className="text-center mb-16">
           <p className="text-sm font-medium text-accent uppercase tracking-widest mb-4 font-mono">
             <Zap className="w-3.5 h-3.5 inline mr-1.5 -mt-0.5" />
-            About Me
           </p>
           <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-accent">About Me
 
