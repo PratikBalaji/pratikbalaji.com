@@ -1,8 +1,14 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef, useState, lazy, Suspense, type MouseEvent } from 'react';
-import { useWebGL } from '@/hooks/useWebGL';
+import { useRef, useState, lazy, Suspense, type MouseEvent, Component, type ReactNode } from 'react';
 
 const FluidSimulation = lazy(() => import('@/components/3d/FluidSimulation'));
+
+// Error boundary to gracefully handle WebGL failures
+class WebGLErrorBoundary extends Component<{ children: ReactNode; fallback: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  render() { return this.state.hasError ? this.props.fallback : this.props.children; }
+}
 
 const GitHubLogo = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -75,19 +81,16 @@ export default function Hero() {
     offset: ['start start', 'end start'],
   });
 
-  const isWebGLAvailable = useWebGL();
   const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
     <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
       {/* WebGL Fluid Simulation Background */}
-      {isWebGLAvailable ? (
+      <WebGLErrorBoundary fallback={<div className="absolute inset-0 -z-10 bg-background" />}>
         <Suspense fallback={<div className="absolute inset-0 -z-10 bg-background" />}>
           <FluidSimulation />
         </Suspense>
-      ) : (
-        <div className="absolute inset-0 -z-10 bg-background" />
-      )}
+      </WebGLErrorBoundary>
 
       {/* Content */}
       <motion.div style={{ opacity: contentOpacity }} className="container-tight relative z-10">
