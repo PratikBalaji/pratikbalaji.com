@@ -2,6 +2,9 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Loader2, X, User } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import AudioVisualizer from '@/components/voice/AudioVisualizer';
+import VoiceMicButton from '@/components/voice/VoiceMicButton';
+import { useVoiceAgent } from '@/hooks/useVoiceAgent';
 
 type Msg = { role: 'user' | 'assistant'; content: string };
 
@@ -21,12 +24,14 @@ function PBLogo({ className }: { className?: string }) {
 export default function ChatAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([
-    { role: 'assistant', content: "Hi! I'm Pratik's AI Resume Assistant. Ask me about his skills, experience, projects — or just ask for his resume!" },
+    { role: 'assistant', content: "Hi! I'm Pratik's AI Resume Assistant. Ask me about his skills, experience, projects — or just hold the mic and talk to me!" },
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { isListening, isProcessing, analyser, startListening, stopListening } = useVoiceAgent(messages, setMessages, setIsLoading);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -57,7 +62,7 @@ export default function ChatAssistant() {
         },
         body: JSON.stringify({
           messages: allMessages
-            .filter((_, i) => i > 0) // skip initial greeting
+            .filter((_, i) => i > 0)
             .map(m => ({ role: m.role, content: m.content })),
         }),
       });
@@ -106,7 +111,7 @@ export default function ChatAssistant() {
 
   return (
     <>
-      {/* FAB with fancy PB logo */}
+      {/* FAB */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 right-6 z-50 w-[72px] h-[72px] rounded-full flex items-center justify-center"
@@ -149,16 +154,45 @@ export default function ChatAssistant() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-48px)] h-[500px] max-h-[70vh] bg-card border border-border rounded-2xl shadow-strong flex flex-col overflow-hidden"
+            className="fixed bottom-24 right-6 z-50 w-[400px] max-w-[calc(100vw-48px)] h-[560px] max-h-[75vh] bg-card border border-border rounded-2xl shadow-strong flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center gap-3 px-5 py-4 border-b border-border bg-secondary/50">
               <PBLogo className="w-9 h-9" />
-              <div>
-                <p className="font-display font-bold text-sm text-foreground">AI Resume Assistant</p>
-                <p className="text-xs text-muted-foreground">Ask about Pratik's background</p>
+              <div className="flex-1">
+                <p className="font-display font-bold text-sm text-foreground">JARVIS · AI Agent</p>
+                <p className="text-xs text-muted-foreground">
+                  {isListening ? (
+                    <span className="text-accent animate-pulse">● Listening...</span>
+                  ) : isProcessing ? (
+                    <span className="text-accent">Processing voice...</span>
+                  ) : (
+                    'Type or hold mic to speak'
+                  )}
+                </p>
               </div>
             </div>
+
+            {/* Voice Visualizer Overlay */}
+            <AnimatePresence>
+              {isListening && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 160 }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="relative flex items-center justify-center bg-background/80 backdrop-blur-sm border-b border-border overflow-hidden"
+                >
+                  <AudioVisualizer analyser={analyser} isActive={isListening} className="w-[160px] h-[160px]" />
+                  <motion.p
+                    className="absolute bottom-2 text-xs text-muted-foreground"
+                    animate={{ opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    Release to send
+                  </motion.p>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 no-scrollbar">
@@ -208,7 +242,7 @@ export default function ChatAssistant() {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input */}
+            {/* Input with mic button */}
             <div className="px-4 py-3 border-t border-border">
               <form onSubmit={e => { e.preventDefault(); send(); }} className="flex gap-2">
                 <input
@@ -218,11 +252,17 @@ export default function ChatAssistant() {
                   placeholder="Ask about Pratik..."
                   className="flex-1 bg-secondary border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all"
                   maxLength={500}
-                  disabled={isLoading}
+                  disabled={isLoading || isListening}
+                />
+                <VoiceMicButton
+                  isListening={isListening}
+                  isProcessing={isProcessing}
+                  onMouseDown={startListening}
+                  onMouseUp={stopListening}
                 />
                 <motion.button
                   type="submit"
-                  disabled={isLoading || !input.trim()}
+                  disabled={isLoading || !input.trim() || isListening}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="w-10 h-10 rounded-xl bg-accent text-accent-foreground flex items-center justify-center disabled:opacity-50 transition-all"
