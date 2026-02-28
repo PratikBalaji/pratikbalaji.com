@@ -7,7 +7,6 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import CustomCursor from "@/components/CustomCursor";
 import NoiseOverlay from "@/components/NoiseOverlay";
 import ChatAssistant from "@/components/sections/ChatAssistant";
-import LatentSpaceExplorer from "@/components/LatentSpaceExplorer";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
@@ -20,8 +19,8 @@ const App = () => (
         <CustomCursor />
         <NoiseOverlay />
         <ChatAssistant />
-        <LatentSpaceExplorer />
         <Toaster />
+        <Sonner />
         <Sonner />
         <BrowserRouter>
           <Routes>
