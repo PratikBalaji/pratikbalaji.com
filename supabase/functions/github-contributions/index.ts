@@ -5,6 +5,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// GitHub usernames: alphanumeric + hyphens, 1-39 chars
+const GITHUB_USERNAME_REGEX = /^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$/;
+
 interface ContributionDay {
   date: string;
   contributionCount: number;
@@ -32,7 +35,6 @@ interface GraphQLResponse {
 }
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
@@ -40,9 +42,17 @@ serve(async (req) => {
   try {
     const { username } = await req.json();
     
-    if (!username) {
+    if (!username || typeof username !== 'string') {
       return new Response(
         JSON.stringify({ error: 'Username is required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate GitHub username format
+    if (!GITHUB_USERNAME_REGEX.test(username)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid username format' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -52,7 +62,7 @@ serve(async (req) => {
     if (!GITHUB_TOKEN) {
       console.error('GITHUB_TOKEN not configured');
       return new Response(
-        JSON.stringify({ error: 'GitHub token not configured' }),
+        JSON.stringify({ error: 'Service configuration error' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -94,8 +104,8 @@ serve(async (req) => {
       const errorText = await response.text();
       console.error('GitHub API error:', response.status, errorText);
       return new Response(
-        JSON.stringify({ error: `GitHub API error: ${response.status}` }),
-        { status: response.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({ error: 'Failed to fetch contribution data' }),
+        { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
@@ -104,13 +114,12 @@ serve(async (req) => {
     if (data.errors) {
       console.error('GraphQL errors:', data.errors);
       return new Response(
-        JSON.stringify({ error: data.errors[0]?.message || 'GraphQL error' }),
+        JSON.stringify({ error: 'Failed to fetch contribution data' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
     if (!data.data?.user) {
-      console.error('User not found:', username);
       return new Response(
         JSON.stringify({ error: 'User not found' }),
         { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -119,7 +128,6 @@ serve(async (req) => {
 
     const calendar = data.data.user.contributionsCollection.contributionCalendar;
     
-    // Transform the data to match our frontend format
     const contributions = calendar.weeks.flatMap(week => 
       week.contributionDays.map(day => ({
         date: day.date,
@@ -139,9 +147,8 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error('Error in github-contributions function:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Internal server error';
     return new Response(
-      JSON.stringify({ error: errorMessage }),
+      JSON.stringify({ error: 'An unexpected error occurred. Please try again.' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
