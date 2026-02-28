@@ -88,30 +88,30 @@ const fragmentShader = `
     float f = fbm(p + 4.0 * r + mouseInfluence * 0.5);
     
     // Deep dark metallic base - rich violets and blacks
-    vec3 col = vec3(0.02, 0.01, 0.04); // near-black violet base
+    vec3 col = vec3(0.03, 0.01, 0.06); // near-black violet base
     
     // Layer 1: deep violet undertone
-    col = mix(col, vec3(0.08, 0.02, 0.15), clamp(f * f * 2.0, 0.0, 1.0));
+    col = mix(col, vec3(0.12, 0.03, 0.22), clamp(f * f * 2.5, 0.0, 1.0));
     
     // Layer 2: rich purple mid-tones
-    col = mix(col, vec3(0.15, 0.04, 0.25), clamp(length(q) * 0.8, 0.0, 1.0));
+    col = mix(col, vec3(0.2, 0.06, 0.35), clamp(length(q) * 1.0, 0.0, 1.0));
     
     // Layer 3: dark blue-violet depth
-    col = mix(col, vec3(0.05, 0.03, 0.18), clamp(length(r.x) * 0.6, 0.0, 1.0));
+    col = mix(col, vec3(0.08, 0.04, 0.25), clamp(length(r.x) * 0.8, 0.0, 1.0));
     
     // Neon highlights catching the "light" on wave peaks
-    float highlight = smoothstep(0.3, 0.9, f + ripple * 2.0);
-    vec3 neonPurple = vec3(0.55, 0.15, 1.0); // bright neon purple
-    vec3 neonBlue = vec3(0.2, 0.4, 1.0);
-    vec3 neonPink = vec3(0.9, 0.2, 0.8);
+    float highlight = smoothstep(0.2, 0.8, f + ripple * 2.0);
+    vec3 neonPurple = vec3(0.6, 0.2, 1.0); // bright neon purple
+    vec3 neonBlue = vec3(0.3, 0.5, 1.0);
+    vec3 neonPink = vec3(1.0, 0.3, 0.9);
     
-    col += neonPurple * highlight * 0.3;
-    col += neonBlue * smoothstep(0.5, 1.0, f) * 0.15;
-    col += neonPink * mouseInfluence * 0.4 * highlight;
+    col += neonPurple * highlight * 0.4;
+    col += neonBlue * smoothstep(0.4, 0.9, f) * 0.25;
+    col += neonPink * mouseInfluence * 0.5 * highlight;
     
     // Metallic specular-like sheen
-    float spec = pow(max(0.0, f + ripple), 4.0) * 0.5;
-    col += vec3(0.6, 0.4, 1.0) * spec;
+    float spec = pow(max(0.0, f + ripple), 3.0) * 0.6;
+    col += vec3(0.7, 0.5, 1.0) * spec;
     
     // Chromatic aberration on cursor interaction
     float caStrength = mouseInfluence * 0.012;
