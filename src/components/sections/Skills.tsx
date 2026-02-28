@@ -53,13 +53,13 @@ export default function Skills() {
           >
             <div className="relative w-80 h-80">
               <motion.div animate={{ rotateY: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute inset-0" style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}>
-                <motion.div className="absolute inset-0 border rounded-full transition-colors duration-500" style={{ borderColor: selectedCategory !== null ? 'hsl(270 100% 64%)' : 'hsl(0 0% 14%)', boxShadow: selectedCategory !== null ? '0 0 20px hsl(270 100% 64% / 0.3)' : 'none' }} />
+                <motion.div className="absolute inset-0 border-2 rounded-full transition-colors duration-500" style={{ borderColor: selectedCategory !== null ? 'hsl(330 90% 60%)' : 'hsl(0 0% 14%)', boxShadow: selectedCategory !== null ? '0 0 25px hsl(330 90% 60% / 0.3)' : 'none' }} />
               </motion.div>
               <motion.div animate={{ rotateX: 360 }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }} className="absolute inset-8">
-                <div className="w-full h-full border rounded-full transition-colors duration-500" style={{ borderColor: selectedCategory !== null ? 'hsl(270 100% 64% / 0.6)' : 'hsl(0 0% 14%)' }} />
+                <div className="w-full h-full border-2 rounded-full transition-colors duration-500" style={{ borderColor: selectedCategory !== null ? 'hsl(200 100% 55% / 0.7)' : 'hsl(0 0% 14%)' }} />
               </motion.div>
               <motion.div animate={{ rotate: -360 }} transition={{ duration: 25, repeat: Infinity, ease: "linear" }} className="absolute inset-16">
-                <div className="w-full h-full border rounded-full transition-colors duration-500" style={{ borderColor: selectedCategory !== null ? 'hsl(270 100% 64% / 0.4)' : 'hsl(0 0% 14%)' }} />
+                <div className="w-full h-full border-2 rounded-full transition-colors duration-500" style={{ borderColor: selectedCategory !== null ? 'hsl(160 80% 50% / 0.5)' : 'hsl(0 0% 14%)' }} />
               </motion.div>
 
               <AnimatePresence mode="wait">
@@ -84,9 +84,17 @@ export default function Skills() {
               </AnimatePresence>
 
               <div className="absolute inset-0 flex items-center justify-center">
-                <motion.div animate={{ scale: [1, 1.1, 1], backgroundColor: selectedCategory !== null ? 'hsl(270 100% 64%)' : 'hsl(0 0% 92%)' }}
-                  transition={{ scale: { duration: 3, repeat: Infinity, ease: "easeInOut" }, backgroundColor: { duration: 0.5 } }}
-                  className="w-20 h-20 rounded-full flex items-center justify-center" style={{ boxShadow: selectedCategory !== null ? '0 0 30px hsl(270 100% 64% / 0.5)' : 'none' }}>
+                <motion.div animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ scale: { duration: 3, repeat: Infinity, ease: "easeInOut" } }}
+                  className="w-20 h-20 rounded-full flex items-center justify-center transition-all duration-500"
+                  style={{
+                    background: selectedCategory !== null
+                      ? 'linear-gradient(135deg, hsl(330 90% 60%), hsl(270 100% 64%), hsl(200 100% 55%))'
+                      : 'hsl(0 0% 92%)',
+                    boxShadow: selectedCategory !== null
+                      ? '0 0 35px hsl(270 100% 64% / 0.4), 0 0 15px hsl(330 90% 60% / 0.3), 0 0 15px hsl(200 100% 55% / 0.3)'
+                      : 'none'
+                  }}>
                   {selectedCategory === null && <span className="text-background text-[10px] font-medium text-center px-1">Click a category</span>}
                 </motion.div>
               </div>
