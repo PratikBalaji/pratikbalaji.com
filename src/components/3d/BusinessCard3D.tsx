@@ -1,8 +1,39 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Html, RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
 import CoffeeChatScheduler from '@/components/sections/CoffeeChatScheduler';
+import { toast } from 'sonner';
+
+/* ── Copyable HUD Field ── */
+function HudField({ label, value }: { label: string; value: string }) {
+  const handleCopy = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(value);
+    toast('Copied!', { duration: 1500 });
+  }, [value]);
+
+  return (
+    <button onClick={handleCopy} className="text-left group/field">
+      <p className="text-[9px] uppercase tracking-[0.25em] text-gray-400 leading-none mb-0.5">{label}</p>
+      <p className="text-[13px] font-mono text-white group-hover/field:text-purple-400 transition-colors leading-tight">{value}</p>
+    </button>
+  );
+}
+
+/* ── Live EST Clock ── */
+function EstClock() {
+  const [time, setTime] = useState('');
+  useEffect(() => {
+    const tick = () => {
+      setTime(new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: 'America/New_York' }));
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+  return <span className="font-mono">{time}</span>;
+}
 
 /* ── Front face HTML ── */
 function CardFront({ visible, onFlip }: { visible: boolean; onFlip: () => void }) {
@@ -24,31 +55,32 @@ function CardFront({ visible, onFlip }: { visible: boolean; onFlip: () => void }
         onClick={onFlip}
         className="w-[600px] h-[440px] max-w-full overflow-hidden rounded-2xl flex flex-col justify-between relative mx-auto cursor-pointer select-none text-white font-sans px-12 py-8"
       >
+        {/* Header */}
         <div>
           <p className="text-[10px] uppercase tracking-[0.3em] text-purple-300/60 mb-1">AI/ML+Data Scientist</p>
           <h2 className="text-2xl font-bold tracking-tight leading-[1.15]">
             Pratik<br />Balaji
           </h2>
         </div>
-        <div className="space-y-1 text-xs text-purple-100/75">
-          <p className="flex items-center gap-2.5">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-purple-400" />
-            balajipratik8@gmail.com
-          </p>
-          <p className="flex items-center gap-2.5">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-purple-400" />
-            pratik.balaji@temple.edu
-          </p>
-          <p className="flex items-center gap-2.5">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-purple-400" />
-            (346) 446-8717
-          </p>
-          <p className="flex items-center gap-2.5">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-purple-400" />
-            Philadelphia, PA
-          </p>
+
+        {/* HUD Data Grid */}
+        <div className="grid grid-cols-2 gap-x-8 gap-y-3">
+          <HudField label="PERSONAL EMAIL" value="balajipratik8@gmail.com" />
+          <HudField label="ACADEMIC EMAIL" value="pratik.balaji@temple.edu" />
+          <HudField label="DIRECT LINE" value="(346) 446-8717" />
         </div>
-        <p className="text-[9px] text-purple-300/35">Tap to schedule a coffee chat →</p>
+
+        {/* Telemetry Bar */}
+        <div className="flex items-center justify-between text-[10px] text-gray-500 font-mono">
+          <div className="flex items-center gap-1.5">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-400" />
+            </span>
+            <span>PHILADELPHIA // 39.9526° N, 75.1652° W</span>
+          </div>
+          <span className="text-gray-500">LOCAL: <EstClock /></span>
+        </div>
       </div>
     </Html>
   );
