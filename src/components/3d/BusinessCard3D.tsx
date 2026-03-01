@@ -1,32 +1,36 @@
-import { useRef } from 'react';
+import { useRef, useCallback } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Html, RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
+import CoffeeChatScheduler from '@/components/sections/CoffeeChatScheduler';
 
 /* ── Front face HTML ── */
-function CardFront({ visible }: { visible: boolean }) {
+function CardFront({ visible, onFlip }: { visible: boolean; onFlip: () => void }) {
   return (
     <Html
       transform
       occlude={false}
       position={[0, 0, 0.07]}
-      distanceFactor={5}
+      distanceFactor={4.2}
       style={{
-        width: 640,
-        height: 400,
+        width: 720,
+        height: 440,
         pointerEvents: visible ? 'auto' : 'none',
         opacity: visible ? 1 : 0,
         transition: 'opacity 0.3s',
       }}
     >
-      <div className="select-none w-full h-full flex flex-col justify-between p-10 text-white font-sans">
+      <div
+        onClick={onFlip}
+        className="cursor-pointer select-none w-full h-full flex flex-col justify-between p-12 text-white font-sans"
+      >
         <div>
-          <p className="text-base uppercase tracking-[0.35em] text-purple-300/70 mb-2">Software Engineer</p>
-          <h2 className="text-5xl font-bold tracking-tight leading-tight">
+          <p className="text-sm uppercase tracking-[0.35em] text-purple-300/70 mb-3">Software Engineer</p>
+          <h2 className="text-6xl font-bold tracking-tight leading-[1.1]">
             Pratik<br />Balaji
           </h2>
         </div>
-        <div className="space-y-2.5 text-lg text-purple-100/80">
+        <div className="space-y-3 text-base text-purple-100/80">
           <p className="flex items-center gap-3">
             <span className="inline-block w-2 h-2 rounded-full bg-purple-400" />
             balajipratik8@gmail.com
@@ -44,29 +48,20 @@ function CardFront({ visible }: { visible: boolean }) {
             Philadelphia, PA
           </p>
         </div>
-        <div className="absolute top-8 right-10 w-20 h-20 border border-purple-400/20 rounded-full" />
+        <p className="text-xs text-purple-300/40 mt-2">Tap to schedule a coffee chat →</p>
+        <div className="absolute top-10 right-12 w-24 h-24 border border-purple-400/20 rounded-full" />
       </div>
     </Html>
   );
 }
 
-/* ── Back face HTML (Contact Form) ── */
+/* ── Back face HTML (Coffee Chat Scheduler) ── */
 function CardBack({
   visible,
-  formData,
-  setFormData,
-  onSubmit,
-  isSubmitting,
-  isSuccess,
-  errors,
+  onFlip,
 }: {
   visible: boolean;
-  formData: { name: string; email: string; message: string };
-  setFormData: React.Dispatch<React.SetStateAction<{ name: string; email: string; message: string }>>;
-  onSubmit: (e: React.FormEvent) => void;
-  isSubmitting: boolean;
-  isSuccess: boolean;
-  errors: Record<string, string>;
+  onFlip: () => void;
 }) {
   return (
     <Html
@@ -74,60 +69,16 @@ function CardBack({
       occlude={false}
       position={[0, 0, -0.07]}
       rotation={[0, Math.PI, 0]}
-      distanceFactor={5}
+      distanceFactor={4.2}
       style={{
-        width: 640,
-        height: 400,
+        width: 720,
+        height: 440,
         pointerEvents: visible ? 'auto' : 'none',
         opacity: visible ? 1 : 0,
         transition: 'opacity 0.3s',
       }}
     >
-      <div className="select-none w-full h-full flex flex-col p-8 text-white font-sans">
-        <p className="text-base uppercase tracking-[0.35em] text-purple-300/70 mb-4">Send a Message</p>
-        <form onSubmit={onSubmit} className="flex flex-col gap-3 flex-1">
-          <div>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
-              placeholder="Your name"
-              maxLength={100}
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-base text-white placeholder:text-white/30 focus:outline-none focus:border-purple-400/50 transition-colors"
-            />
-            {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
-          </div>
-          <div>
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
-              placeholder="your@email.com"
-              maxLength={255}
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-base text-white placeholder:text-white/30 focus:outline-none focus:border-purple-400/50 transition-colors"
-            />
-            {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
-          </div>
-          <div className="flex-1">
-            <textarea
-              value={formData.message}
-              onChange={(e) => setFormData((p) => ({ ...p, message: e.target.value }))}
-              placeholder="What's on your mind?"
-              maxLength={1000}
-              rows={4}
-              className="w-full h-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-base text-white placeholder:text-white/30 focus:outline-none focus:border-purple-400/50 transition-colors resize-none"
-            />
-            {errors.message && <p className="text-red-400 text-xs mt-1">{errors.message}</p>}
-          </div>
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-purple-500/80 hover:bg-purple-500 text-white text-base font-semibold py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isSubmitting ? 'Sending...' : isSuccess ? '✓ Sent!' : 'Send Message'}
-          </button>
-        </form>
-      </div>
+      <CoffeeChatScheduler onFlipBack={onFlip} />
     </Html>
   );
 }
@@ -135,20 +86,10 @@ function CardBack({
 /* ── Glass Card Mesh ── */
 function GlassCard({
   isFlipped,
-  formData,
-  setFormData,
-  onSubmit,
-  isSubmitting,
-  isSuccess,
-  errors,
+  onFlip,
 }: {
   isFlipped: boolean;
-  formData: { name: string; email: string; message: string };
-  setFormData: React.Dispatch<React.SetStateAction<{ name: string; email: string; message: string }>>;
-  onSubmit: (e: React.FormEvent) => void;
-  isSubmitting: boolean;
-  isSuccess: boolean;
-  errors: Record<string, string>;
+  onFlip: () => void;
 }) {
   const groupRef = useRef<THREE.Group>(null);
   const { viewport } = useThree();
@@ -157,8 +98,8 @@ function GlassCard({
 
   useFrame(({ pointer }) => {
     if (!groupRef.current) return;
-    targetRotation.current.x = pointer.y * 0.15;
-    targetRotation.current.y = pointer.x * 0.2;
+    targetRotation.current.x = pointer.y * 0.12;
+    targetRotation.current.y = pointer.x * 0.15;
     flipTarget.current = isFlipped ? Math.PI : 0;
 
     const g = groupRef.current.rotation;
@@ -166,40 +107,32 @@ function GlassCard({
     g.y = THREE.MathUtils.lerp(g.y, flipTarget.current + targetRotation.current.y, 0.06);
   });
 
-  const scale = Math.min(viewport.width / 8, 1);
+  const scale = Math.min(viewport.width / 7, 1.15);
 
   return (
     <group ref={groupRef} scale={scale}>
-      <RoundedBox args={[5.2, 3.2, 0.12]} radius={0.15} smoothness={4}>
+      <RoundedBox args={[6, 3.6, 0.12]} radius={0.15} smoothness={4}>
         <meshStandardMaterial
           color="#1a0a2e"
           metalness={0.6}
           roughness={0.15}
           transparent
-          opacity={0.9}
+          opacity={0.92}
         />
       </RoundedBox>
 
       {/* Subtle edge glow */}
-      <RoundedBox args={[5.24, 3.24, 0.01]} radius={0.15} smoothness={4} position={[0, 0, 0.065]}>
+      <RoundedBox args={[6.04, 3.64, 0.01]} radius={0.15} smoothness={4} position={[0, 0, 0.065]}>
         <meshBasicMaterial color="#a855f7" transparent opacity={0.06} />
       </RoundedBox>
 
-      <CardFront visible={!isFlipped} />
-      <CardBack
-        visible={isFlipped}
-        formData={formData}
-        setFormData={setFormData}
-        onSubmit={onSubmit}
-        isSubmitting={isSubmitting}
-        isSuccess={isSuccess}
-        errors={errors}
-      />
+      <CardFront visible={!isFlipped} onFlip={onFlip} />
+      <CardBack visible={isFlipped} onFlip={onFlip} />
     </group>
   );
 }
 
-/* ── Lighting (2 lights only) ── */
+/* ── Lighting ── */
 function CardLighting() {
   const lightRef = useRef<THREE.PointLight>(null);
 
@@ -214,13 +147,7 @@ function CardLighting() {
   return (
     <>
       <ambientLight intensity={0.3} />
-      <pointLight
-        ref={lightRef}
-        color="#a855f7"
-        intensity={35}
-        distance={15}
-        decay={2}
-      />
+      <pointLight ref={lightRef} color="#a855f7" intensity={35} distance={15} decay={2} />
     </>
   );
 }
@@ -228,20 +155,10 @@ function CardLighting() {
 /* ── Main Export ── */
 export default function BusinessCard3D({
   isFlipped,
-  formData,
-  setFormData,
-  onSubmit,
-  isSubmitting,
-  isSuccess,
-  errors,
+  onFlip,
 }: {
   isFlipped: boolean;
-  formData: { name: string; email: string; message: string };
-  setFormData: React.Dispatch<React.SetStateAction<{ name: string; email: string; message: string }>>;
-  onSubmit: (e: React.FormEvent) => void;
-  isSubmitting: boolean;
-  isSuccess: boolean;
-  errors: Record<string, string>;
+  onFlip: () => void;
 }) {
   return (
     <Canvas
@@ -251,15 +168,7 @@ export default function BusinessCard3D({
       style={{ background: 'transparent' }}
     >
       <CardLighting />
-      <GlassCard
-        isFlipped={isFlipped}
-        formData={formData}
-        setFormData={setFormData}
-        onSubmit={onSubmit}
-        isSubmitting={isSubmitting}
-        isSuccess={isSuccess}
-        errors={errors}
-      />
+      <GlassCard isFlipped={isFlipped} onFlip={onFlip} />
     </Canvas>
   );
 }
