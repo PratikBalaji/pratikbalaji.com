@@ -1,5 +1,6 @@
 import { useRef, useState, useMemo, Suspense } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
+import SafeCanvas from './SafeCanvas';
 import { OrbitControls, Html } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -263,16 +264,17 @@ export default function ContributionCity({ contributions }: ContributionCityProp
         }}
       />
 
-      <Canvas
+      <SafeCanvas
         gl={{ antialias: true, alpha: false }}
         dpr={[1, 1.5]}
         camera={{ fov: 45, near: 0.1, far: 100 }}
         style={{ background: '#000000' }}
+        fallback={<div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">3D view unavailable</div>}
       >
         <Suspense fallback={null}>
           <CityScene contributions={contributions} />
         </Suspense>
-      </Canvas>
+      </SafeCanvas>
 
       {/* Legend overlay */}
       <div className="absolute bottom-3 left-3 z-20 flex items-center gap-2 text-[10px] font-mono text-emerald-400/60">

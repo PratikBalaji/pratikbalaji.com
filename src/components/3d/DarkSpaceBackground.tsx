@@ -1,5 +1,6 @@
 import { useRef, useMemo, useEffect, useState } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
+import SafeCanvas from './SafeCanvas';
 import * as THREE from 'three';
 
 // ─── Starfield ────────────────────────────────────────────────
@@ -237,7 +238,7 @@ export default function DarkSpaceBackground() {
 
   return (
     <div className="fixed inset-0" style={{ zIndex: -1 }}>
-      <Canvas
+      <SafeCanvas
         camera={{ position: [0, 0, 8], fov: 50 }}
         dpr={[1, 1.5]}
         gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
@@ -245,7 +246,7 @@ export default function DarkSpaceBackground() {
         style={{ background: 'transparent' }}
       >
         <Scene />
-      </Canvas>
+      </SafeCanvas>
     </div>
   );
 }
