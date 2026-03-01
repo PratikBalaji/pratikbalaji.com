@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 
 import NoiseOverlay from "@/components/NoiseOverlay";
 import ChatAssistant from "@/components/sections/ChatAssistant";
+import DarkSpaceBackground from "@/components/3d/DarkSpaceBackground";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
@@ -17,6 +18,7 @@ const App = () => (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
       <TooltipProvider>
         
+        <DarkSpaceBackground />
         <NoiseOverlay />
         <ChatAssistant />
         <Toaster />
