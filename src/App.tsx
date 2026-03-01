@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import CustomCursor from "@/components/CustomCursor";
+
 import NoiseOverlay from "@/components/NoiseOverlay";
 import ChatAssistant from "@/components/sections/ChatAssistant";
 import Index from "./pages/Index";
@@ -16,7 +16,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
       <TooltipProvider>
-        <CustomCursor />
+        
         <NoiseOverlay />
         <ChatAssistant />
         <Toaster />
