@@ -10,7 +10,7 @@ function CardFront({ visible, onFlip }: { visible: boolean; onFlip: () => void }
     <Html
       transform
       occlude={false}
-      position={[0, 0, 0.07]}
+      position={[0, 0, 0.12]}
       distanceFactor={4.2}
       style={{
         width: 720,
@@ -101,12 +101,20 @@ function GlassCard({ isFlipped, onFlip }: { isFlipped: boolean; onFlip: () => vo
   return (
     <group ref={groupRef} scale={scale}>
       <RoundedBox args={[6, 3.6, 0.12]} radius={0.15} smoothness={4}>
-        <meshStandardMaterial
+        <meshPhysicalMaterial
           color="#1a0a2e"
-          metalness={0.5}
-          roughness={0.2}
+          metalness={0.6}
+          roughness={0.15}
           transparent
           opacity={0.7}
+          iridescence={1}
+          iridescenceIOR={1.3}
+          iridescenceThicknessRange={[100, 400]}
+          clearcoat={1}
+          clearcoatRoughness={0.1}
+          reflectivity={0.8}
+          sheen={0.5}
+          sheenColor={new THREE.Color('#a855f7')}
         />
       </RoundedBox>
 
@@ -120,8 +128,10 @@ function GlassCard({ isFlipped, onFlip }: { isFlipped: boolean; onFlip: () => vo
 function CardLighting() {
   return (
     <>
-      <ambientLight intensity={0.4} />
-      <pointLight color="#a855f7" intensity={25} position={[3, 2, 4]} distance={15} decay={2} />
+      <ambientLight intensity={0.5} />
+      <pointLight color="#a855f7" intensity={30} position={[3, 2, 4]} distance={15} decay={2} />
+      <pointLight color="#60a5fa" intensity={15} position={[-3, -1, 3]} distance={12} decay={2} />
+      <pointLight color="#f472b6" intensity={10} position={[0, 3, 2]} distance={10} decay={2} />
     </>
   );
 }
