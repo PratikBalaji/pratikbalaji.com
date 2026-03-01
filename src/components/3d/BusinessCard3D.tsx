@@ -15,15 +15,16 @@ function CardFront({ visible, onFlip }: { visible: boolean; onFlip: () => void }
       style={{
         width: 720,
         height: 440,
+        overflow: 'hidden',
+        borderRadius: 16,
         pointerEvents: visible ? 'auto' : 'none',
         opacity: visible ? 1 : 0,
         transition: 'opacity 0.3s',
       }}
     >
-      <div className="w-[720px] h-[440px] overflow-hidden rounded-2xl">
       <div
         onClick={onFlip}
-        className="cursor-pointer select-none w-full h-full flex flex-col justify-between p-6 text-white font-sans overflow-hidden box-border"
+        className="cursor-pointer select-none w-full h-full flex flex-col justify-between p-6 text-white font-sans"
       >
         <div>
           <p className="text-[10px] uppercase tracking-[0.3em] text-purple-300/60 mb-1">Software Engineer</p>
@@ -51,7 +52,6 @@ function CardFront({ visible, onFlip }: { visible: boolean; onFlip: () => void }
         </div>
         <p className="text-[9px] text-purple-300/35">Tap to schedule a coffee chat →</p>
       </div>
-      </div>
     </Html>
   );
 }
@@ -68,14 +68,14 @@ function CardBack({ visible, onFlip }: { visible: boolean; onFlip: () => void })
       style={{
         width: 720,
         height: 440,
+        overflow: 'hidden',
+        borderRadius: 16,
         pointerEvents: visible ? 'auto' : 'none',
         opacity: visible ? 1 : 0,
         transition: 'opacity 0.3s',
       }}
     >
-      <div className="w-[720px] h-[440px] overflow-hidden rounded-2xl">
-        <CoffeeChatScheduler onFlipBack={onFlip} />
-      </div>
+      <CoffeeChatScheduler onFlipBack={onFlip} />
     </Html>
   );
 }
