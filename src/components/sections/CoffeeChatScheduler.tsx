@@ -68,13 +68,12 @@ export default function CoffeeChatScheduler({ onFlipBack }: { onFlipBack: () => 
 
   return (
     <div
-      className="w-full h-full flex flex-col p-4 text-white font-sans overflow-hidden box-border"
-      style={{ maxWidth: 720, maxHeight: 440 }}
+      className="w-full h-full flex flex-col text-white font-sans overflow-hidden"
       onClick={(e) => e.stopPropagation()}
       onPointerDown={(e) => e.stopPropagation()}
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-3">
+      <div className="w-full px-6 pt-4 flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           {step === 'details' && (
             <button onClick={() => setStep('date')} className="text-purple-300/60 hover:text-purple-300 transition-colors">
@@ -103,15 +102,15 @@ export default function CoffeeChatScheduler({ onFlipBack }: { onFlipBack: () => 
             className="flex flex-col flex-1 min-h-0"
           >
             {/* Date row */}
-            <p className="text-[10px] text-purple-200/50 mb-1.5">Pick a day</p>
-            <div className="flex gap-0.5 pb-1">
+            <p className="text-[10px] text-purple-200/50 mb-1.5 px-6">Pick a day</p>
+            <div className="flex w-full overflow-x-auto gap-2 pb-2 scrollbar-hide px-6 snap-x">
               {dates.map((d) => {
                 const active = selectedDate && isSameDay(d, selectedDate);
                 return (
                   <button
                     key={d.toISOString()}
                     onClick={() => setSelectedDate(d)}
-                    className={`flex-1 min-w-0 flex flex-col items-center px-1 py-1 rounded-md transition-all text-center ${
+                    className={`flex-shrink-0 w-16 min-w-[64px] p-2 text-xs snap-center rounded-md transition-all text-center ${
                       active
                         ? 'bg-purple-500/30 border border-purple-400/50 shadow-[0_0_8px_hsl(270_100%_64%/0.2)]'
                         : 'bg-white/5 border border-white/10 hover:border-purple-400/30'
