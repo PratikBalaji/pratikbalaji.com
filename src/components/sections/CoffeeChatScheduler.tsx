@@ -73,14 +73,13 @@ export default function CoffeeChatScheduler({ onFlipBack }: { onFlipBack: () => 
       onPointerDown={(e) => e.stopPropagation()}
     >
       {/* Header */}
-      <div className="w-full px-6 pt-4 flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
+      <div className="w-full max-w-[560px] mx-auto px-6 pt-4 flex items-center justify-between mb-3">
+        <div className="flex items-center gap-1.5">
           {step === 'details' && (
             <button onClick={() => setStep('date')} className="text-purple-300/60 hover:text-purple-300 transition-colors">
               <ArrowLeft className="w-3.5 h-3.5" />
             </button>
           )}
-          <Coffee className="w-3.5 h-3.5 text-purple-400" />
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-purple-300/80">Book a Coffee Chat</p>
         </div>
         <button
@@ -102,15 +101,15 @@ export default function CoffeeChatScheduler({ onFlipBack }: { onFlipBack: () => 
             className="flex flex-col flex-1 min-h-0"
           >
             {/* Date row */}
-            <p className="text-[10px] text-purple-200/50 mb-1.5 px-6">Pick a day</p>
-            <div className="flex w-full overflow-x-auto gap-2 pb-2 scrollbar-hide px-6 snap-x">
+            <p className="w-full max-w-[560px] mx-auto text-[10px] text-purple-200/50 mb-1.5 px-6">Pick a day</p>
+            <div className="flex w-full max-w-[560px] mx-auto overflow-x-auto gap-2 pb-2 scrollbar-hide px-6 snap-x items-stretch justify-start">
               {dates.map((d) => {
                 const active = selectedDate && isSameDay(d, selectedDate);
                 return (
                   <button
                     key={d.toISOString()}
                     onClick={() => setSelectedDate(d)}
-                    className={`flex-shrink-0 w-16 min-w-[64px] p-2 text-xs snap-center rounded-md transition-all text-center ${
+                    className={`flex-shrink-0 w-16 min-w-[64px] p-2 text-xs snap-center rounded-md transition-all text-center flex flex-col items-center justify-center ${
                       active
                         ? 'bg-purple-500/30 border border-purple-400/50 shadow-[0_0_8px_hsl(270_100%_64%/0.2)]'
                         : 'bg-white/5 border border-white/10 hover:border-purple-400/30'

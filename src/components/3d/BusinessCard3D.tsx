@@ -73,7 +73,7 @@ function CardBack({ visible, onFlip }: { visible: boolean; onFlip: () => void })
         transition: 'opacity 0.3s',
       }}
     >
-      <div className="w-[720px] h-[440px] max-w-full overflow-hidden rounded-2xl flex flex-col relative">
+      <div className="w-[600px] h-[440px] max-w-full overflow-hidden rounded-2xl flex flex-col relative mx-auto">
         <CoffeeChatScheduler onFlipBack={onFlip} />
       </div>
     </Html>
