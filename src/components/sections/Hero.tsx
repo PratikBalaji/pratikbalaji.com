@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, useState, type MouseEvent } from 'react';
 
 const GitHubLogo = ({ className }: { className?: string }) => (
@@ -72,67 +72,10 @@ export default function Hero() {
     offset: ['start start', 'end start'],
   });
 
-  const parallaxY1 = useTransform(scrollYProgress, [0, 1], [0, -150]);
-  const parallaxY2 = useTransform(scrollYProgress, [0, 1], [0, -80]);
-  const parallaxY3 = useTransform(scrollYProgress, [0, 1], [0, -200]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
     <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
-      {/* Parallax ambient orbs */}
-      <div className="absolute inset-0 -z-10">
-        <motion.div
-          style={{ y: parallaxY1 }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[800px] md:h-[800px] rounded-full"
-        >
-          <motion.div
-            animate={{
-              scale: [1, 1.15, 0.95, 1],
-              rotate: [0, 5, -5, 0],
-            }}
-            transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-full h-full rounded-full"
-            style={{
-              background: 'radial-gradient(circle, hsl(270 100% 64% / 0.08) 0%, hsl(270 100% 64% / 0.02) 40%, transparent 70%)',
-            }}
-          />
-        </motion.div>
-
-        <motion.div
-          style={{ y: parallaxY2 }}
-          className="absolute top-[15%] left-[10%] w-[350px] h-[350px] rounded-full"
-        >
-          <motion.div
-            animate={{
-              x: [0, 60, -30, 0],
-              y: [0, -30, 50, 0],
-            }}
-            transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-full h-full rounded-full"
-            style={{
-              background: 'radial-gradient(circle, hsl(270 80% 60% / 0.06) 0%, transparent 70%)',
-            }}
-          />
-        </motion.div>
-
-        <motion.div
-          style={{ y: parallaxY3 }}
-          className="absolute bottom-[10%] right-[5%] w-[400px] h-[400px] rounded-full"
-        >
-          <motion.div
-            animate={{
-              x: [0, -50, 40, 0],
-              y: [0, 40, -20, 0],
-            }}
-            transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-full h-full rounded-full"
-            style={{
-              background: 'radial-gradient(circle, hsl(280 90% 60% / 0.05) 0%, transparent 70%)',
-            }}
-          />
-        </motion.div>
-      </div>
-
       {/* Content */}
       <motion.div style={{ opacity: contentOpacity }} className="container-tight relative z-10">
         <motion.div
