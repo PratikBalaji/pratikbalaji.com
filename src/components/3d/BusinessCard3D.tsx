@@ -22,15 +22,15 @@ function CardFront({ visible, onFlip }: { visible: boolean; onFlip: () => void }
     >
       <div
         onClick={onFlip}
-        className="cursor-pointer select-none w-full h-full flex flex-col justify-between p-10 text-white font-sans"
+        className="cursor-pointer select-none w-full h-full flex flex-col justify-between p-6 text-white font-sans overflow-hidden box-border"
       >
         <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-purple-300/60 mb-2">Software Engineer</p>
-          <h2 className="text-4xl font-bold tracking-tight leading-[1.15]">
+          <p className="text-[10px] uppercase tracking-[0.3em] text-purple-300/60 mb-1">Software Engineer</p>
+          <h2 className="text-2xl font-bold tracking-tight leading-[1.15]">
             Pratik<br />Balaji
           </h2>
         </div>
-        <div className="space-y-2 text-sm text-purple-100/75">
+        <div className="space-y-1 text-xs text-purple-100/75">
           <p className="flex items-center gap-2.5">
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-purple-400" />
             balajipratik8@gmail.com
@@ -48,7 +48,7 @@ function CardFront({ visible, onFlip }: { visible: boolean; onFlip: () => void }
             Philadelphia, PA
           </p>
         </div>
-        <p className="text-[10px] text-purple-300/35 mt-1">Tap to schedule a coffee chat →</p>
+        <p className="text-[9px] text-purple-300/35">Tap to schedule a coffee chat →</p>
       </div>
     </Html>
   );

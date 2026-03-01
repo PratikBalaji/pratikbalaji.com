@@ -18,15 +18,7 @@ export default function CoffeeChatScheduler({ onFlipBack }: { onFlipBack: () => 
 
   const dates = useMemo(() => {
     const today = new Date();
-    // Show next 10 weekdays
-    const result: Date[] = [];
-    let d = addDays(today, 1);
-    while (result.length < 10) {
-      const day = d.getDay();
-      if (day !== 0 && day !== 6) result.push(d);
-      d = addDays(d, 1);
-    }
-    return result;
+    return Array.from({ length: 7 }, (_, i) => addDays(today, i + 1));
   }, []);
 
   const handleSubmit = async () => {
@@ -76,26 +68,27 @@ export default function CoffeeChatScheduler({ onFlipBack }: { onFlipBack: () => 
 
   return (
     <div
-      className="w-full h-full flex flex-col p-6 text-white font-sans overflow-hidden"
+      className="w-full h-full flex flex-col p-4 text-white font-sans overflow-hidden box-border"
+      style={{ maxWidth: 720, maxHeight: 440 }}
       onClick={(e) => e.stopPropagation()}
       onPointerDown={(e) => e.stopPropagation()}
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           {step === 'details' && (
             <button onClick={() => setStep('date')} className="text-purple-300/60 hover:text-purple-300 transition-colors">
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-3.5 h-3.5" />
             </button>
           )}
-          <Coffee className="w-4 h-4 text-purple-400" />
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-purple-300/80">Book a Coffee Chat</p>
+          <Coffee className="w-3.5 h-3.5 text-purple-400" />
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-purple-300/80">Book a Coffee Chat</p>
         </div>
         <button
           onClick={onFlipBack}
-          className="text-xs text-purple-300/40 hover:text-purple-300/70 transition-colors"
+          className="flex items-center gap-1 text-[10px] text-purple-300/40 hover:text-purple-300/70 transition-colors"
         >
-          ← flip
+          <ChevronLeft className="w-3 h-3" /> Back
         </button>
       </div>
 
@@ -110,23 +103,23 @@ export default function CoffeeChatScheduler({ onFlipBack }: { onFlipBack: () => 
             className="flex flex-col flex-1 min-h-0"
           >
             {/* Date row */}
-            <p className="text-xs text-purple-200/50 mb-2">Pick a day</p>
-            <div className="flex gap-1.5 overflow-x-auto pb-2 scrollbar-none">
+            <p className="text-[10px] text-purple-200/50 mb-1.5">Pick a day</p>
+            <div className="flex gap-1 overflow-hidden pb-1">
               {dates.map((d) => {
                 const active = selectedDate && isSameDay(d, selectedDate);
                 return (
                   <button
                     key={d.toISOString()}
                     onClick={() => setSelectedDate(d)}
-                    className={`flex-shrink-0 flex flex-col items-center px-3 py-2 rounded-xl transition-all text-center ${
+                    className={`flex-1 min-w-0 flex flex-col items-center px-1.5 py-1.5 rounded-lg transition-all text-center ${
                       active
-                        ? 'bg-purple-500/30 border border-purple-400/50 shadow-[0_0_12px_hsl(270_100%_64%/0.2)]'
+                        ? 'bg-purple-500/30 border border-purple-400/50 shadow-[0_0_8px_hsl(270_100%_64%/0.2)]'
                         : 'bg-white/5 border border-white/10 hover:border-purple-400/30'
                     }`}
                   >
-                    <span className="text-[10px] uppercase tracking-wider text-purple-200/50">{format(d, 'EEE')}</span>
-                    <span className="text-lg font-semibold leading-tight">{format(d, 'd')}</span>
-                    <span className="text-[10px] text-purple-200/40">{format(d, 'MMM')}</span>
+                    <span className="text-[8px] uppercase tracking-wider text-purple-200/50">{format(d, 'EEE')}</span>
+                    <span className="text-sm font-semibold leading-tight">{format(d, 'd')}</span>
+                    <span className="text-[8px] text-purple-200/40">{format(d, 'MMM')}</span>
                   </button>
                 );
               })}
@@ -142,8 +135,8 @@ export default function CoffeeChatScheduler({ onFlipBack }: { onFlipBack: () => 
                   transition={{ duration: 0.3, ease: 'easeInOut' }}
                   className="overflow-hidden mt-3"
                 >
-                  <p className="text-xs text-purple-200/50 mb-2">Available times</p>
-                  <div className="grid grid-cols-3 gap-1.5">
+                  <p className="text-[10px] text-purple-200/50 mb-1.5">Available times</p>
+                  <div className="grid grid-cols-3 gap-1">
                     {AVAILABLE_TIMES.map((time) => {
                       const active = selectedTime === time;
                       return (
