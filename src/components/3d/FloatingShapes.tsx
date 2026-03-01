@@ -1,5 +1,6 @@
 import { useRef, useMemo, useState, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
+import SafeCanvas from './SafeCanvas';
 import { Float, MeshTransmissionMaterial, Environment } from '@react-three/drei';
 import * as THREE from 'three';
 import WebGLFallback from './WebGLFallback';
@@ -184,7 +185,7 @@ export default function FloatingShapes() {
 
   return (
     <div className="absolute inset-0 -z-10">
-      <Canvas
+      <SafeCanvas
         camera={{ position: [0, 0, 10], fov: 45 }}
         dpr={[1, 2]}
         gl={{ antialias: true, alpha: true, powerPreference: 'low-power' }}
@@ -192,9 +193,10 @@ export default function FloatingShapes() {
           gl.setClearColor(0x000000, 0);
         }}
         onError={() => setHasError(true)}
+        fallback={<WebGLFallback className="absolute inset-0 -z-10" variant="hero" />}
       >
         <Scene />
-      </Canvas>
+      </SafeCanvas>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
+import SafeCanvas from './SafeCanvas';
 import { Html, RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
 import CoffeeChatScheduler from '@/components/sections/CoffeeChatScheduler';
@@ -171,14 +172,15 @@ function CardLighting() {
 /* ── Main Export ── */
 export default function BusinessCard3D({ isFlipped, onFlip }: { isFlipped: boolean; onFlip: () => void }) {
   return (
-    <Canvas
+    <SafeCanvas
       camera={{ position: [0, 0, 6], fov: 40 }}
       gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
       dpr={[1, 1.5]}
       style={{ background: 'transparent' }}
+      fallback={<div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">3D card unavailable</div>}
     >
       <CardLighting />
       <GlassCard isFlipped={isFlipped} onFlip={onFlip} />
-    </Canvas>
+    </SafeCanvas>
   );
 }
