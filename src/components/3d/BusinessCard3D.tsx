@@ -25,7 +25,7 @@ function CardFront({ visible, onFlip }: { visible: boolean; onFlip: () => void }
         className="w-[600px] h-[440px] max-w-full overflow-hidden rounded-2xl flex flex-col justify-between relative mx-auto cursor-pointer select-none text-white font-sans px-12 py-8"
       >
         <div>
-          <p className="text-[10px] uppercase tracking-[0.3em] text-purple-300/60 mb-1">Software Engineer</p>
+          <p className="text-[10px] uppercase tracking-[0.3em] text-purple-300/60 mb-1">AI/ML+Data Scientist</p>
           <h2 className="text-2xl font-bold tracking-tight leading-[1.15]">
             Pratik<br />Balaji
           </h2>
