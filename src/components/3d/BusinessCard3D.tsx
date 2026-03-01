@@ -68,14 +68,14 @@ function CardBack({ visible, onFlip }: { visible: boolean; onFlip: () => void })
       style={{
         width: 720,
         height: 440,
-        overflow: 'hidden',
-        borderRadius: 16,
         pointerEvents: visible ? 'auto' : 'none',
         opacity: visible ? 1 : 0,
         transition: 'opacity 0.3s',
       }}
     >
-      <CoffeeChatScheduler onFlipBack={onFlip} />
+      <div className="w-[720px] h-[440px] max-w-full overflow-hidden rounded-2xl flex flex-col relative">
+        <CoffeeChatScheduler onFlipBack={onFlip} />
+      </div>
     </Html>
   );
 }
