@@ -15,8 +15,6 @@ function CardFront({ visible, onFlip }: { visible: boolean; onFlip: () => void }
       style={{
         width: 720,
         height: 440,
-        overflow: 'hidden',
-        borderRadius: 16,
         pointerEvents: visible ? 'auto' : 'none',
         opacity: visible ? 1 : 0,
         transition: 'opacity 0.3s',
@@ -24,7 +22,7 @@ function CardFront({ visible, onFlip }: { visible: boolean; onFlip: () => void }
     >
       <div
         onClick={onFlip}
-        className="cursor-pointer select-none w-full h-full flex flex-col justify-between p-6 text-white font-sans"
+        className="w-[600px] h-[440px] max-w-full overflow-hidden rounded-2xl flex flex-col justify-between relative mx-auto cursor-pointer select-none text-white font-sans px-12 py-8"
       >
         <div>
           <p className="text-[10px] uppercase tracking-[0.3em] text-purple-300/60 mb-1">Software Engineer</p>
