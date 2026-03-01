@@ -104,14 +104,14 @@ export default function CoffeeChatScheduler({ onFlipBack }: { onFlipBack: () => 
           >
             {/* Date row */}
             <p className="text-[10px] text-purple-200/50 mb-1.5">Pick a day</p>
-            <div className="flex gap-1 overflow-hidden pb-1">
+            <div className="flex gap-0.5 pb-1">
               {dates.map((d) => {
                 const active = selectedDate && isSameDay(d, selectedDate);
                 return (
                   <button
                     key={d.toISOString()}
                     onClick={() => setSelectedDate(d)}
-                    className={`flex-1 min-w-0 flex flex-col items-center px-1.5 py-1.5 rounded-lg transition-all text-center ${
+                    className={`flex-1 min-w-0 flex flex-col items-center px-1 py-1 rounded-md transition-all text-center ${
                       active
                         ? 'bg-purple-500/30 border border-purple-400/50 shadow-[0_0_8px_hsl(270_100%_64%/0.2)]'
                         : 'bg-white/5 border border-white/10 hover:border-purple-400/30'
