@@ -189,7 +189,7 @@ export default function GitHub() {
   const [totalContributions, setTotalContributions] = useState(0);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const isWebGL = useWebGL();
-  const [mode, setMode] = useState<'city' | 'repos'>('city');
+  const [mode, setMode] = useState<'3d' | '2d'>(isWebGL ? '3d' : '2d');
 
   // Fetch projects from DB
   useEffect(() => {
@@ -236,58 +236,55 @@ export default function GitHub() {
           <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground">GitHub Activity</h2>
         </ScrollReveal>
 
-        {/* Mode Toggle */}
-        <div className="flex items-center justify-center gap-4 mb-10">
-          <span className={`text-sm font-medium transition-colors ${mode === 'city' ? 'text-accent' : 'text-muted-foreground'}`}>
-            Contribution City
-          </span>
-          <button
-            onClick={() => setMode(mode === 'city' ? 'repos' : 'city')}
-            className="relative w-14 h-7 rounded-full border border-border bg-secondary transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            aria-label="Toggle between Contribution City and Repositories view"
-          >
-            <motion.div
-              className="absolute top-0.5 w-6 h-6 rounded-full bg-accent shadow-md"
-              animate={{ left: mode === 'city' ? '2px' : '26px' }}
-              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-            />
-          </button>
-          <span className={`text-sm font-medium transition-colors ${mode === 'repos' ? 'text-accent' : 'text-muted-foreground'}`}>
-            Repositories
-          </span>
-        </div>
-
-        <AnimatePresence mode="wait">
-          {mode === 'city' ? (
-            <motion.div
-              key="city"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
+        {/* Mode Toggle - 3D City vs 2D Calendar */}
+        {isWebGL && (
+          <div className="flex items-center justify-center gap-4 mb-10">
+            <span className={`text-sm font-medium transition-colors ${mode === '3d' ? 'text-accent' : 'text-muted-foreground'}`}>
+              3D City
+            </span>
+            <button
+              onClick={() => setMode(mode === '3d' ? '2d' : '3d')}
+              className="relative w-14 h-7 rounded-full border border-border bg-secondary transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label="Toggle between 3D city and 2D calendar view"
             >
-              <div className="bg-card rounded-2xl p-6 border border-border hover:border-accent/30 transition-all duration-300 mb-8">
-                <div className="flex items-center gap-2 mb-6">
-                  <Calendar className="w-5 h-5 text-accent" />
-                  <h3 className="font-semibold text-lg text-foreground">Contribution Activity</h3>
-                  <div className="ml-auto flex items-center gap-3">
-                    {totalContributions > 0 && (
-                      <span className="text-sm text-muted-foreground">{totalContributions} contributions in the last year</span>
-                    )}
-                    {lastUpdated && (
-                      <span className="text-xs text-muted-foreground hidden sm:inline">Updated {lastUpdated.toLocaleTimeString()}</span>
-                    )}
-                    <button onClick={() => fetchGitHubData(true)} disabled={refreshing}
-                      className="p-1.5 rounded-md hover:bg-muted transition-colors disabled:opacity-50">
-                      <RefreshCw className={`w-4 h-4 text-muted-foreground ${refreshing ? 'animate-spin' : ''}`} />
-                    </button>
-                  </div>
-                </div>
-                {loading ? (
-                  <div className="w-full h-[400px] rounded-xl bg-muted/20 animate-pulse flex items-center justify-center">
-                    <div className="text-muted-foreground text-sm font-mono">Loading contribution data...</div>
-                  </div>
-                ) : isWebGL ? (
+              <motion.div
+                className="absolute top-0.5 w-6 h-6 rounded-full bg-accent shadow-md"
+                animate={{ left: mode === '3d' ? '2px' : '26px' }}
+                transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+              />
+            </button>
+            <span className={`text-sm font-medium transition-colors ${mode === '2d' ? 'text-accent' : 'text-muted-foreground'}`}>
+              2D Calendar
+            </span>
+          </div>
+        )}
+
+        {/* Contribution Activity */}
+        <div className="bg-card rounded-2xl p-6 border border-border hover:border-accent/30 transition-all duration-300 mb-8">
+          <div className="flex items-center gap-2 mb-6">
+            <Calendar className="w-5 h-5 text-accent" />
+            <h3 className="font-semibold text-lg text-foreground">Contribution Activity</h3>
+            <div className="ml-auto flex items-center gap-3">
+              {totalContributions > 0 && (
+                <span className="text-sm text-muted-foreground">{totalContributions} contributions in the last year</span>
+              )}
+              {lastUpdated && (
+                <span className="text-xs text-muted-foreground hidden sm:inline">Updated {lastUpdated.toLocaleTimeString()}</span>
+              )}
+              <button onClick={() => fetchGitHubData(true)} disabled={refreshing}
+                className="p-1.5 rounded-md hover:bg-muted transition-colors disabled:opacity-50">
+                <RefreshCw className={`w-4 h-4 text-muted-foreground ${refreshing ? 'animate-spin' : ''}`} />
+              </button>
+            </div>
+          </div>
+          {loading ? (
+            <div className="w-full h-[400px] rounded-xl bg-muted/20 animate-pulse flex items-center justify-center">
+              <div className="text-muted-foreground text-sm font-mono">Loading contribution data...</div>
+            </div>
+          ) : (
+            <AnimatePresence mode="wait">
+              {mode === '3d' && isWebGL ? (
+                <motion.div key="3d" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.3 }}>
                   <Suspense fallback={
                     <div className="w-full h-[400px] rounded-xl bg-background flex items-center justify-center border border-border">
                       <div className="text-accent/60 text-sm font-mono animate-pulse">Initializing 3D city...</div>
@@ -295,75 +292,70 @@ export default function GitHub() {
                   }>
                     <ContributionCity contributions={contributions} />
                   </Suspense>
-                ) : (
-                  <ContributionCalendar contributions={contributions} />
-                )}
-              </div>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="repos"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <h3 className="font-semibold text-lg mb-6 flex items-center gap-2 text-foreground">
-                <svg className="w-5 h-5 text-accent" viewBox="0 0 16 16" fill="currentColor">
-                  <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z" />
-                </svg>
-                Highlighted Projects
-              </h3>
-              {projectsLoading ? (
-                <div className="grid md:grid-cols-2 gap-4">
-                  {[...Array(2)].map((_, i) => (
-                    <div key={i} className="bg-card rounded-xl border border-border p-5 animate-pulse">
-                      <div className="h-5 w-40 bg-muted rounded mb-3" />
-                      <div className="space-y-2 mb-4">
-                        <div className="h-4 w-full bg-muted rounded" />
-                        <div className="h-4 w-3/4 bg-muted rounded" />
-                        <div className="h-4 w-1/2 bg-muted rounded" />
-                      </div>
-                      <div className="flex gap-2">
-                        <div className="h-6 w-16 bg-muted rounded-full" />
-                        <div className="h-6 w-16 bg-muted rounded-full" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                </motion.div>
               ) : (
-                <div className="grid md:grid-cols-2 gap-4">
-                  {dbProjects.map((project, index) => (
-                    <RepoCard
-                      key={project.id}
-                      repo={{
-                        id: index,
-                        name: project.name,
-                        description: project.description,
-                        html_url: project.url || '#',
-                        stargazers_count: project.stargazers_count,
-                        forks_count: project.forks_count,
-                        language: project.language,
-                        updated_at: '',
-                        topics: project.topics || [],
-                        readme: null,
-                      }}
-                      index={index}
-                    />
-                  ))}
-                </div>
+                <motion.div key="2d" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.3 }}>
+                  <ContributionCalendar contributions={contributions} />
+                </motion.div>
               )}
-
-              <div className="text-center mt-10">
-                <a href="https://github.com/PratikBalaji?tab=repositories" target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-accent hover:underline font-medium">
-                  View all repositories on GitHub
-                  <ExternalLink className="w-4 h-4" />
-                </a>
-              </div>
-            </motion.div>
+            </AnimatePresence>
           )}
-        </AnimatePresence>
+        </div>
+
+        {/* Repositories - always visible */}
+        <h3 className="font-semibold text-lg mb-6 flex items-center gap-2 text-foreground">
+          <svg className="w-5 h-5 text-accent" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z" />
+          </svg>
+          Highlighted Projects
+        </h3>
+        {projectsLoading ? (
+          <div className="grid md:grid-cols-2 gap-4">
+            {[...Array(2)].map((_, i) => (
+              <div key={i} className="bg-card rounded-xl border border-border p-5 animate-pulse">
+                <div className="h-5 w-40 bg-muted rounded mb-3" />
+                <div className="space-y-2 mb-4">
+                  <div className="h-4 w-full bg-muted rounded" />
+                  <div className="h-4 w-3/4 bg-muted rounded" />
+                  <div className="h-4 w-1/2 bg-muted rounded" />
+                </div>
+                <div className="flex gap-2">
+                  <div className="h-6 w-16 bg-muted rounded-full" />
+                  <div className="h-6 w-16 bg-muted rounded-full" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 gap-4">
+            {dbProjects.map((project, index) => (
+              <RepoCard
+                key={project.id}
+                repo={{
+                  id: index,
+                  name: project.name,
+                  description: project.description,
+                  html_url: project.url || '#',
+                  stargazers_count: project.stargazers_count,
+                  forks_count: project.forks_count,
+                  language: project.language,
+                  updated_at: '',
+                  topics: project.topics || [],
+                  readme: null,
+                }}
+                index={index}
+              />
+            ))}
+          </div>
+        )}
+
+        <div className="text-center mt-10">
+          <a href="https://github.com/PratikBalaji?tab=repositories" target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-accent hover:underline font-medium">
+            View all repositories on GitHub
+            <ExternalLink className="w-4 h-4" />
+          </a>
+        </div>
       </div>
     </section>
   );
