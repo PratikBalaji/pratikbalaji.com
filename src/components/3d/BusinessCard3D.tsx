@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Html, RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
@@ -22,47 +22,40 @@ function CardFront({ visible, onFlip }: { visible: boolean; onFlip: () => void }
     >
       <div
         onClick={onFlip}
-        className="cursor-pointer select-none w-full h-full flex flex-col justify-between p-12 text-white font-sans"
+        className="cursor-pointer select-none w-full h-full flex flex-col justify-between p-10 text-white font-sans"
       >
         <div>
-          <p className="text-sm uppercase tracking-[0.35em] text-purple-300/70 mb-3">Software Engineer</p>
-          <h2 className="text-6xl font-bold tracking-tight leading-[1.1]">
+          <p className="text-xs uppercase tracking-[0.3em] text-purple-300/60 mb-2">Software Engineer</p>
+          <h2 className="text-4xl font-bold tracking-tight leading-[1.15]">
             Pratik<br />Balaji
           </h2>
         </div>
-        <div className="space-y-3 text-base text-purple-100/80">
-          <p className="flex items-center gap-3">
-            <span className="inline-block w-2 h-2 rounded-full bg-purple-400" />
+        <div className="space-y-2 text-sm text-purple-100/75">
+          <p className="flex items-center gap-2.5">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-purple-400" />
             balajipratik8@gmail.com
           </p>
-          <p className="flex items-center gap-3">
-            <span className="inline-block w-2 h-2 rounded-full bg-purple-400" />
+          <p className="flex items-center gap-2.5">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-purple-400" />
             pratik.balaji@temple.edu
           </p>
-          <p className="flex items-center gap-3">
-            <span className="inline-block w-2 h-2 rounded-full bg-purple-400" />
+          <p className="flex items-center gap-2.5">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-purple-400" />
             (346) 446-8717
           </p>
-          <p className="flex items-center gap-3">
-            <span className="inline-block w-2 h-2 rounded-full bg-purple-400" />
+          <p className="flex items-center gap-2.5">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-purple-400" />
             Philadelphia, PA
           </p>
         </div>
-        <p className="text-xs text-purple-300/40 mt-2">Tap to schedule a coffee chat →</p>
-        <div className="absolute top-10 right-12 w-24 h-24 border border-purple-400/20 rounded-full" />
+        <p className="text-[10px] text-purple-300/35 mt-1">Tap to schedule a coffee chat →</p>
       </div>
     </Html>
   );
 }
 
 /* ── Back face HTML (Coffee Chat Scheduler) ── */
-function CardBack({
-  visible,
-  onFlip,
-}: {
-  visible: boolean;
-  onFlip: () => void;
-}) {
+function CardBack({ visible, onFlip }: { visible: boolean; onFlip: () => void }) {
   return (
     <Html
       transform
@@ -84,13 +77,7 @@ function CardBack({
 }
 
 /* ── Glass Card Mesh ── */
-function GlassCard({
-  isFlipped,
-  onFlip,
-}: {
-  isFlipped: boolean;
-  onFlip: () => void;
-}) {
+function GlassCard({ isFlipped, onFlip }: { isFlipped: boolean; onFlip: () => void }) {
   const groupRef = useRef<THREE.Group>(null);
   const { viewport } = useThree();
   const targetRotation = useRef({ x: 0, y: 0 });
@@ -114,16 +101,11 @@ function GlassCard({
       <RoundedBox args={[6, 3.6, 0.12]} radius={0.15} smoothness={4}>
         <meshStandardMaterial
           color="#1a0a2e"
-          metalness={0.6}
-          roughness={0.15}
+          metalness={0.5}
+          roughness={0.2}
           transparent
-          opacity={0.92}
+          opacity={0.7}
         />
-      </RoundedBox>
-
-      {/* Subtle edge glow */}
-      <RoundedBox args={[6.04, 3.64, 0.01]} radius={0.15} smoothness={4} position={[0, 0, 0.065]}>
-        <meshBasicMaterial color="#a855f7" transparent opacity={0.06} />
       </RoundedBox>
 
       <CardFront visible={!isFlipped} onFlip={onFlip} />
@@ -134,32 +116,16 @@ function GlassCard({
 
 /* ── Lighting ── */
 function CardLighting() {
-  const lightRef = useRef<THREE.PointLight>(null);
-
-  useFrame(({ clock, pointer }) => {
-    if (!lightRef.current) return;
-    const t = clock.getElapsedTime();
-    lightRef.current.position.x = pointer.x * 3 + Math.sin(t * 0.5) * 2;
-    lightRef.current.position.y = pointer.y * 2 + Math.cos(t * 0.3) * 1;
-    lightRef.current.position.z = 4;
-  });
-
   return (
     <>
-      <ambientLight intensity={0.3} />
-      <pointLight ref={lightRef} color="#a855f7" intensity={35} distance={15} decay={2} />
+      <ambientLight intensity={0.4} />
+      <pointLight color="#a855f7" intensity={25} position={[3, 2, 4]} distance={15} decay={2} />
     </>
   );
 }
 
 /* ── Main Export ── */
-export default function BusinessCard3D({
-  isFlipped,
-  onFlip,
-}: {
-  isFlipped: boolean;
-  onFlip: () => void;
-}) {
+export default function BusinessCard3D({ isFlipped, onFlip }: { isFlipped: boolean; onFlip: () => void }) {
   return (
     <Canvas
       camera={{ position: [0, 0, 6], fov: 40 }}
