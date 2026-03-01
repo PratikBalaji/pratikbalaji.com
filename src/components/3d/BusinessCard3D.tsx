@@ -35,58 +35,6 @@ function EstClock() {
   return <span className="font-mono">{time}</span>;
 }
 
-/* ── Mini Holographic Globe ── */
-function MiniGlobe() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    let globe: ReturnType<typeof import('cobe').default> | undefined;
-    let phi = 0;
-
-    import('cobe').then((mod) => {
-      const createGlobe = mod.default;
-      if (!canvasRef.current) return;
-      globe = createGlobe(canvasRef.current, {
-        devicePixelRatio: 2,
-        width: 160,
-        height: 160,
-        phi: 0,
-        theta: 0.35,
-        dark: 1,
-        diffuse: 1.2,
-        mapSamples: 12000,
-        mapBrightness: 2,
-        baseColor: [0.15, 0.05, 0.25],
-        markerColor: [0.66, 0.33, 0.97],
-        glowColor: [0.25, 0.1, 0.4],
-        markers: [
-          { location: [39.9526, -75.1652], size: 0.08 },
-        ],
-        onRender: (state) => {
-          state.phi = phi;
-          phi += 0.005;
-        },
-      });
-    });
-
-    return () => globe?.destroy();
-  }, []);
-
-  return (
-    <div className="relative flex items-center justify-center" style={{ width: 80, height: 80 }}>
-      {/* Glow backdrop */}
-      <div className="absolute inset-0 rounded-full bg-purple-500/20 blur-xl" />
-      <canvas
-        ref={canvasRef}
-        width={160}
-        height={160}
-        className="relative"
-        style={{ width: 80, height: 80 }}
-      />
-    </div>
-  );
-}
-
 /* ── Front face HTML ── */
 function CardFront({ visible, onFlip }: { visible: boolean; onFlip: () => void }) {
   return (
@@ -122,20 +70,16 @@ function CardFront({ visible, onFlip }: { visible: boolean; onFlip: () => void }
           <HudField label="DIRECT LINE" value="(346) 446-8717" />
         </div>
 
-        {/* Holographic Globe Telemetry */}
-        <div className="flex items-center gap-4">
-          <MiniGlobe />
-          <div className="flex flex-col gap-1 text-[10px] font-mono text-gray-500">
-            <div className="flex items-center gap-1.5">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-400" />
-              </span>
-              <span className="text-gray-400">SYSTEM ONLINE</span>
-            </div>
-            <span>39.9526° N, 75.1652° W</span>
-            <span>LOCAL: <EstClock /></span>
+        {/* Telemetry Bar */}
+        <div className="flex items-center justify-between text-[10px] text-gray-500 font-mono">
+          <div className="flex items-center gap-1.5">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-400" />
+            </span>
+            <span>PHILADELPHIA // 39.9526° N, 75.1652° W</span>
           </div>
+          <span className="text-gray-500">LOCAL: <EstClock /></span>
         </div>
       </div>
     </Html>
