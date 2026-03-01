@@ -75,7 +75,7 @@ export default function Hero() {
   const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
+    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-transparent">
       {/* Content */}
       <motion.div style={{ opacity: contentOpacity }} className="container-tight relative z-10">
         <motion.div
