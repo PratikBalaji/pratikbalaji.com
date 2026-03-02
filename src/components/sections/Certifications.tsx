@@ -8,8 +8,9 @@ import googleLogo from '@/assets/google-logo.png';
 import databricksLogo from '@/assets/databricks-logo.png';
 import outskillLogo from '@/assets/outskill-logo.png';
 import linkedinLogo from '@/assets/linkedin-logo.png';
+import jpmorganLogo from '@/assets/jpmorgan-logo.png';
 
-type Category = 'AI' | 'Development' | 'Data Science' | 'Database';
+type Category = 'AI' | 'Development' | 'Data Science' | 'Database' | 'Finance';
 
 interface Certification {
   title: string;
@@ -30,6 +31,7 @@ const certifications: Certification[] = [
   { title: 'AI Agent Fundamentals', issuer: 'Databricks', logo: databricksLogo, category: 'AI' },
   { title: 'Generative AI Mastermind Certificate', issuer: 'Outskill', logo: outskillLogo, category: 'AI' },
   { title: 'SQL Essential Training', issuer: 'LinkedIn', logo: linkedinLogo, category: 'Database' },
+  { title: 'Quantitative Research', issuer: 'J.P. Morgan (Forage)', logo: jpmorganLogo, category: 'Finance' },
 ];
 
 function CertificationCard({ certification, index }: { certification: Certification; index: number }) {
@@ -139,7 +141,7 @@ function CertificationFolder({ category, certs }: { category: Category; certs: C
 
 export default function Certifications() {
   const ref = useRef(null);
-  const categories: Category[] = ['AI', 'Development', 'Data Science', 'Database'];
+  const categories: Category[] = ['AI', 'Development', 'Data Science', 'Database', 'Finance'];
   const getCertsByCategory = (category: Category) => certifications.filter(cert => cert.category === category);
 
   return (
