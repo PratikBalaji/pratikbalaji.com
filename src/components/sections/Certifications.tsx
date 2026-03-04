@@ -9,6 +9,7 @@ import databricksLogo from '@/assets/databricks-logo.png';
 import outskillLogo from '@/assets/outskill-logo.png';
 import linkedinLogo from '@/assets/linkedin-logo.png';
 import jpmorganLogo from '@/assets/jpmorgan-logo.png';
+import anthropicLogo from '@/assets/anthropic-logo.png';
 
 type Category = 'AI' | 'Development' | 'Data Science' | 'Database' | 'Finance';
 
@@ -32,6 +33,7 @@ const certifications: Certification[] = [
   { title: 'Generative AI Mastermind Certificate', issuer: 'Outskill', logo: outskillLogo, category: 'AI' },
   { title: 'SQL Essential Training', issuer: 'LinkedIn', logo: linkedinLogo, category: 'Database' },
   { title: 'Quantitative Research', issuer: 'J.P. Morgan (Forage)', logo: jpmorganLogo, category: 'Finance' },
+  { title: 'Claude Code In Action', issuer: 'Anthropic', logo: anthropicLogo, category: 'AI' },
 ];
 
 function CertificationCard({ certification, index }: { certification: Certification; index: number }) {
