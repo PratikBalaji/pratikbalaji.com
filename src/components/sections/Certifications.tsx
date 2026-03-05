@@ -33,6 +33,7 @@ const certifications: Certification[] = [
   { title: 'Generative AI Mastermind Certificate', issuer: 'Outskill', logo: outskillLogo, category: 'AI' },
   { title: 'SQL Essential Training', issuer: 'LinkedIn', logo: linkedinLogo, category: 'Database' },
   { title: 'Quantitative Research', issuer: 'J.P. Morgan (Forage)', logo: jpmorganLogo, category: 'Finance' },
+  { title: 'Software Engineering', issuer: 'J.P. Morgan (Forage)', logo: jpmorganLogo, category: 'Development' },
   { title: 'Claude Code In Action', issuer: 'Anthropic', logo: anthropicLogo, category: 'AI' },
 ];
 
