@@ -11,7 +11,7 @@ export const RESUME_CHUNKS: ResumeChunk[] = [
   {
     id: 'edu',
     label: 'Education',
-    summary: 'Temple University — BS Data Science, Computational Analytics (Expected 2027). Coursework: Calculus I-III, Data Structures & Algorithms, Computer Systems & Low-Level Programming, Principles of Data Science, Linear Algebra, Probability Theory, Database Systems. Extracurriculars: Temple Data Analytics Club, Temple Data Science Community, Research Scholars Club.',
+    summary: 'Temple University — BS Data Science, Computational Analytics (Expected 2027). Coursework: Calculus I-III, Mathematical Concepts in Computing I-II, Data Structures & Algorithms, Computer Systems & Low-Level Programming, Principles of Data Science(s), Linear Algebra, Principles of Database Systems, Probability Theory. Extracurriculars: Temple Data Analytics Club, Temple Data Science Community, Research Scholars Club.',
     x: 2.1, y: 4.3,
     keywords: ['education', 'university', 'degree', 'temple', 'school', 'study', 'coursework', 'gpa', 'graduation', '2027', 'data analytics club', 'research scholars'],
   },
@@ -20,7 +20,7 @@ export const RESUME_CHUNKS: ResumeChunk[] = [
     label: 'Programming',
     summary: 'Python, C, C++, Java, JavaScript, SQL, R, Bash',
     x: -1.5, y: 2.8,
-    keywords: ['python', 'java', 'programming', 'language', 'code', 'skill', 'javascript', 'sql', 'c++', 'bash', 'r'],
+    keywords: ['python', 'java', 'programming', 'language', 'code', 'skill', 'javascript', 'sql', 'c++', 'bash', 'r', 'quantitative research'],
   },
   {
     id: 'skills-ml',
@@ -39,7 +39,7 @@ export const RESUME_CHUNKS: ResumeChunk[] = [
   {
     id: 'skills-adobe',
     label: 'Adobe & Data Tools',
-    summary: 'Adobe Experience Platform (AEP), Real-Time CDP, Customer Journey Analytics (CJA), Data Visualization, EDA',
+    summary: 'Adobe Experience Platform (AEP), Real-Time CDP, Customer Journey Analytics (CJA), Data Visualization, EDA, Quantitative Research',
     x: -1.0, y: 1.5,
     keywords: ['adobe', 'aep', 'cdp', 'customer journey', 'cja', 'visualization', 'eda', 'analytics', 'real-time'],
   },
@@ -74,9 +74,9 @@ export const RESUME_CHUNKS: ResumeChunk[] = [
   {
     id: 'certs',
     label: 'Certifications',
-    summary: 'AI: Google AI & Productivity, Outskill GenAI Mastermind, Databricks AI Agent Fundamentals. Development: Python (Santander), Quantitative Research J.P. Morgan (Forage), SQL Essential Training (LinkedIn).',
+    summary: 'AI: Google AI & Productivity, Outskill GenAI Mastermind, Databricks AI Agent Fundamentals. Development: Quantitative Research J.P. Morgan (Forage), Software Engineering J.P. Morgan (Forage). Other: Claude Code In Action (Anthropic), SQL Essential Training (LinkedIn), Python (Santander).',
     x: -3.1, y: -0.8,
-    keywords: ['certification', 'certificate', 'google', 'databricks', 'course', 'credential', 'santander', 'jpmorgan', 'forage', 'quantitative'],
+    keywords: ['certification', 'certificate', 'google', 'databricks', 'course', 'credential', 'santander', 'jpmorgan', 'forage', 'quantitative', 'anthropic', 'claude', 'software engineering'],
   },
   {
     id: 'contact',
