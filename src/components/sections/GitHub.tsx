@@ -79,16 +79,21 @@ function ContributionCalendar({ contributions }: { contributions: ContributionDa
 
   return (
     <div className="w-full pb-2">
-      <div className="w-full">
-        <div className="flex mb-1 ml-6">
-          {monthLabels.map(({ month, index }, i) => (
-            <div key={`${month}-${index}`} className="text-[9px] sm:text-xs text-muted-foreground"
-              style={{ position: 'absolute', left: `${24 + index * (100 / weeks.length)}%` }}>
-              {month}
-            </div>
-          ))}
+      <div className="w-full relative">
+        <div className="flex gap-px sm:gap-[2px] mt-0 ml-6 sm:ml-7">
+          {weeks.map((week, weekIndex) => {
+            const firstDay = week[0];
+            const date = parseDateString(firstDay.date);
+            const showLabel = weekIndex === 0 || date.getDate() <= 7;
+            return (
+              <div key={weekIndex} className="flex-1 text-center">
+                {showLabel && date.getDate() <= 7 ? (
+                  <span className="text-[7px] sm:text-[9px] text-muted-foreground">{months[date.getMonth()]}</span>
+                ) : null}
+              </div>
+            );
+          })}
         </div>
-        <div className="flex gap-px sm:gap-[2px] mt-5">
           <div className="flex flex-col gap-px sm:gap-[2px] mr-0.5">
             {days.map((day, i) => (
               <div key={day} className="h-[8px] sm:h-[10px] text-[7px] sm:text-[9px] text-muted-foreground leading-[8px] sm:leading-[10px]">
