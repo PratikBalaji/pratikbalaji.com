@@ -40,7 +40,7 @@ serve(async (req) => {
   }
 
   try {
-    const { username } = await req.json();
+    const { username, from, to } = await req.json();
     
     if (!username || typeof username !== 'string') {
       return new Response(
@@ -70,9 +70,9 @@ serve(async (req) => {
     console.log(`Fetching contributions for user: ${username}`);
 
     const query = `
-      query($username: String!) {
+      query($username: String!, $from: DateTime, $to: DateTime) {
         user(login: $username) {
-          contributionsCollection {
+          contributionsCollection(from: $from, to: $to) {
             contributionCalendar {
               totalContributions
               weeks {
@@ -96,7 +96,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         query,
-        variables: { username },
+        variables: { username, from: from || undefined, to: to || undefined },
       }),
     });
 
