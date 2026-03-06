@@ -78,39 +78,44 @@ function ContributionCalendar({ contributions }: { contributions: ContributionDa
   const monthLabels = getMonthLabels();
 
   return (
-    <div className="w-full overflow-x-auto pb-2">
-      <div className="min-w-[750px]">
-        <div className="flex mb-1 ml-8">
-          {monthLabels.map(({ month, index }) => (
-            <div key={`${month}-${index}`} className="text-xs text-muted-foreground"
-              style={{ marginLeft: index === 0 ? 0 : `${(index - (monthLabels[monthLabels.indexOf({ month, index }) - 1]?.index || 0)) * 14 - 20}px` }}>
-              {month}
-            </div>
-          ))}
+    <div className="w-full pb-2">
+      <div className="w-full">
+        <div className="flex gap-px sm:gap-[2px] ml-5 sm:ml-6 mb-1">
+          {weeks.map((week, weekIndex) => {
+            const firstDay = week[0];
+            const date = parseDateString(firstDay.date);
+            return (
+              <div key={weekIndex} className="flex-1 text-center">
+                {date.getDate() <= 7 ? (
+                  <span className="text-[7px] sm:text-[9px] text-muted-foreground">{months[date.getMonth()]}</span>
+                ) : null}
+              </div>
+            );
+          })}
         </div>
-        <div className="flex gap-1">
-          <div className="flex flex-col gap-[3px] mr-1">
+        <div className="flex gap-px sm:gap-[2px]">
+          <div className="flex flex-col gap-px sm:gap-[2px] mr-0.5 shrink-0">
             {days.map((day, i) => (
-              <div key={day} className="h-[12px] text-[10px] text-muted-foreground leading-[12px]">
-                {i % 2 === 1 ? day.slice(0, 3) : ''}
+              <div key={day} className="h-[8px] sm:h-[10px] text-[7px] sm:text-[9px] text-muted-foreground leading-[8px] sm:leading-[10px] w-4 sm:w-5">
+                {i % 2 === 1 ? day.slice(0, 2) : ''}
               </div>
             ))}
           </div>
-          <div className="flex gap-[3px]">
+          <div className="flex gap-px sm:gap-[2px] flex-1">
             {weeks.map((week, weekIndex) => (
-              <div key={weekIndex} className="flex flex-col gap-[3px]">
+              <div key={weekIndex} className="flex flex-col gap-px sm:gap-[2px] flex-1">
                 {week.map((day) => (
-                  <div key={day.date} className={`w-[12px] h-[12px] rounded-sm ${getLevelColor(day.level)} transition-colors cursor-pointer`}
+                  <div key={day.date} className={`aspect-square w-full rounded-[1px] sm:rounded-sm ${getLevelColor(day.level)} transition-colors cursor-pointer`}
                     title={`${day.date}: ${day.count} contributions`} />
                 ))}
               </div>
             ))}
           </div>
         </div>
-        <div className="flex items-center justify-end gap-1 mt-3 text-xs text-muted-foreground">
+        <div className="flex items-center justify-end gap-1 mt-3 text-[9px] sm:text-xs text-muted-foreground">
           <span>Less</span>
           {[0, 1, 2, 3, 4].map((level) => (
-            <div key={level} className={`w-[12px] h-[12px] rounded-sm ${getLevelColor(level)}`} />
+            <div key={level} className={`w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] rounded-[1px] sm:rounded-sm ${getLevelColor(level)}`} />
           ))}
           <span>More</span>
         </div>
