@@ -211,7 +211,19 @@ export default function GitHub() {
         body: { username: GITHUB_USERNAME, from: '2026-01-01T00:00:00Z', to: '2026-12-31T23:59:59Z' },
       });
       if (!error && data?.contributions) {
-        setContributions(data.contributions);
+        // Pad contributions to cover the full year (Jan 1 – Dec 31)
+        const contribMap = new Map<string, ContributionDay>();
+        for (const c of data.contributions) {
+          contribMap.set(c.date, c);
+        }
+        const fullYear: ContributionDay[] = [];
+        const start = new Date(2026, 0, 1);
+        const end = new Date(2026, 11, 31);
+        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+          const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+          fullYear.push(contribMap.get(key) || { date: key, count: 0, level: 0 });
+        }
+        setContributions(fullYear);
         setTotalContributions(data.totalContributions || 0);
         setLastUpdated(new Date());
       }
