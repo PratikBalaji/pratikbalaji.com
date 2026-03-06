@@ -208,7 +208,7 @@ export default function GitHub() {
     try {
       if (isRefresh) setRefreshing(true);
       const { data, error } = await supabase.functions.invoke('github-contributions', {
-        body: { username: GITHUB_USERNAME },
+        body: { username: GITHUB_USERNAME, from: '2026-01-01T00:00:00Z', to: '2026-12-31T23:59:59Z' },
       });
       if (!error && data?.contributions) {
         setContributions(data.contributions);
