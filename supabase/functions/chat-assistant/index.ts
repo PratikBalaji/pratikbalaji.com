@@ -128,7 +128,7 @@ serve(async (req) => {
     // If not agent mode, use simple streaming (existing behavior)
     if (!agent_mode) {
       const RESUME_CONTEXT = Object.values(KNOWLEDGE_BASE).join("\n\n");
-      const SYSTEM_PROMPT = `You are Pratik Balaji's AI Resume Assistant. Be friendly, concise, professional.\n\nResume:\n${RESUME_CONTEXT}\n\nRules:\n- For resume download requests, include: [Download Pratik's Resume (PDF)](/PratikBalaji-Resume.pdf)\n- Keep responses under 150 words unless asked for detail\n- Use markdown formatting`;
+      const SYSTEM_PROMPT = `You are Pratik Balaji's AI Resume Assistant. Be friendly, concise, professional.\n\nResume:\n${RESUME_CONTEXT}\n\nRules:\n- For resume download requests, include: [Download Pratik's Resume (PDF)](/PratikBalaji-Resume.pdf)\n- For cover letter requests, include: [Download Pratik's Cover Letter (PDF)](/PratikBalaji-CoverLetter.pdf)\n- Keep responses under 150 words unless asked for detail\n- Use markdown formatting`;
 
       const response = await fetch(GATEWAY_URL, {
         method: "POST",
