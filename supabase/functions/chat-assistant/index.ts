@@ -265,7 +265,7 @@ IMPORTANT: When you receive tool results, analyze them and either call more tool
                   model: "google/gemini-2.5-flash",
                   messages: [
                     ...conversationMessages,
-                    { role: "user", content: `Based on all the tool results above, provide a comprehensive, well-formatted markdown answer to the original question. Include specific details and metrics. If a resume download was relevant, include the link: [Download Resume (PDF)](/PratikBalaji-Resume.pdf)` },
+                    { role: "user", content: `Based on all the tool results above, provide a comprehensive, well-formatted markdown answer to the original question. Include specific details and metrics. If a resume download was relevant, include the link: [Download Resume (PDF)](/PratikBalaji-Resume.pdf). If a cover letter was relevant, include the link: [Download Cover Letter (PDF)](/PratikBalaji-CoverLetter.pdf)` },
                   ],
                   stream: true,
                   max_tokens: 1024,
