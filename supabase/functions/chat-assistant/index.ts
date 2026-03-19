@@ -17,6 +17,7 @@ const KNOWLEDGE_BASE: Record<string, string> = {
   "experience": "YAN IT Solutions (Data Analyst Intern, June-Sept 2025): IoT data pipelines, ML predictions, FastAPI dashboard, Azure deployment, 33% faster decision-making, 45% user interaction boost. Natraj Beats LLC (Web Developer & Consultant, Feb 2025-Jan 2026): Built NatrajBeats platform via Lovable AI, 60% faster time-to-market, user telemetry, automated booking pipeline, 30% more leads, UI/UX & SEO optimization.",
   "certifications": "AI: AI & Productivity (Google), Generative AI Mastermind (Outskill), AI Agent Fundamentals (Databricks). Development: Quantitative Research J.P. Morgan (Forage), Software Engineering J.P. Morgan (Forage). Other: Claude Code In Action (Anthropic), SQL Essential Training (LinkedIn), Python (Santander).",
   "contact": "Pratik Balaji, Philadelphia PA 19122. Phone: (346) 446-8717. Email: balajipratik8@gmail.com. LinkedIn: linkedin.com/in/pratikbalaji. GitHub: github.com/PratikBalaji. Kaggle. Portfolio: pratikbalaji.lovable.app",
+  "cover_letter": "Pratik Balaji's Cover Letter: As a Data Science with Computational Analytics student at Temple University, he has developed a deep foundation in predictive modeling, statistical analysis, and artificial intelligence. At YAN IT Solutions, he built Python pipelines to process IoT sensor data from MongoDB, improving predictive accuracy by 40% and reducing device downtime by 35% across hundreds of endpoints. He developed the Startup Success Predictor, an end-to-end ML pipeline utilizing Random Forest and XGBoost algorithms with 70% test accuracy. For the AROMA project, he engineered agentic workflows using n8n and integrated Vapi conversational AI voice agent, achieving a 95% automated response rate. As Technical Consultant for Natraj Beats LLC, he engineered data-tracking telemetry systems and reduced time-to-market by 60%. His technical stack spans Python, TensorFlow, scikit-learn, AWS, and modern AI agent frameworks.",
 };
 
 // Tool definitions for the agent
@@ -127,7 +128,7 @@ serve(async (req) => {
     // If not agent mode, use simple streaming (existing behavior)
     if (!agent_mode) {
       const RESUME_CONTEXT = Object.values(KNOWLEDGE_BASE).join("\n\n");
-      const SYSTEM_PROMPT = `You are Pratik Balaji's AI Resume Assistant. Be friendly, concise, professional.\n\nResume:\n${RESUME_CONTEXT}\n\nRules:\n- For resume download requests, include: [Download Pratik's Resume (PDF)](/PratikBalaji-Resume.pdf)\n- Keep responses under 150 words unless asked for detail\n- Use markdown formatting`;
+      const SYSTEM_PROMPT = `You are Pratik Balaji's AI Resume Assistant. Be friendly, concise, professional.\n\nResume:\n${RESUME_CONTEXT}\n\nRules:\n- For resume download requests, include: [Download Pratik's Resume (PDF)](/PratikBalaji-Resume.pdf)\n- For cover letter requests, include: [Download Pratik's Cover Letter (PDF)](/PratikBalaji-CoverLetter.pdf)\n- Keep responses under 150 words unless asked for detail\n- Use markdown formatting`;
 
       const response = await fetch(GATEWAY_URL, {
         method: "POST",
@@ -264,7 +265,7 @@ IMPORTANT: When you receive tool results, analyze them and either call more tool
                   model: "google/gemini-2.5-flash",
                   messages: [
                     ...conversationMessages,
-                    { role: "user", content: `Based on all the tool results above, provide a comprehensive, well-formatted markdown answer to the original question. Include specific details and metrics. If a resume download was relevant, include the link: [Download Resume (PDF)](/PratikBalaji-Resume.pdf)` },
+                    { role: "user", content: `Based on all the tool results above, provide a comprehensive, well-formatted markdown answer to the original question. Include specific details and metrics. If a resume download was relevant, include the link: [Download Resume (PDF)](/PratikBalaji-Resume.pdf). If a cover letter was relevant, include the link: [Download Cover Letter (PDF)](/PratikBalaji-CoverLetter.pdf)` },
                   ],
                   stream: true,
                   max_tokens: 1024,
