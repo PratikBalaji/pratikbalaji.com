@@ -46,16 +46,9 @@ export const RESUME_CHUNKS: ResumeChunk[] = [
   {
     id: 'exp-yan',
     label: 'YAN IT Solutions',
-    summary: 'Data Analyst Intern (June–Sep 2025) — Python/MongoDB IoT pipelines, ML predictions (Linear Regression), FastAPI dashboard with Chart.js. 40% accuracy improvement, 35% downtime reduction across 230+ devices. 85% uptime, 55% data output increase, 45% user interaction boost for 200+ stakeholders. Deployed on Azure App Services.',
+    summary: 'Data Analyst Intern (June–Sep 2025) — Implemented Python/MongoDB IoT pipelines, ML predictions (Linear Regression), FastAPI dashboard with Chart.js. 40% accuracy improvement, 35% downtime reduction across 230+ devices. 33% faster decision-making, 45% user interaction boost among 200+ stakeholders. 85% uptime, 55% data output increase. Deployed on Azure App Services.',
     x: 3.2, y: -1.4,
     keywords: ['intern', 'experience', 'work', 'yan', 'iot', 'data analyst', 'job', 'internship', 'recent', 'azure', 'fastapi', 'mongodb'],
-  },
-  {
-    id: 'exp-natraj',
-    label: 'Natraj Beats',
-    summary: 'Web Developer & Consultant (Feb 2025–Jan 2026) — Lovable AI framework, 60% faster time-to-market, telemetry & data-tracking, automated booking pipeline, 30% inbound lead boost, UI/UX & SEO optimization.',
-    x: 1.8, y: -2.1,
-    keywords: ['natraj', 'web', 'developer', 'consultant', 'experience', 'work', 'client', 'seo', 'booking', 'telemetry'],
   },
   {
     id: 'proj-ssp',
@@ -72,6 +65,13 @@ export const RESUME_CHUNKS: ResumeChunk[] = [
     keywords: ['project', 'aroma', 'restaurant', 'automation', 'agent', 'voice', 'whatsapp', 'n8n', 'vapi'],
   },
   {
+    id: 'proj-aura',
+    label: 'AURA ATLAS Project',
+    summary: 'Agentic Geospatial Wellness Network (Spring 2026) — Mapbox GL JS 3D routing with bounding box constraints, 40% false-positive reduction. Next.js navigation HUD with emotional weather system, 60% faster decisions. 2-step fuzzy proximity search algorithm, 95% success for local landmarks. Optimized React state-management, zero-latency transitions across 11 cities.',
+    x: 1.8, y: -2.1,
+    keywords: ['project', 'aura', 'atlas', 'geospatial', 'wellness', 'mapbox', 'navigation', 'mental health', 'routing', 'next.js', 'react', 'fuzzy search'],
+  },
+  {
     id: 'certs',
     label: 'Certifications',
     summary: 'AI: Google AI & Productivity, Outskill GenAI Mastermind, Databricks AI Agent Fundamentals. Development: Quantitative Research J.P. Morgan (Forage), Software Engineering J.P. Morgan (Forage). Other: Claude Code In Action (Anthropic), SQL Essential Training (LinkedIn), Python (Santander).',
@@ -84,6 +84,13 @@ export const RESUME_CHUNKS: ResumeChunk[] = [
     summary: 'Philadelphia, PA 19122 — (346) 446-8717 — balajipratik8@gmail.com — LinkedIn, GitHub, Kaggle, Portfolio',
     x: 4.0, y: 1.5,
     keywords: ['contact', 'email', 'phone', 'linkedin', 'github', 'location', 'philadelphia', 'reach', 'kaggle', 'portfolio'],
+  },
+  {
+    id: 'cover-letter',
+    label: 'Cover Letter',
+    summary: 'Pratik Balaji\'s cover letter highlights his foundation in predictive modeling, statistical analysis, and AI. Covers his work at YAN IT Solutions (40% accuracy improvement, 35% downtime reduction), Startup Success Predictor (70% test accuracy), AROMA project (95% automated response rate), and Natraj Beats LLC (60% time-to-market reduction). Technical stack: Python, TensorFlow, scikit-learn, AWS, AI agent frameworks.',
+    x: 3.5, y: 3.0,
+    keywords: ['cover letter', 'cover', 'letter', 'hiring', 'application', 'apply', 'motivation', 'introduction'],
   },
 ];
 
