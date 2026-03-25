@@ -114,7 +114,7 @@ export default function Education() {
 
         <ScrollReveal>
           <TiltCard className="relative rounded-2xl">
-            <div className="bg-card rounded-2xl p-6 md:p-8 border border-border hover:border-accent/40 transition-all duration-300">
+            <div className="rounded-2xl p-6 md:p-8">
               {/* Top: Institution info */}
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-shrink-0">
