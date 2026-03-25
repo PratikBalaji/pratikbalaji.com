@@ -4,6 +4,7 @@ import { Send, Loader2, X, User, Square, Cloud, Cpu } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import AudioVisualizer from '@/components/voice/AudioVisualizer';
 import VoiceMicButton from '@/components/voice/VoiceMicButton';
+import TTSWaveform from '@/components/voice/TTSWaveform';
 import { useVoiceAgent } from '@/hooks/useVoiceAgent';
 import { useEdgeLLM } from '@/hooks/useEdgeLLM';
 import RAGVisualization from '@/components/chat/RAGVisualization';
@@ -385,6 +386,18 @@ export default function ChatAssistant() {
                   <motion.p className="absolute bottom-2 text-xs text-muted-foreground" animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}>
                     Release to send
                   </motion.p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* TTS Playback Waveform */}
+            <AnimatePresence>
+              {isSpeaking && !isListening && (
+                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 48 }} exit={{ opacity: 0, height: 0 }}
+                  className="flex items-center justify-center gap-3 bg-accent/5 border-b border-accent/20 overflow-hidden">
+                  <TTSWaveform isActive={isSpeaking} />
+                  <span className="text-xs text-accent font-medium">Speaking...</span>
+                  <TTSWaveform isActive={isSpeaking} />
                 </motion.div>
               )}
             </AnimatePresence>
