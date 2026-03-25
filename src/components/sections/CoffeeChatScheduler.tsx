@@ -24,11 +24,20 @@ export default function CoffeeChatScheduler({ onFlipBack }: { onFlipBack: () => 
 
   const handleSubmit = async () => {
     if (!selectedDate || !selectedTime || !name.trim() || !email.trim()) return;
+
+    // Client-side validation & sanitization
+    const cleanName = sanitizeInput(name, 100);
+    const cleanEmail = email.trim().slice(0, 255);
+    const nameErr = validateField(cleanName, 'Name', { maxLength: 100 });
+    const emailErr = validateField(cleanEmail, 'Email', { isEmail: true, maxLength: 255 });
+    if (nameErr) { toast({ title: 'Validation error', description: nameErr, variant: 'destructive' }); return; }
+    if (emailErr) { toast({ title: 'Validation error', description: emailErr, variant: 'destructive' }); return; }
+
     setIsSubmitting(true);
     try {
       const { error } = await supabase.from('meeting_requests').insert({
-        name: name.trim(),
-        email: email.trim(),
+        name: cleanName,
+        email: cleanEmail,
         requested_date: format(selectedDate, 'yyyy-MM-dd'),
         requested_time: selectedTime,
       });

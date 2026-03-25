@@ -111,7 +111,7 @@ export default function Guestbook() {
     try {
       const { error } = await supabase.from('guestbook').insert({
         user_id: user.id,
-        message: message.trim(),
+        message: cleanMessage,
       });
       if (error) throw error;
       setMessage('');
