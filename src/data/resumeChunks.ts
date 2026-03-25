@@ -102,7 +102,7 @@ export const RESUME_CHUNKS: ResumeChunk[] = [
   {
     id: 'exp-auxilior',
     label: 'Auxilior Capital Partners',
-    summary: 'IT Intern at Auxilior Capital Partners (Starting May 2026) — Applying data science and machine learning to real-world challenges in financial tech. Part of the 2026 Intern Program.',
+    summary: 'IT Intern at Auxilior Capital Partners Inc. (May–Sep 2026) — Running AI operations under VP leadership to integrate automated tools and optimize secure financial systems. Automating data workflows and deploying custom AI agents to streamline internal reporting and enhance efficiency.',
     x: 3.8, y: -0.5,
     keywords: ['auxilior', 'capital', 'partners', 'intern', 'it', 'financial', 'fintech', 'upcoming', '2026', 'may'],
   },
