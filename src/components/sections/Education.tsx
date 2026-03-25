@@ -1,8 +1,7 @@
-import { GraduationCap, Calendar, MapPin } from 'lucide-react';
+import { GraduationCap, Calendar, MapPin, BookOpen } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
 import TiltCard from '@/components/TiltCard';
 import templeLogo from '@/assets/temple-logo.png';
-import downingtownLogo from '@/assets/downingtown-logo.png';
 
 const education = [
   {
@@ -15,16 +14,20 @@ const education = [
     highlights: ['Statistical Methods', 'Algorithmic Approaches', 'Data Analysis', 'Research Scholar Club', 'Badminton Club'],
     logo: templeLogo,
   },
-  {
-    degree: 'High School Diploma',
-    concentration: null,
-    institution: 'Downingtown East High School',
-    location: 'Downingtown, PA',
-    period: null,
-    description: 'Maintained a high level of engagement across diverse academic and extracurricular platforms. As an active member of FBLA and Student Council, developed foundational skills in professional communication, project coordination, and peer advocacy. Commitment to versatility demonstrated through participation in Track and Field, cultivating creative collaboration.',
-    highlights: ['FBLA', 'Student Council', 'Track and Field'],
-    logo: downingtownLogo,
-  },
+];
+
+const coursework = [
+  'Calculus I',
+  'Calculus II',
+  'Calculus III',
+  'Linear Algebra',
+  'Probability Theory',
+  'Mathematical Concepts in Computing I',
+  'Mathematical Concepts in Computing II',
+  'Data Structures & Algorithms',
+  'Computer Systems & Low-Level Programming',
+  'Principles of Data Science(s)',
+  'Principles of Database Systems',
 ];
 
 function EducationCard({ edu, index }: { edu: typeof education[0]; index: number }) {
@@ -111,6 +114,30 @@ export default function Education() {
           {education.map((edu, index) => (
             <EducationCard key={edu.institution} edu={edu} index={index} />
           ))}
+
+          {/* Coursework */}
+          <ScrollReveal delay={0.2}>
+            <div className="bg-card rounded-2xl p-6 md:p-8 border border-border hover:border-accent/40 transition-all duration-300">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-lg bg-accent/15 flex items-center justify-center">
+                  <BookOpen className="w-5 h-5 text-accent" />
+                </div>
+                <h3 className="font-display text-xl font-bold text-foreground">
+                  Relevant Coursework
+                </h3>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {coursework.map((course) => (
+                  <span
+                    key={course}
+                    className="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full border border-accent/20 font-medium"
+                  >
+                    {course}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
