@@ -156,7 +156,7 @@ export default function Certifications() {
           <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-4 text-foreground">
             Certifications
           </h2>
-          <p className="text-muted-foreground">Hover over a folder to explore certificates</p>
+          
         </ScrollReveal>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6">
