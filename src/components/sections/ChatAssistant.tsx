@@ -394,7 +394,7 @@ export default function ChatAssistant() {
             <AnimatePresence>
               {isSpeaking && !isListening && (
                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 48 }} exit={{ opacity: 0, height: 0 }}
-                  className="flex items-center justify-center gap-3 bg-accent/5 border-b border-accent/20 overflow-hidden">
+                  className="flex items-center justify-center gap-3 bg-accent/5 border-b border-white/10 overflow-hidden">
                   <TTSWaveform isActive={isSpeaking} />
                   <span className="text-xs text-accent font-medium">Speaking...</span>
                   <TTSWaveform isActive={isSpeaking} />
