@@ -72,7 +72,7 @@ export default function Skills() {
                         <motion.div key={skill} initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1, rotate: 360 }}
                           transition={{ opacity: { duration: 0.3, delay: i * 0.05 }, scale: { type: 'spring', stiffness: 300, damping: 20, delay: i * 0.05 }, rotate: { duration: 30 + i * 2, repeat: Infinity, ease: "linear" } }}
                           className="absolute top-1/2 left-1/2" style={{ width: radius * 2, height: radius * 2, marginLeft: -radius, marginTop: -radius }}>
-                          <div className="absolute px-3 py-1.5 bg-card border border-border rounded-full text-xs font-medium text-foreground whitespace-nowrap"
+                          <div className="absolute px-3 py-1.5 rounded-full text-xs font-medium text-foreground whitespace-nowrap"
                             style={{ top: '50%', left: '50%', transform: `rotate(${angle}deg) translateX(${radius}px) rotate(-${angle}deg) translate(-50%, -50%)` }}>
                             {skill}
                           </div>
@@ -105,7 +105,7 @@ export default function Skills() {
           <div className="order-1 lg:order-2 space-y-4">
             {loading ? (
               Array.from({ length: 7 }).map((_, i) => (
-                <div key={i} className="bg-card border border-border rounded-xl p-5 animate-pulse">
+                <div key={i} className="rounded-xl p-5 animate-pulse">
                   <div className="h-5 w-40 bg-muted rounded mb-4" />
                   <div className="flex flex-wrap gap-2">
                     {Array.from({ length: 4 }).map((_, j) => (
@@ -123,10 +123,10 @@ export default function Skills() {
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ type: 'spring', stiffness: 100, damping: 20, delay: catIndex * 0.08 }}
                   onClick={() => setSelectedCategory(selectedCategory === catIndex ? null : catIndex)}
-                  className={`cursor-pointer p-5 rounded-xl border transition-all duration-300 hover:-translate-y-1 ${
+                  className={`cursor-pointer p-5 rounded-xl transition-all duration-300 hover:-translate-y-1 ${
                     selectedCategory === catIndex
-                      ? 'bg-card border-accent shadow-[var(--electric-glow)]'
-                      : 'bg-card border-border hover:border-accent/40 hover:shadow-[var(--electric-glow)]'
+                      ? 'shadow-[var(--electric-glow)]'
+                      : ''
                   }`}
                 >
                   <h3 className={`font-display text-lg font-bold mb-4 transition-colors ${selectedCategory === catIndex ? 'text-accent' : 'text-foreground'}`}>
@@ -138,8 +138,8 @@ export default function Skills() {
                       <motion.span key={skill} initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
                         transition={{ type: 'spring', stiffness: 200, damping: 20, delay: catIndex * 0.05 + skillIndex * 0.03 }}
                         whileHover={{ scale: 1.05, y: -2 }}
-                        className={`px-3 py-1.5 bg-secondary border rounded-full text-sm font-medium cursor-pointer transition-all hover:border-accent/40 ${
-                          selectedCategory === catIndex ? 'border-accent/30 text-foreground' : 'border-border text-muted-foreground'
+                        className={`px-3 py-1.5 rounded-full text-sm font-medium cursor-pointer transition-all ${
+                          selectedCategory === catIndex ? 'text-foreground' : 'text-muted-foreground'
                         }`}>
                         {skill}
                       </motion.span>

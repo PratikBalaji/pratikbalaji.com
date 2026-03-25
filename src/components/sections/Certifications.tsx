@@ -50,9 +50,9 @@ function CertificationCard({ certification, index }: { certification: Certificat
       onMouseLeave={() => setIsHovered(false)}
       className="group relative"
     >
-      <div className="bg-card rounded-xl p-4 border border-border hover:border-accent/40 hover:shadow-[var(--electric-glow)] transition-all duration-300 hover:-translate-y-1">
-        <div className="flex items-center gap-3">
-          <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-muted flex items-center justify-center p-1.5 border border-border overflow-hidden">
+        <div className="rounded-xl p-4 hover:-translate-y-1 transition-all duration-300">
+          <div className="flex items-center gap-3">
+            <div className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center p-1.5 overflow-hidden">
             <img src={certification.logo} alt={`${certification.issuer} logo`} className="w-full h-full object-contain" />
           </div>
           <div className="flex-1 min-w-0">
@@ -69,7 +69,7 @@ function CertificationCard({ certification, index }: { certification: Certificat
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-card/95 backdrop-blur-sm rounded-xl flex items-center justify-center border border-accent/40"
+              className="absolute inset-0 bg-background/95 backdrop-blur-sm rounded-xl flex items-center justify-center"
             >
               <motion.button
                 initial={{ scale: 0.8 }}
@@ -103,7 +103,7 @@ function CertificationFolder({ category, certs }: { category: Category; certs: C
       >
         <div className="absolute -top-3 left-4 w-24 h-5 bg-accent rounded-t-lg" />
         
-        <div className="relative bg-card border border-border hover:border-accent/40 rounded-xl p-6 min-h-[180px] transition-all duration-300">
+        <div className="relative rounded-xl p-6 min-h-[180px] transition-all duration-300">
           <div className="flex flex-col items-center justify-center h-full">
             <motion.div
               animate={{ rotateY: isOpen ? 180 : 0 }}
@@ -130,7 +130,7 @@ function CertificationFolder({ category, certs }: { category: Category; certs: C
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="absolute top-full left-0 right-0 z-50 pt-4"
           >
-            <div className="bg-card/90 backdrop-blur-xl rounded-xl border border-border shadow-2xl p-4 space-y-3">
+            <div className="backdrop-blur-xl rounded-xl p-4 space-y-3">
               {certs.map((cert, index) => (
                 <CertificationCard key={cert.title} certification={cert} index={index} />
               ))}
