@@ -72,6 +72,8 @@ export default function LinkedInPosts() {
           ))}
         </div>
 
+        {/* Subtle divider */}
+        <div className="mt-16 mx-auto max-w-xs h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
       </div>
     </section>
   );
