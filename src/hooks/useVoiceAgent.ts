@@ -1,6 +1,8 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback } from 'react';
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-assistant`;
+const TTS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-tts`;
+const STT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-stt`;
 
 type Msg = { role: 'user' | 'assistant'; content: string };
 
@@ -14,15 +16,18 @@ export function useVoiceAgent(
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
 
-  const recognitionRef = useRef<any>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
   const audioContextRef = useRef<AudioContext | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const currentAudioRef = useRef<HTMLAudioElement | null>(null);
 
   const startListening = useCallback(async () => {
     try {
-      // Set up audio context for visualizer
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
+
+      // Set up analyser for visualizer
       const audioCtx = new AudioContext();
       audioContextRef.current = audioCtx;
       const source = audioCtx.createMediaStreamSource(stream);
@@ -31,42 +36,26 @@ export function useVoiceAgent(
       source.connect(analyserNode);
       setAnalyser(analyserNode);
 
-      // Set up speech recognition
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        alert('Speech recognition is not supported in this browser. Try Chrome.');
-        return;
-      }
+      // Record audio for ElevenLabs STT
+      audioChunksRef.current = [];
+      const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+      mediaRecorderRef.current = mediaRecorder;
 
-      const recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = false;
-      recognition.lang = 'en-US';
-      recognitionRef.current = recognition;
-
-      let transcript = '';
-
-      recognition.onresult = (event: any) => {
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          if (event.results[i].isFinal) {
-            transcript += event.results[i][0].transcript;
-          }
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
         }
       };
 
-      recognition.onend = () => {
-        // When recognition ends (user released mic), process the transcript
+      mediaRecorder.onstop = async () => {
         cleanup();
-        if (transcript.trim()) {
-          processVoiceInput(transcript.trim());
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        if (audioBlob.size > 0) {
+          await transcribeAndProcess(audioBlob);
         }
       };
 
-      recognition.onerror = () => {
-        cleanup();
-      };
-
-      recognition.start();
+      mediaRecorder.start();
       setIsListening(true);
     } catch {
       console.error('Microphone access denied');
@@ -74,8 +63,8 @@ export function useVoiceAgent(
   }, []);
 
   const stopListening = useCallback(() => {
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+      mediaRecorderRef.current.stop();
     }
   }, []);
 
@@ -92,16 +81,40 @@ export function useVoiceAgent(
     }
   }, []);
 
-  const processVoiceInput = useCallback(async (text: string) => {
-    const userMsg: Msg = { role: 'user', content: text };
-    setMessages(prev => [...prev, userMsg]);
-    setIsLoading(true);
+  const transcribeAndProcess = useCallback(async (audioBlob: Blob) => {
     setIsProcessing(true);
-
-    let assistantSoFar = '';
-    const allMessages = [...messages, userMsg];
+    setIsLoading(true);
 
     try {
+      // Step 1: Transcribe with ElevenLabs STT
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'recording.webm');
+
+      const sttResp = await fetch(STT_URL, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+        },
+        body: formData,
+      });
+
+      if (!sttResp.ok) throw new Error('STT failed');
+      const { text } = await sttResp.json();
+
+      if (!text?.trim()) {
+        setIsProcessing(false);
+        setIsLoading(false);
+        return;
+      }
+
+      // Step 2: Send to chat assistant (same as before)
+      const userMsg: Msg = { role: 'user', content: text.trim() };
+      setMessages(prev => [...prev, userMsg]);
+
+      const allMessages = [...messages, userMsg];
+      let assistantSoFar = '';
+
       const resp = await fetch(CHAT_URL, {
         method: 'POST',
         headers: {
@@ -115,7 +128,7 @@ export function useVoiceAgent(
         }),
       });
 
-      if (!resp.ok || !resp.body) throw new Error('Stream failed');
+      if (!resp.ok || !resp.body) throw new Error('Chat failed');
 
       const reader = resp.body.getReader();
       const decoder = new TextDecoder();
@@ -151,11 +164,12 @@ export function useVoiceAgent(
         }
       }
 
-      // Speak the response using browser TTS
+      // Step 3: Speak response with ElevenLabs TTS
       if (assistantSoFar) {
-        speakText(assistantSoFar);
+        await speakText(assistantSoFar);
       }
-    } catch {
+    } catch (err) {
+      console.error('Voice pipeline error:', err);
       setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, something went wrong. Try again!' }]);
     } finally {
       setIsLoading(false);
@@ -163,27 +177,63 @@ export function useVoiceAgent(
     }
   }, [messages, setMessages, setIsLoading]);
 
-  const speakText = useCallback((text: string) => {
-    if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 1.05;
-    utterance.pitch = 0.95;
-    const voices = window.speechSynthesis.getVoices();
-    const preferred = voices.find(v => v.name.includes('Google') && v.lang.startsWith('en')) 
-      || voices.find(v => v.lang.startsWith('en'));
-    if (preferred) utterance.voice = preferred;
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-    window.speechSynthesis.speak(utterance);
+  const speakText = useCallback(async (text: string) => {
+    try {
+      setIsSpeaking(true);
+
+      // Strip markdown for cleaner TTS
+      const cleanText = text
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // links
+        .replace(/[*_#`~>]/g, '')                  // formatting
+        .replace(/\n{2,}/g, '. ')                  // paragraphs
+        .trim();
+
+      if (!cleanText) {
+        setIsSpeaking(false);
+        return;
+      }
+
+      const response = await fetch(TTS_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+        },
+        body: JSON.stringify({ text: cleanText }),
+      });
+
+      if (!response.ok) throw new Error('TTS failed');
+
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+      currentAudioRef.current = audio;
+
+      audio.onended = () => {
+        setIsSpeaking(false);
+        URL.revokeObjectURL(audioUrl);
+        currentAudioRef.current = null;
+      };
+      audio.onerror = () => {
+        setIsSpeaking(false);
+        URL.revokeObjectURL(audioUrl);
+        currentAudioRef.current = null;
+      };
+
+      await audio.play();
+    } catch (err) {
+      console.error('TTS error:', err);
+      setIsSpeaking(false);
+    }
   }, []);
 
   const stopSpeaking = useCallback(() => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
+    if (currentAudioRef.current) {
+      currentAudioRef.current.pause();
+      currentAudioRef.current = null;
     }
+    setIsSpeaking(false);
   }, []);
 
   return {
