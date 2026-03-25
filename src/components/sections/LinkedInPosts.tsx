@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import ScrollReveal from '@/components/ScrollReveal';
-import { ExternalLink, Linkedin } from 'lucide-react';
+import { } from 'lucide-react';
 
 const embeds = [
   {
