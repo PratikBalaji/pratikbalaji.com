@@ -72,7 +72,7 @@ export default function Skills() {
                         <motion.div key={skill} initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1, rotate: 360 }}
                           transition={{ opacity: { duration: 0.3, delay: i * 0.05 }, scale: { type: 'spring', stiffness: 300, damping: 20, delay: i * 0.05 }, rotate: { duration: 30 + i * 2, repeat: Infinity, ease: "linear" } }}
                           className="absolute top-1/2 left-1/2" style={{ width: radius * 2, height: radius * 2, marginLeft: -radius, marginTop: -radius }}>
-                          <div className="absolute px-3 py-1.5 bg-card border border-border rounded-full text-xs font-medium text-foreground whitespace-nowrap"
+                          <div className="absolute px-3 py-1.5 rounded-full text-xs font-medium text-foreground whitespace-nowrap"
                             style={{ top: '50%', left: '50%', transform: `rotate(${angle}deg) translateX(${radius}px) rotate(-${angle}deg) translate(-50%, -50%)` }}>
                             {skill}
                           </div>
