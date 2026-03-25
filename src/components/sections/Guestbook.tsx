@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { Loader2, Send, LogIn, LogOut, MessageSquare, User } from 'lucide-react';
 import type { User as SupaUser } from '@supabase/supabase-js';
+import { sanitizeInput, containsScriptInjection } from '@/lib/sanitize';
 
 type GuestbookEntry = {
   id: string;
@@ -95,8 +96,14 @@ export default function Guestbook() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim() || !user) return;
-    if (message.trim().length > 100) {
-      toast({ title: 'Too long', description: 'Keep it under 100 characters!', variant: 'destructive' });
+
+    const cleanMessage = sanitizeInput(message, 100);
+    if (!cleanMessage) {
+      toast({ title: 'Invalid message', description: 'Message cannot be empty after sanitization.', variant: 'destructive' });
+      return;
+    }
+    if (containsScriptInjection(message)) {
+      toast({ title: 'Invalid content', description: 'Message contains disallowed content.', variant: 'destructive' });
       return;
     }
 
@@ -104,7 +111,7 @@ export default function Guestbook() {
     try {
       const { error } = await supabase.from('guestbook').insert({
         user_id: user.id,
-        message: message.trim(),
+        message: cleanMessage,
       });
       if (error) throw error;
       setMessage('');
