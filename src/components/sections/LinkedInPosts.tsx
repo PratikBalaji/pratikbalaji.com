@@ -14,7 +14,7 @@ const embeds = [
     id: '2',
     src: 'https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7434368685231738881',
     title: 'Embedded post',
-    height: 819,
+    height: 880,
   },
 ];
 
