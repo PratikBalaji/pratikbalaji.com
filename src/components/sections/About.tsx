@@ -180,7 +180,7 @@ export default function About() {
             className="relative group">
 
             <div className="absolute -inset-px rounded-2xl bg-accent/10 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative bg-card border border-border rounded-2xl p-5 hover:border-accent/40 transition-all duration-300 h-full">
+            <div className="relative rounded-2xl p-5 h-full">
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
                   <Music className="w-4 h-4 text-accent" />
@@ -215,7 +215,7 @@ export default function About() {
             className="relative group">
 
             <div className="absolute -inset-px rounded-2xl bg-accent/10 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative bg-card border border-border rounded-2xl p-5 hover:border-accent/40 transition-all duration-300 h-full">
+            <div className="relative rounded-2xl p-5 h-full">
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
                   <Brain className="w-4 h-4 text-accent" />
@@ -264,11 +264,11 @@ export default function About() {
               agents. I thrive on turning complex data into actionable insights and innovative applications.
             </p>
             <div className="flex flex-wrap gap-3">
-              <div className="px-4 py-2 bg-card rounded-full border border-border hover:border-accent/40 transition-colors">
+              <div className="px-4 py-2 rounded-full">
                 <span className="font-display font-semibold text-foreground text-sm">AI/ML</span>
                 <span className="text-muted-foreground text-sm ml-2">Focused</span>
               </div>
-              <div className="px-4 py-2 bg-card rounded-full border border-border hover:border-accent/40 transition-colors">
+              <div className="px-4 py-2 rounded-full">
                 <span className="font-display font-semibold text-foreground text-sm">Data Science</span>
                 <span className="text-muted-foreground text-sm ml-2">Major</span>
               </div>
