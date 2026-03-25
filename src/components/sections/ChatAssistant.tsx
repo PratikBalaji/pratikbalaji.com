@@ -381,7 +381,7 @@ export default function ChatAssistant() {
             <AnimatePresence>
               {isListening && (
                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 160 }} exit={{ opacity: 0, height: 0 }}
-                  className="relative flex items-center justify-center bg-background/80 backdrop-blur-sm border-b border-border overflow-hidden">
+                  className="relative flex items-center justify-center bg-background/40 backdrop-blur-sm border-b border-white/10 overflow-hidden">
                   <AudioVisualizer analyser={analyser} isActive={isListening} className="w-[160px] h-[160px]" />
                   <motion.p className="absolute bottom-2 text-xs text-muted-foreground" animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}>
                     Release to send
