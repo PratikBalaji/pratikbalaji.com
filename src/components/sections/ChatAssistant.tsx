@@ -390,6 +390,18 @@ export default function ChatAssistant() {
               )}
             </AnimatePresence>
 
+            {/* TTS Playback Waveform */}
+            <AnimatePresence>
+              {isSpeaking && !isListening && (
+                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 48 }} exit={{ opacity: 0, height: 0 }}
+                  className="flex items-center justify-center gap-3 bg-accent/5 border-b border-accent/20 overflow-hidden">
+                  <TTSWaveform isActive={isSpeaking} />
+                  <span className="text-xs text-accent font-medium">Speaking...</span>
+                  <TTSWaveform isActive={isSpeaking} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             {/* Messages */}
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 no-scrollbar">
               {messages.map((msg, i) => (
