@@ -10,6 +10,7 @@ import outskillLogo from '@/assets/outskill-logo.png';
 import linkedinLogo from '@/assets/linkedin-logo.png';
 import jpmorganLogo from '@/assets/jpmorgan-logo.png';
 import anthropicLogo from '@/assets/anthropic-logo.png';
+import udacityLogo from '@/assets/udacity-logo.png';
 
 type Category = 'AI' | 'Development' | 'Data Science' | 'Database' | 'Finance';
 
