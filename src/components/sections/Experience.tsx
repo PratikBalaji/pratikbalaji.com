@@ -73,7 +73,7 @@ function ExperienceCard({ experience, index, mode }: { experience: typeof experi
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-shrink-0">
                   {experience.logo ? (
-                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl bg-muted flex items-center justify-center p-2 border border-border">
+                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl flex items-center justify-center p-2">
                       <img src={experience.logo} alt={`${experience.company} logo`} className="w-full h-full object-contain" />
                     </div>
                   ) : (
