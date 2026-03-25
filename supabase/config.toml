@@ -5,3 +5,8 @@ verify_jwt = false
 
 [functions.chat-assistant]
 verify_jwt = false
+
+[auth]
+[auth.password]
+hibp_enabled = true
+min_length = 8
