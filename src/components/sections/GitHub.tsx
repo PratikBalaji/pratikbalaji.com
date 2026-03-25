@@ -366,13 +366,6 @@ export default function GitHub() {
           </div>
         )}
 
-        <div className="text-center mt-10">
-          <a href="https://github.com/PratikBalaji?tab=repositories" target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-accent hover:underline font-medium">
-            View all repositories on GitHub
-            <ExternalLink className="w-4 h-4" />
-          </a>
-        </div>
       </div>
     </section>
   );
