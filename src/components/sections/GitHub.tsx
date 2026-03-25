@@ -171,7 +171,7 @@ function RepoCard({ repo, index }: { repo: Repository; index: number }) {
           {repo.topics && repo.topics.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-3">
               {repo.topics.slice(0, 3).map((topic) => (
-                <span key={topic} className="px-2 py-0.5 bg-accent/10 text-accent text-xs rounded-full border border-accent/20">
+                <span key={topic} className="px-2 py-0.5 bg-accent/10 text-accent text-xs rounded-full">
                   {topic}
                 </span>
               ))}
