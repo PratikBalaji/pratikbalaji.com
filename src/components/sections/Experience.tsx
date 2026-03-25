@@ -121,10 +121,10 @@ function ExperienceCard({ experience, index, mode }: { experience: typeof experi
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ type: 'spring', stiffness: 300, damping: 20, delay: i * 0.05 }}
-                          className={`px-3 py-1 text-sm rounded-full border ${
+                          className={`px-3 py-1 text-sm rounded-full ${
                             mode === 'business'
-                              ? 'bg-accent/10 text-accent border-accent/30'
-                              : 'bg-secondary text-muted-foreground border-border'
+                              ? 'bg-accent/10 text-accent'
+                              : 'text-muted-foreground'
                           }`}
                         >
                           {highlight}
