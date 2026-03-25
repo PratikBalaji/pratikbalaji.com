@@ -316,7 +316,7 @@ export default function ChatAssistant() {
             className="fixed bottom-24 right-6 z-50 w-[400px] max-w-[calc(100vw-48px)] h-[560px] max-h-[75vh] bg-card/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center gap-3 px-5 py-3 border-b border-border bg-secondary/50">
+            <div className="flex items-center gap-3 px-5 py-3 border-b border-white/10 bg-white/5 backdrop-blur-sm">
               <PBLogo className="w-9 h-9" />
               <div className="flex-1 min-w-0">
                 <p className="font-display font-bold text-sm text-foreground">JARVIS · AI Agent</p>
