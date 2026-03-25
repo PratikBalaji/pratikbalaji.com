@@ -77,7 +77,7 @@ function ExperienceCard({ experience, index, mode }: { experience: typeof experi
                       <img src={experience.logo} alt={`${experience.company} logo`} className="w-full h-full object-contain" />
                     </div>
                   ) : (
-                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl border-2 border-dashed border-border bg-muted/20 flex items-center justify-center">
+                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl flex items-center justify-center">
                       <Briefcase className="w-8 h-8 text-muted-foreground" />
                     </div>
                   )}
