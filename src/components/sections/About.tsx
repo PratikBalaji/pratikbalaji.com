@@ -264,11 +264,11 @@ export default function About() {
               agents. I thrive on turning complex data into actionable insights and innovative applications.
             </p>
             <div className="flex flex-wrap gap-3">
-              <div className="px-4 py-2 bg-card rounded-full border border-border hover:border-accent/40 transition-colors">
+              <div className="px-4 py-2 rounded-full">
                 <span className="font-display font-semibold text-foreground text-sm">AI/ML</span>
                 <span className="text-muted-foreground text-sm ml-2">Focused</span>
               </div>
-              <div className="px-4 py-2 bg-card rounded-full border border-border hover:border-accent/40 transition-colors">
+              <div className="px-4 py-2 rounded-full">
                 <span className="font-display font-semibold text-foreground text-sm">Data Science</span>
                 <span className="text-muted-foreground text-sm ml-2">Major</span>
               </div>
