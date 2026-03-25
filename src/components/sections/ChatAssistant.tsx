@@ -313,10 +313,10 @@ export default function ChatAssistant() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="fixed bottom-24 right-6 z-50 w-[400px] max-w-[calc(100vw-48px)] h-[560px] max-h-[75vh] bg-card border border-border rounded-2xl shadow-strong flex flex-col overflow-hidden"
+            className="fixed bottom-24 right-6 z-50 w-[400px] max-w-[calc(100vw-48px)] h-[560px] max-h-[75vh] bg-card/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center gap-3 px-5 py-3 border-b border-border bg-secondary/50">
+            <div className="flex items-center gap-3 px-5 py-3 border-b border-white/10 bg-white/5 backdrop-blur-sm">
               <PBLogo className="w-9 h-9" />
               <div className="flex-1 min-w-0">
                 <p className="font-display font-bold text-sm text-foreground">JARVIS · AI Agent</p>
@@ -351,7 +351,7 @@ export default function ChatAssistant() {
             </div>
 
             {/* Compute Mode Toggle */}
-            <div className="flex items-center justify-between px-5 py-2 border-b border-border bg-muted/30">
+            <div className="flex items-center justify-between px-5 py-2 border-b border-white/10 bg-white/[0.03]">
               <div className="flex items-center gap-2 text-xs">
                 <Cloud className={`w-3.5 h-3.5 ${!edgeMode ? 'text-accent' : 'text-muted-foreground'}`} />
                 <span className={`font-medium ${!edgeMode ? 'text-foreground' : 'text-muted-foreground'}`}>Cloud</span>
@@ -381,7 +381,7 @@ export default function ChatAssistant() {
             <AnimatePresence>
               {isListening && (
                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 160 }} exit={{ opacity: 0, height: 0 }}
-                  className="relative flex items-center justify-center bg-background/80 backdrop-blur-sm border-b border-border overflow-hidden">
+                  className="relative flex items-center justify-center bg-background/40 backdrop-blur-sm border-b border-white/10 overflow-hidden">
                   <AudioVisualizer analyser={analyser} isActive={isListening} className="w-[160px] h-[160px]" />
                   <motion.p className="absolute bottom-2 text-xs text-muted-foreground" animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}>
                     Release to send
@@ -394,7 +394,7 @@ export default function ChatAssistant() {
             <AnimatePresence>
               {isSpeaking && !isListening && (
                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 48 }} exit={{ opacity: 0, height: 0 }}
-                  className="flex items-center justify-center gap-3 bg-accent/5 border-b border-accent/20 overflow-hidden">
+                  className="flex items-center justify-center gap-3 bg-accent/5 border-b border-white/10 overflow-hidden">
                   <TTSWaveform isActive={isSpeaking} />
                   <span className="text-xs text-accent font-medium">Speaking...</span>
                   <TTSWaveform isActive={isSpeaking} />
@@ -411,8 +411,8 @@ export default function ChatAssistant() {
                   {msg.role === 'assistant' && <PBLogo className="w-7 h-7 flex-shrink-0 mt-0.5" />}
                   <div className={`max-w-[80%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed ${
                     msg.role === 'user'
-                      ? 'bg-accent text-accent-foreground rounded-br-md whitespace-pre-wrap'
-                      : 'bg-secondary text-foreground rounded-bl-md prose prose-sm prose-invert max-w-none [&_a]:text-accent [&_a]:underline [&_a]:font-medium [&_p]:my-1 [&_ul]:my-1 [&_li]:my-0.5'
+                      ? 'bg-accent/80 backdrop-blur-sm text-accent-foreground rounded-br-md whitespace-pre-wrap'
+                      : 'bg-white/[0.08] backdrop-blur-sm text-foreground rounded-bl-md prose prose-sm prose-invert max-w-none [&_a]:text-accent [&_a]:underline [&_a]:font-medium [&_p]:my-1 [&_ul]:my-1 [&_li]:my-0.5'
                   }`}>
                     {msg.role === 'assistant' ? (
                       <ReactMarkdown components={{ a: renderLink }}>{msg.content}</ReactMarkdown>
@@ -437,7 +437,7 @@ export default function ChatAssistant() {
               {isLoading && !ragQuery && !isAgentActive && messages[messages.length - 1]?.role === 'user' && (
                 <div className="flex gap-2">
                   <PBLogo className="w-7 h-7 flex-shrink-0" />
-                  <div className="bg-secondary rounded-2xl rounded-bl-md px-4 py-3">
+                  <div className="bg-white/[0.08] backdrop-blur-sm rounded-2xl rounded-bl-md px-4 py-3">
                     <div className="flex gap-1">
                       <span className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: '0ms' }} />
                       <span className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -450,14 +450,14 @@ export default function ChatAssistant() {
             </div>
 
             {/* Input with mic button */}
-            <div className="px-4 py-3 border-t border-border">
+            <div className="px-4 py-3 border-t border-white/10 bg-white/[0.03]">
               <form onSubmit={e => { e.preventDefault(); send(); }} className="flex gap-2">
                 <input
                   ref={inputRef}
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   placeholder={edgeMode ? 'Ask locally (no network)...' : 'Ask about Pratik...'}
-                  className="flex-1 bg-secondary border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all"
+                  className="flex-1 bg-white/[0.06] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 backdrop-blur-sm transition-all"
                   maxLength={500}
                   disabled={isLoading || isListening || !!ragQuery || (edgeMode && isModelLoading)}
                 />
