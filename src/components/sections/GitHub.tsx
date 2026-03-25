@@ -303,7 +303,7 @@ export default function GitHub() {
               {mode === '3d' && isWebGL ? (
                 <motion.div key="3d" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.3 }}>
                   <Suspense fallback={
-                    <div className="w-full h-[400px] rounded-xl bg-background flex items-center justify-center border border-border">
+                    <div className="w-full h-[400px] rounded-xl bg-background flex items-center justify-center">
                       <div className="text-accent/60 text-sm font-mono animate-pulse">Initializing 3D city...</div>
                     </div>
                   }>
