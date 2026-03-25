@@ -37,11 +37,6 @@ export default function LinkedInPosts() {
               LinkedIn Highlights
             </h2>
           </ScrollReveal>
-          <ScrollReveal delay={0.2}>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Recent milestones, projects, and professional updates from my journey.
-            </p>
-          </ScrollReveal>
         </div>
 
         {/* Embedded LinkedIn Posts */}
