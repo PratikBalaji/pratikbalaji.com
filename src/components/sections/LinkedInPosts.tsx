@@ -50,7 +50,7 @@ export default function LinkedInPosts() {
                 damping: 20,
                 delay: 0.3 + i * 0.15,
               }}
-              className="w-full max-w-[504px] rounded-xl overflow-hidden border border-border"
+              className="w-full max-w-[504px] rounded-xl overflow-hidden border border-accent/40 shadow-[0_0_30px_-5px_hsl(var(--accent)/0.3)]"
             >
               <iframe
                 src={embed.src}
