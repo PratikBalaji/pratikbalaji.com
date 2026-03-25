@@ -16,21 +16,21 @@ type LinkedInPost = {
 const posts: LinkedInPost[] = [
   {
     id: '1',
-    title: 'J.P. Morgan Quantitative Research Simulation',
-    body: `I just wrapped up the J.P. Morgan Quantitative Research job simulation on Forage, and it was a fantastic dive into the real-world challenges quants face every day.\n\nRather than just reading about financial modeling, I actually got to build tools to assess credit risk. One of the most interesting parts was taking a massive book of loans and writing a Python model to estimate the probability of a customer defaulting. I even used dynamic programming to group FICO scores into risk categories, which really showed me how much math and coding go into protecting a bank from financial risk.\n\nIt was an incredibly rewarding way to bridge the gap between classroom theory and real-world application.`,
-    date: 'Recent',
-    likes: 24,
-    comments: 3,
-    reposts: 1,
-  },
-  {
-    id: '2',
     title: 'Accepted Offer — Auxilior Capital Partners',
     body: `I am excited to share that I have officially accepted an offer for the 2026 Intern Program at Auxilior Capital Partners, Inc.\n\nStarting this May, I will be joining as an IT intern, where I will have the opportunity to apply my background in data science and machine learning to real-world challenges in this role. I look forward to developing my technical skills and contributing to impactful financial tech solutions.\n\nI am incredibly grateful for this opportunity and excited to begin my journey at Auxilior Capital Partners, Inc.`,
     date: 'Recent',
     likes: 47,
     comments: 8,
     reposts: 2,
+  },
+  {
+    id: '2',
+    title: 'J.P. Morgan Quantitative Research Simulation',
+    body: `I just wrapped up the J.P. Morgan Quantitative Research job simulation on Forage, and it was a fantastic dive into the real-world challenges quants face every day.\n\nRather than just reading about financial modeling, I actually got to build tools to assess credit risk. One of the most interesting parts was taking a massive book of loans and writing a Python model to estimate the probability of a customer defaulting. I even used dynamic programming to group FICO scores into risk categories, which really showed me how much math and coding go into protecting a bank from financial risk.\n\nIt was an incredibly rewarding way to bridge the gap between classroom theory and real-world application.`,
+    date: 'Recent',
+    likes: 24,
+    comments: 3,
+    reposts: 1,
   },
 ];
 
