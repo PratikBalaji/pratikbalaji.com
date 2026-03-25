@@ -24,7 +24,7 @@ const posts: LinkedInPost[] = [
     id: '2',
     title: 'Accepted Offer — Auxilior Capital Partners',
     snippet:
-      'Excited to share that I've officially accepted an offer for the 2026 Intern Program at Auxilior Capital Partners as an IT intern, applying data science and machine learning to real-world financial tech solutions.',
+      "Excited to share that I've officially accepted an offer for the 2026 Intern Program at Auxilior Capital Partners as an IT intern, applying data science and machine learning to real-world financial tech solutions.",
     icon: 'briefcase',
     date: 'Recent',
   },
