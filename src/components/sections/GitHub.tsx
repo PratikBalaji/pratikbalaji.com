@@ -329,7 +329,7 @@ export default function GitHub() {
         {projectsLoading ? (
           <div className="grid md:grid-cols-2 gap-4">
             {[...Array(2)].map((_, i) => (
-              <div key={i} className="bg-card rounded-xl border border-border p-5 animate-pulse">
+              <div key={i} className="rounded-xl p-5 animate-pulse">
                 <div className="h-5 w-40 bg-muted rounded mb-3" />
                 <div className="space-y-2 mb-4">
                   <div className="h-4 w-full bg-muted rounded" />
