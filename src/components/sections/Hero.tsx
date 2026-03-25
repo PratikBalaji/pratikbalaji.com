@@ -154,7 +154,7 @@ export default function Hero() {
             </MagneticButton>
             <MagneticButton
               onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="px-8 py-4 bg-card text-foreground font-medium rounded-full border border-border hover:border-accent hover:shadow-[var(--electric-glow)] hover:scale-105 transition-all duration-300"
+              className="px-8 py-4 text-foreground font-medium rounded-full hover:text-accent hover:scale-105 transition-all duration-300"
             >
               Hire Me
             </MagneticButton>
