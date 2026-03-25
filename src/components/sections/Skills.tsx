@@ -123,10 +123,10 @@ export default function Skills() {
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ type: 'spring', stiffness: 100, damping: 20, delay: catIndex * 0.08 }}
                   onClick={() => setSelectedCategory(selectedCategory === catIndex ? null : catIndex)}
-                  className={`cursor-pointer p-5 rounded-xl border transition-all duration-300 hover:-translate-y-1 ${
+                  className={`cursor-pointer p-5 rounded-xl transition-all duration-300 hover:-translate-y-1 ${
                     selectedCategory === catIndex
-                      ? 'bg-card border-accent shadow-[var(--electric-glow)]'
-                      : 'bg-card border-border hover:border-accent/40 hover:shadow-[var(--electric-glow)]'
+                      ? 'shadow-[var(--electric-glow)]'
+                      : ''
                   }`}
                 >
                   <h3 className={`font-display text-lg font-bold mb-4 transition-colors ${selectedCategory === catIndex ? 'text-accent' : 'text-foreground'}`}>
