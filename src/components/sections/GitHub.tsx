@@ -140,7 +140,7 @@ function RepoCard({ repo, index }: { repo: Repository; index: number }) {
       className="group block"
     >
       <TiltCard className="relative rounded-xl">
-        <div className="h-full bg-card rounded-xl p-5 border border-border transition-all duration-300 group-hover:border-accent/40">
+        <div className="h-full rounded-xl p-5 transition-all duration-300">
           <div className="flex items-start justify-between mb-3">
             <h3 className="font-semibold text-foreground group-hover:text-accent transition-colors truncate pr-2">
               {repo.name}
