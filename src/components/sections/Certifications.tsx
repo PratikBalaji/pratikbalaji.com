@@ -130,7 +130,7 @@ function CertificationFolder({ category, certs }: { category: Category; certs: C
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="absolute top-full left-0 right-0 z-50 pt-4"
           >
-            <div className="bg-card/90 backdrop-blur-xl rounded-xl border border-border shadow-2xl p-4 space-y-3">
+            <div className="backdrop-blur-xl rounded-xl p-4 space-y-3">
               {certs.map((cert, index) => (
                 <CertificationCard key={cert.title} certification={cert} index={index} />
               ))}

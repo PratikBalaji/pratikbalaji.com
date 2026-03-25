@@ -138,8 +138,8 @@ export default function Skills() {
                       <motion.span key={skill} initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
                         transition={{ type: 'spring', stiffness: 200, damping: 20, delay: catIndex * 0.05 + skillIndex * 0.03 }}
                         whileHover={{ scale: 1.05, y: -2 }}
-                        className={`px-3 py-1.5 bg-secondary border rounded-full text-sm font-medium cursor-pointer transition-all hover:border-accent/40 ${
-                          selectedCategory === catIndex ? 'border-accent/30 text-foreground' : 'border-border text-muted-foreground'
+                        className={`px-3 py-1.5 rounded-full text-sm font-medium cursor-pointer transition-all ${
+                          selectedCategory === catIndex ? 'text-foreground' : 'text-muted-foreground'
                         }`}>
                         {skill}
                       </motion.span>
