@@ -351,7 +351,7 @@ export default function ChatAssistant() {
             </div>
 
             {/* Compute Mode Toggle */}
-            <div className="flex items-center justify-between px-5 py-2 border-b border-border bg-muted/30">
+            <div className="flex items-center justify-between px-5 py-2 border-b border-white/10 bg-white/[0.03]">
               <div className="flex items-center gap-2 text-xs">
                 <Cloud className={`w-3.5 h-3.5 ${!edgeMode ? 'text-accent' : 'text-muted-foreground'}`} />
                 <span className={`font-medium ${!edgeMode ? 'text-foreground' : 'text-muted-foreground'}`}>Cloud</span>
