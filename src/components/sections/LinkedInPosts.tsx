@@ -72,24 +72,6 @@ export default function LinkedInPosts() {
           ))}
         </div>
 
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ type: 'spring', stiffness: 100, damping: 20, delay: 0.6 }}
-          className="text-center"
-        >
-          <a
-            href="https://www.linkedin.com/in/pratikbalaji/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 bg-accent text-accent-foreground font-semibold px-6 py-3 rounded-xl hover:shadow-[var(--electric-glow)] transition-all hover:scale-[1.03] active:scale-[0.97]"
-          >
-            <Linkedin className="w-4 h-4" />
-            View All Posts on LinkedIn
-            <ExternalLink className="w-3.5 h-3.5 opacity-70" />
-          </a>
-        </motion.div>
       </div>
     </section>
   );
