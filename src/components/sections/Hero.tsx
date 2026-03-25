@@ -85,7 +85,7 @@ export default function Hero() {
           className="max-w-4xl mx-auto text-center"
         >
           <motion.div variants={staggerItem} className="flex justify-center mb-4">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border text-muted-foreground text-sm font-medium uppercase tracking-widest">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-muted-foreground text-sm font-medium uppercase tracking-widest">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
