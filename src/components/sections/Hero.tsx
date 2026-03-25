@@ -137,7 +137,7 @@ export default function Hero() {
               href="https://linkedin.com/in/pratikbalaji"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center justify-center w-12 h-12 rounded-full bg-card border border-border hover:border-accent hover:shadow-[var(--electric-glow)] transition-all duration-300 hover:scale-110"
+              className="group flex items-center justify-center w-12 h-12 rounded-full hover:text-accent transition-all duration-300 hover:scale-110"
               aria-label="LinkedIn"
             >
               <LinkedInLogo className="w-5 h-5 text-foreground" />
