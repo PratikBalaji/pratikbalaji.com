@@ -69,7 +69,7 @@ function ExperienceCard({ experience, index, mode }: { experience: typeof experi
       <div className={`lg:grid lg:grid-cols-2 lg:gap-12 ${index % 2 === 0 ? '' : 'lg:flex-row-reverse'}`}>
         <div className={`${index % 2 === 0 ? 'lg:text-right lg:pr-12' : 'lg:col-start-2 lg:pl-12'}`}>
           <TiltCard className="relative rounded-2xl">
-            <div className="bg-card rounded-2xl p-6 md:p-8 border border-border hover:border-accent/40 transition-all duration-300">
+            <div className="rounded-2xl p-6 md:p-8">
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-shrink-0">
                   {experience.logo ? (
