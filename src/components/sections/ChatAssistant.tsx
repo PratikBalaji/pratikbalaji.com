@@ -411,8 +411,8 @@ export default function ChatAssistant() {
                   {msg.role === 'assistant' && <PBLogo className="w-7 h-7 flex-shrink-0 mt-0.5" />}
                   <div className={`max-w-[80%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed ${
                     msg.role === 'user'
-                      ? 'bg-accent text-accent-foreground rounded-br-md whitespace-pre-wrap'
-                      : 'bg-secondary text-foreground rounded-bl-md prose prose-sm prose-invert max-w-none [&_a]:text-accent [&_a]:underline [&_a]:font-medium [&_p]:my-1 [&_ul]:my-1 [&_li]:my-0.5'
+                      ? 'bg-accent/80 backdrop-blur-sm text-accent-foreground rounded-br-md whitespace-pre-wrap'
+                      : 'bg-white/[0.08] backdrop-blur-sm text-foreground rounded-bl-md prose prose-sm prose-invert max-w-none [&_a]:text-accent [&_a]:underline [&_a]:font-medium [&_p]:my-1 [&_ul]:my-1 [&_li]:my-0.5'
                   }`}>
                     {msg.role === 'assistant' ? (
                       <ReactMarkdown components={{ a: renderLink }}>{msg.content}</ReactMarkdown>
