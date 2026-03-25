@@ -32,6 +32,7 @@ export default function Navbar() {
     { label: 'Certifications', href: '#certifications' },
     { label: 'Skills', href: '#skills' },
     { label: 'Projects', href: '#github' },
+    { label: 'LinkedIn', href: '#linkedin' },
     { label: 'Contact', href: '#contact' },
   ];
 
