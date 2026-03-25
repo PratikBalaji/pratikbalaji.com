@@ -97,6 +97,10 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.7" },
         },
+        "glow-pulse": {
+          "0%, 100%": { textShadow: "0 0 10px hsl(var(--accent) / 0.6), 0 0 20px hsl(var(--accent) / 0.3), 0 0 40px hsl(var(--accent) / 0.15)" },
+          "50%": { textShadow: "0 0 15px hsl(var(--accent) / 0.8), 0 0 30px hsl(var(--accent) / 0.5), 0 0 60px hsl(var(--accent) / 0.25)" },
+        },
         "rotate-slow": {
           "0%": { transform: "rotate(0deg)" },
           "100%": { transform: "rotate(360deg)" },
@@ -110,6 +114,7 @@ export default {
         "scale-in": "scale-in 0.5s ease-out forwards",
         "float": "float 6s ease-in-out infinite",
         "pulse-soft": "pulse-soft 3s ease-in-out infinite",
+        "glow-pulse": "glow-pulse 3s ease-in-out infinite",
         "rotate-slow": "rotate-slow 20s linear infinite",
       },
     },
