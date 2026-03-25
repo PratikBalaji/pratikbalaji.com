@@ -86,6 +86,27 @@ export const RESUME_CHUNKS: ResumeChunk[] = [
     keywords: ['contact', 'email', 'phone', 'linkedin', 'github', 'location', 'philadelphia', 'reach', 'kaggle', 'portfolio'],
   },
   {
+    id: 'linkedin-highlights',
+    label: 'LinkedIn Highlights',
+    summary: 'Recent LinkedIn posts: (1) Accepted an offer for the 2026 Intern Program at Auxilior Capital Partners as an IT intern, applying data science and machine learning to financial tech solutions. (2) Completed the J.P. Morgan Quantitative Research job simulation on Forage — built Python models for credit risk assessment, used dynamic programming to group FICO scores into risk categories.',
+    x: 4.2, y: 2.2,
+    keywords: ['linkedin', 'post', 'highlights', 'auxilior', 'capital', 'intern', 'jp morgan', 'forage', 'quantitative', 'credit risk', 'fico', 'update', 'news', 'recent'],
+  },
+  {
+    id: 'about',
+    label: 'About Me',
+    summary: 'Pratik Balaji is a passionate Data Science student at Temple University specializing in AI, machine learning, and building intelligent applications. Based in Philadelphia, PA. Currently open for opportunities. Fluent in Tamil, English, Hindi; novice in Spanish.',
+    x: 1.0, y: 4.5,
+    keywords: ['about', 'who', 'bio', 'background', 'introduction', 'myself', 'passionate', 'data science', 'philadelphia'],
+  },
+  {
+    id: 'exp-auxilior',
+    label: 'Auxilior Capital Partners',
+    summary: 'IT Intern at Auxilior Capital Partners (Starting May 2026) — Applying data science and machine learning to real-world challenges in financial tech. Part of the 2026 Intern Program.',
+    x: 3.8, y: -0.5,
+    keywords: ['auxilior', 'capital', 'partners', 'intern', 'it', 'financial', 'fintech', 'upcoming', '2026', 'may'],
+  },
+  {
     id: 'cover-letter',
     label: 'Cover Letter',
     summary: 'Pratik Balaji\'s cover letter highlights his foundation in predictive modeling, statistical analysis, and AI. Covers his work at YAN IT Solutions (40% accuracy improvement, 35% downtime reduction), Startup Success Predictor (70% test accuracy), AROMA project (95% automated response rate), and Natraj Beats LLC (60% time-to-market reduction). Technical stack: Python, TensorFlow, scikit-learn, AWS, AI agent frameworks.',
