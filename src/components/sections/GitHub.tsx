@@ -261,7 +261,7 @@ export default function GitHub() {
             </span>
             <button
               onClick={() => setMode(mode === '3d' ? '2d' : '3d')}
-              className="relative w-14 h-7 rounded-full border border-border bg-secondary transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="relative w-14 h-7 rounded-full bg-secondary transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               aria-label="Toggle between 3D city and 2D calendar view"
             >
               <motion.div
