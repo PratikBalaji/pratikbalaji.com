@@ -19,7 +19,7 @@ serve(async (req) => {
       "img-src 'self' data: blob: https:",
       "connect-src 'self' https://*.supabase.co https://*.supabase.in https://ai.gateway.lovable.dev https://api.elevenlabs.io https://api.github.com",
       "media-src 'self' blob:",
-      "frame-src 'none'",
+      "frame-src https://www.linkedin.com https://platform.linkedin.com",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
