@@ -98,6 +98,8 @@ function EducationCard({ edu, index }: { edu: typeof education[0]; index: number
 }
 
 export default function Education() {
+  const edu = education[0];
+
   return (
     <section id="education" className="section-padding bg-background">
       <div className="container-tight">
@@ -109,36 +111,70 @@ export default function Education() {
             Education
           </h2>
         </ScrollReveal>
-        
-        <div className="space-y-8">
-          {education.map((edu, index) => (
-            <EducationCard key={edu.institution} edu={edu} index={index} />
-          ))}
 
-          {/* Coursework */}
-          <ScrollReveal delay={0.2}>
+        <ScrollReveal>
+          <TiltCard className="relative rounded-2xl">
             <div className="bg-card rounded-2xl p-6 md:p-8 border border-border hover:border-accent/40 transition-all duration-300">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-lg bg-accent/15 flex items-center justify-center">
-                  <BookOpen className="w-5 h-5 text-accent" />
+              {/* Top: Institution info */}
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="flex-shrink-0">
+                  <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl bg-muted flex items-center justify-center p-2 border border-border">
+                    <img src={edu.logo} alt={`${edu.institution} logo`} className="w-full h-full object-contain" />
+                  </div>
                 </div>
-                <h3 className="font-display text-xl font-bold text-foreground">
-                  Relevant Coursework
-                </h3>
+
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 text-muted-foreground text-sm mb-2">
+                    <Calendar className="w-4 h-4 text-accent" />
+                    <span>{edu.period}</span>
+                  </div>
+
+                  <h3 className="font-display text-xl md:text-2xl font-bold mb-1 text-foreground">
+                    {edu.degree}
+                  </h3>
+
+                  <p className="text-accent font-medium mb-2">{edu.concentration}</p>
+
+                  <div className="flex items-center gap-4 text-muted-foreground mb-4">
+                    <div className="flex items-center gap-1.5">
+                      <GraduationCap className="w-4 h-4 text-accent" />
+                      <span>{edu.institution}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <MapPin className="w-4 h-4 text-accent" />
+                      <span>{edu.location}</span>
+                    </div>
+                  </div>
+
+                  <p className="text-muted-foreground">{edu.description}</p>
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {coursework.map((course) => (
-                  <span
-                    key={course}
-                    className="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full border border-accent/20 font-medium"
-                  >
-                    {course}
-                  </span>
-                ))}
+
+              {/* Divider */}
+              <div className="my-6 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
+
+              {/* Bottom: Coursework */}
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <BookOpen className="w-5 h-5 text-accent" />
+                  <h4 className="font-display text-lg font-semibold text-foreground">
+                    Relevant Coursework
+                  </h4>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {coursework.map((course) => (
+                    <span
+                      key={course}
+                      className="px-3 py-1.5 bg-accent/10 text-accent text-sm rounded-full border border-accent/20 font-medium"
+                    >
+                      {course}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
-          </ScrollReveal>
-        </div>
+          </TiltCard>
+        </ScrollReveal>
       </div>
     </section>
   );
