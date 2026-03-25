@@ -118,7 +118,7 @@ export default function Education() {
               {/* Top: Institution info */}
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-shrink-0">
-                  <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl bg-muted flex items-center justify-center p-2 border border-border">
+                  <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl flex items-center justify-center p-2">
                     <img src={edu.logo} alt={`${edu.institution} logo`} className="w-full h-full object-contain" />
                   </div>
                 </div>
