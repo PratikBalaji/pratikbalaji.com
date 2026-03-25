@@ -105,7 +105,7 @@ export default function Skills() {
           <div className="order-1 lg:order-2 space-y-4">
             {loading ? (
               Array.from({ length: 7 }).map((_, i) => (
-                <div key={i} className="bg-card border border-border rounded-xl p-5 animate-pulse">
+                <div key={i} className="rounded-xl p-5 animate-pulse">
                   <div className="h-5 w-40 bg-muted rounded mb-4" />
                   <div className="flex flex-wrap gap-2">
                     {Array.from({ length: 4 }).map((_, j) => (
