@@ -114,11 +114,11 @@ export default function Education() {
 
         <ScrollReveal>
           <TiltCard className="relative rounded-2xl">
-            <div className="bg-card rounded-2xl p-6 md:p-8 border border-border hover:border-accent/40 transition-all duration-300">
+            <div className="rounded-2xl p-6 md:p-8">
               {/* Top: Institution info */}
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-shrink-0">
-                  <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl bg-muted flex items-center justify-center p-2 border border-border">
+                  <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl flex items-center justify-center p-2">
                     <img src={edu.logo} alt={`${edu.institution} logo`} className="w-full h-full object-contain" />
                   </div>
                 </div>
