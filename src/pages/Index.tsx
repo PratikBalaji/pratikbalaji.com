@@ -6,9 +6,8 @@ import Experience from '@/components/sections/Experience';
 import Certifications from '@/components/sections/Certifications';
 import Skills from '@/components/sections/Skills';
 import GitHub from '@/components/sections/GitHub';
-
+import LinkedInPosts from '@/components/sections/LinkedInPosts';
 import Contact from '@/components/sections/Contact';
-import Guestbook from '@/components/sections/Guestbook';
 import Footer from '@/components/Footer';
 
 const Index = () => {
@@ -22,8 +21,7 @@ const Index = () => {
       <Certifications />
       <Skills />
       <GitHub />
-      
-      <Guestbook />
+      <LinkedInPosts />
       <Contact />
       <Footer />
     </main>
