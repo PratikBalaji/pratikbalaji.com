@@ -164,9 +164,6 @@ export default function About() {
           <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-accent">About Me
 
           </h2>
-          <p className="text-muted-foreground mt-3 max-w-lg mx-auto text-sm">
-            Real-time mission control. Live data streams from my daily workflow.
-          </p>
         </ScrollReveal>
 
         {/* Two-column: Now Playing + Focus Mode */}
