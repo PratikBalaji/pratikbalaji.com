@@ -36,7 +36,7 @@ const experiences = [
 
 function RecruiterToggle({ mode, onToggle }: { mode: ViewMode; onToggle: () => void }) {
   return (
-    <div className="flex items-center gap-3 bg-card border border-border rounded-full px-2 py-1.5">
+    <div className="flex items-center gap-3 rounded-full px-2 py-1.5">
       <button
         onClick={mode === 'business' ? onToggle : undefined}
         className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
