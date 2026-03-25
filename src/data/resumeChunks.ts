@@ -74,9 +74,9 @@ export const RESUME_CHUNKS: ResumeChunk[] = [
   {
     id: 'certs',
     label: 'Certifications',
-    summary: 'AI: Google AI & Productivity, Outskill GenAI Mastermind, Databricks AI Agent Fundamentals. Development: Quantitative Research J.P. Morgan (Forage), Software Engineering J.P. Morgan (Forage). Other: Claude Code In Action (Anthropic), SQL Essential Training (LinkedIn), Python (Santander).',
+    summary: 'AI: Google AI & Productivity, Outskill GenAI Mastermind, Databricks AI Agent Fundamentals, AWS AI Practitioner (Udacity). Development: Quantitative Research J.P. Morgan (Forage), Software Engineering J.P. Morgan (Forage). Other: Claude Code In Action (Anthropic), SQL Essential Training (LinkedIn), Python (Santander).',
     x: -3.1, y: -0.8,
-    keywords: ['certification', 'certificate', 'google', 'databricks', 'course', 'credential', 'santander', 'jpmorgan', 'forage', 'quantitative', 'anthropic', 'claude', 'software engineering'],
+    keywords: ['certification', 'certificate', 'google', 'databricks', 'course', 'credential', 'santander', 'jpmorgan', 'forage', 'quantitative', 'anthropic', 'claude', 'software engineering', 'aws', 'udacity', 'ai practitioner'],
   },
   {
     id: 'contact',
