@@ -148,7 +148,7 @@ export default function Hero() {
           <motion.div variants={staggerItem} className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <MagneticButton
               onClick={() => document.querySelector('#github')?.scrollIntoView({ behavior: 'smooth' })}
-              className="group px-8 py-4 bg-accent text-accent-foreground font-medium rounded-full hover:shadow-[0_0_40px_hsl(270_100%_64%/0.4)] hover:scale-105 transition-all duration-300"
+              className="group px-8 py-4 text-foreground font-medium rounded-full hover:text-accent hover:scale-105 transition-all duration-300"
             >
               <span className="relative z-10">View My Work</span>
             </MagneticButton>
