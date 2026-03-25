@@ -61,7 +61,7 @@ export default function LinkedInPosts() {
             >
               <iframe
                 src={embed.src}
-                height={880}
+                height={embed.height}
                 width={504}
                 frameBorder="0"
                 allowFullScreen
