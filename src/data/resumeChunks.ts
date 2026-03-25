@@ -67,7 +67,7 @@ export const RESUME_CHUNKS: ResumeChunk[] = [
   {
     id: 'proj-aura',
     label: 'AURA ATLAS Project',
-    summary: 'Agentic Geospatial Wellness Network (Spring 2026) — Mapbox GL JS 3D routing with bounding box constraints, 40% false-positive reduction. Next.js navigation HUD with emotional weather system, 60% faster decisions. 2-step fuzzy proximity search algorithm, 95% success for local landmarks. Optimized React state-management, zero-latency transitions across 11 cities.',
+    summary: 'Agentic Geospatial Wellness Network (Spring 2026) — Mapbox GL JS 3D routing with bounding box constraints, 40% false-positive reduction. Next.js navigation HUD with emotional weather system, 60% faster decisions. 2-step proximity search algorithm and AR using GPT 4o, 95% success for local landmarks. Optimized React state-management, zero-latency transitions across 11 cities.',
     x: 1.8, y: -2.1,
     keywords: ['project', 'aura', 'atlas', 'geospatial', 'wellness', 'mapbox', 'navigation', 'mental health', 'routing', 'next.js', 'react', 'fuzzy search'],
   },
