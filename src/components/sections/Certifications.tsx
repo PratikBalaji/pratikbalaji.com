@@ -56,7 +56,7 @@ function CertificationCard({ certification, index }: { certification: Certificat
             <img src={certification.logo} alt={`${certification.issuer} logo`} className="w-full h-full object-contain" />
           </div>
           <div className="flex-1 min-w-0">
-            <h4 className="font-semibold text-sm leading-tight mb-0.5 text-foreground group-hover:text-accent transition-colors truncate">
+            <h4 className="font-semibold text-sm leading-tight mb-0.5 text-foreground group-hover:text-accent transition-colors truncate [text-shadow:0_0_10px_hsl(var(--accent)/0.5),0_0_25px_hsl(var(--accent)/0.2)]">
               {certification.title}
             </h4>
             <p className="text-muted-foreground text-xs">{certification.issuer}</p>
@@ -101,7 +101,7 @@ function CertificationFolder({ category, certs }: { category: Category; certs: C
         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
         className="relative cursor-pointer"
       >
-        <div className="absolute -top-3 left-4 w-24 h-5 bg-accent rounded-t-lg" />
+        <div className="absolute -top-3 left-4 w-24 h-5 bg-accent rounded-t-lg shadow-[0_0_10px_hsl(var(--accent)/0.5),0_0_25px_hsl(var(--accent)/0.2)]" />
         
         <div className="relative rounded-xl p-6 min-h-[180px] transition-all duration-300">
           <div className="flex flex-col items-center justify-center h-full">
