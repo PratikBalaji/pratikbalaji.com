@@ -101,7 +101,7 @@ export default function LinkedInPosts() {
               {/* Engagement counts */}
               <div className="flex items-center justify-between px-5 py-2 text-xs text-muted-foreground border-b border-border">
                 <span className="flex items-center gap-1">
-                  <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-blue-500 text-white text-[10px]">👍</span>
+                  <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-accent text-accent-foreground text-[10px]">👍</span>
                   {post.likes}
                 </span>
                 <span>
