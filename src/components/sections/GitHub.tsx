@@ -277,7 +277,7 @@ export default function GitHub() {
         )}
 
         {/* Contribution Activity */}
-        <div className="bg-card rounded-2xl p-6 border border-border hover:border-accent/30 transition-all duration-300 mb-8">
+        <div className="rounded-2xl p-6 mb-8">
           <div className="flex items-center gap-2 mb-6">
             <Calendar className="w-5 h-5 text-accent" />
             <h3 className="font-semibold text-lg text-foreground">Contribution Activity</h3>
