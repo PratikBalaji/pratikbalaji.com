@@ -45,7 +45,7 @@ export default function LinkedInPosts() {
         </div>
 
         {/* Embedded LinkedIn Posts */}
-        <div className="flex flex-col items-center gap-8 mb-12">
+        <div className="flex flex-col md:flex-row md:justify-center items-center gap-8 mb-12">
           {embeds.map((embed, i) => (
             <motion.div
               key={embed.id}
