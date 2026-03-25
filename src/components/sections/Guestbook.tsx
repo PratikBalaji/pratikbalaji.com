@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { Loader2, Send, LogIn, LogOut, MessageSquare, User } from 'lucide-react';
 import type { User as SupaUser } from '@supabase/supabase-js';
+import { sanitizeInput, containsScriptInjection } from '@/lib/sanitize';
 
 type GuestbookEntry = {
   id: string;
