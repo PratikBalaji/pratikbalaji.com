@@ -215,7 +215,7 @@ export default function About() {
             className="relative group">
 
             <div className="absolute -inset-px rounded-2xl bg-accent/10 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative bg-card border border-border rounded-2xl p-5 hover:border-accent/40 transition-all duration-300 h-full">
+            <div className="relative rounded-2xl p-5 h-full">
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
                   <Brain className="w-4 h-4 text-accent" />
