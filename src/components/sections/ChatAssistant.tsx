@@ -437,7 +437,7 @@ export default function ChatAssistant() {
               {isLoading && !ragQuery && !isAgentActive && messages[messages.length - 1]?.role === 'user' && (
                 <div className="flex gap-2">
                   <PBLogo className="w-7 h-7 flex-shrink-0" />
-                  <div className="bg-secondary rounded-2xl rounded-bl-md px-4 py-3">
+                  <div className="bg-white/[0.08] backdrop-blur-sm rounded-2xl rounded-bl-md px-4 py-3">
                     <div className="flex gap-1">
                       <span className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: '0ms' }} />
                       <span className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: '150ms' }} />
