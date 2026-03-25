@@ -8,6 +8,13 @@ const embeds = [
     id: '1',
     src: 'https://www.linkedin.com/embed/feed/update/urn:li:share:7441918594923458560',
     title: 'Embedded post',
+    height: 880,
+  },
+  {
+    id: '2',
+    src: 'https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7434368685231738881',
+    title: 'Embedded post',
+    height: 819,
   },
 ];
 
@@ -54,7 +61,7 @@ export default function LinkedInPosts() {
             >
               <iframe
                 src={embed.src}
-                height={880}
+                height={embed.height}
                 width={504}
                 frameBorder="0"
                 allowFullScreen
