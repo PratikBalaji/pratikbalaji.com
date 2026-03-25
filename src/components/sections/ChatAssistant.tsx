@@ -4,6 +4,7 @@ import { Send, Loader2, X, User, Square, Cloud, Cpu } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import AudioVisualizer from '@/components/voice/AudioVisualizer';
 import VoiceMicButton from '@/components/voice/VoiceMicButton';
+import TTSWaveform from '@/components/voice/TTSWaveform';
 import { useVoiceAgent } from '@/hooks/useVoiceAgent';
 import { useEdgeLLM } from '@/hooks/useEdgeLLM';
 import RAGVisualization from '@/components/chat/RAGVisualization';
