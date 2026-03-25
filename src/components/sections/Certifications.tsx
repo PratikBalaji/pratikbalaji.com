@@ -115,8 +115,7 @@ function CertificationFolder({ category, certs }: { category: Category; certs: C
                 <Folder className="w-16 h-16 text-muted-foreground mb-3" />
               )}
             </motion.div>
-            <h3 className="font-display text-xl font-bold text-center text-foreground">{category}</h3>
-            <p className="text-sm text-muted-foreground mt-1">{certs.length} certificates</p>
+            <h3 className="font-display text-xl font-bold text-center [text-shadow:0_0_10px_hsl(var(--accent)/0.5),0_0_25px_hsl(var(--accent)/0.2)] text-foreground">{category}</h3>
           </div>
         </div>
       </motion.div>
