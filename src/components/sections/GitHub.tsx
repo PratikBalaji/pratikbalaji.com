@@ -140,7 +140,7 @@ function RepoCard({ repo, index }: { repo: Repository; index: number }) {
       className="group block"
     >
       <TiltCard className="relative rounded-xl">
-        <div className="h-full bg-card rounded-xl p-5 border border-border transition-all duration-300 group-hover:border-accent/40">
+        <div className="h-full rounded-xl p-5 transition-all duration-300">
           <div className="flex items-start justify-between mb-3">
             <h3 className="font-semibold text-foreground group-hover:text-accent transition-colors truncate pr-2">
               {repo.name}
@@ -171,7 +171,7 @@ function RepoCard({ repo, index }: { repo: Repository; index: number }) {
           {repo.topics && repo.topics.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-3">
               {repo.topics.slice(0, 3).map((topic) => (
-                <span key={topic} className="px-2 py-0.5 bg-accent/10 text-accent text-xs rounded-full border border-accent/20">
+                <span key={topic} className="px-2 py-0.5 bg-accent/10 text-accent text-xs rounded-full">
                   {topic}
                 </span>
               ))}
@@ -261,7 +261,7 @@ export default function GitHub() {
             </span>
             <button
               onClick={() => setMode(mode === '3d' ? '2d' : '3d')}
-              className="relative w-14 h-7 rounded-full border border-border bg-secondary transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="relative w-14 h-7 rounded-full bg-secondary transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               aria-label="Toggle between 3D city and 2D calendar view"
             >
               <motion.div
@@ -277,7 +277,7 @@ export default function GitHub() {
         )}
 
         {/* Contribution Activity */}
-        <div className="bg-card rounded-2xl p-6 border border-border hover:border-accent/30 transition-all duration-300 mb-8">
+        <div className="rounded-2xl p-6 mb-8">
           <div className="flex items-center gap-2 mb-6">
             <Calendar className="w-5 h-5 text-accent" />
             <h3 className="font-semibold text-lg text-foreground">Contribution Activity</h3>
@@ -303,7 +303,7 @@ export default function GitHub() {
               {mode === '3d' && isWebGL ? (
                 <motion.div key="3d" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.3 }}>
                   <Suspense fallback={
-                    <div className="w-full h-[400px] rounded-xl bg-background flex items-center justify-center border border-border">
+                    <div className="w-full h-[400px] rounded-xl bg-background flex items-center justify-center">
                       <div className="text-accent/60 text-sm font-mono animate-pulse">Initializing 3D city...</div>
                     </div>
                   }>
@@ -329,7 +329,7 @@ export default function GitHub() {
         {projectsLoading ? (
           <div className="grid md:grid-cols-2 gap-4">
             {[...Array(2)].map((_, i) => (
-              <div key={i} className="bg-card rounded-xl border border-border p-5 animate-pulse">
+              <div key={i} className="rounded-xl p-5 animate-pulse">
                 <div className="h-5 w-40 bg-muted rounded mb-3" />
                 <div className="space-y-2 mb-4">
                   <div className="h-4 w-full bg-muted rounded" />
