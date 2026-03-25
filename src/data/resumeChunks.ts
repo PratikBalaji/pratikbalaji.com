@@ -32,9 +32,9 @@ export const RESUME_CHUNKS: ResumeChunk[] = [
   {
     id: 'skills-tools',
     label: 'Tools & Cloud',
-    summary: 'Docker, Git, AWS, Azure, FastAPI, Flask, MongoDB, PostgreSQL, n8n, IoT',
+    summary: 'Docker, Git, AWS, Azure, FastAPI, Flask, MongoDB, PostgreSQL, n8n, IoT, AWS SageMaker, Amazon Bedrock, Amazon PartyRock',
     x: -3.1, y: 1.2,
-    keywords: ['docker', 'aws', 'cloud', 'tool', 'git', 'azure', 'flask', 'fastapi', 'deploy', 'n8n', 'iot', 'mongodb'],
+    keywords: ['docker', 'aws', 'cloud', 'tool', 'git', 'azure', 'flask', 'fastapi', 'deploy', 'n8n', 'iot', 'mongodb', 'sagemaker', 'bedrock', 'partyrock'],
   },
   {
     id: 'skills-adobe',

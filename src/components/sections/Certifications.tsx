@@ -36,6 +36,7 @@ const certifications: Certification[] = [
   { title: 'Quantitative Research', issuer: 'J.P. Morgan (Forage)', logo: jpmorganLogo, category: 'Finance' },
   { title: 'Software Engineering', issuer: 'J.P. Morgan (Forage)', logo: jpmorganLogo, category: 'Development' },
   { title: 'Claude Code In Action', issuer: 'Anthropic', logo: anthropicLogo, category: 'AI' },
+  { title: 'AWS AI Practitioner', issuer: 'Udacity', logo: udacityLogo, category: 'AI' },
 ];
 
 function CertificationCard({ certification, index }: { certification: Certification; index: number }) {
