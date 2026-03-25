@@ -69,7 +69,7 @@ function CertificationCard({ certification, index }: { certification: Certificat
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-card/95 backdrop-blur-sm rounded-xl flex items-center justify-center border border-accent/40"
+              className="absolute inset-0 bg-background/95 backdrop-blur-sm rounded-xl flex items-center justify-center"
             >
               <motion.button
                 initial={{ scale: 0.8 }}
