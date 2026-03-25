@@ -291,14 +291,14 @@ export default function ChatAssistant() {
         <AnimatePresence mode="wait">
           {isOpen ? (
             <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}
-              className="w-[64px] h-[64px] rounded-full bg-card border-2 border-border flex items-center justify-center shadow-lg">
+              className="w-[64px] h-[64px] rounded-full bg-card/60 backdrop-blur-xl border border-white/15 flex items-center justify-center shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
               <X className="w-7 h-7 text-foreground" />
             </motion.div>
           ) : (
             <motion.div key="logo" initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.5, opacity: 0 }} className="relative">
-              <div className="absolute -inset-1 rounded-full bg-accent/20 blur-lg animate-pulse" />
-              <div className="relative w-[64px] h-[64px] rounded-full border-2 border-accent/50 bg-gradient-to-br from-accent via-accent/80 to-accent/60 flex items-center justify-center shadow-[0_0_25px_hsl(var(--accent)/0.5)]">
-                <span className="font-display font-black text-accent-foreground text-lg tracking-tighter">PB</span>
+              <div className="absolute -inset-1 rounded-full bg-accent/15 blur-lg animate-pulse" />
+              <div className="relative w-[64px] h-[64px] rounded-full border border-accent/30 bg-accent/20 backdrop-blur-xl flex items-center justify-center shadow-[0_8px_32px_rgba(0,0,0,0.3),0_0_20px_hsl(var(--accent)/0.3)]">
+                <span className="font-display font-black text-accent text-lg tracking-tighter">PB</span>
               </div>
             </motion.div>
           )}
