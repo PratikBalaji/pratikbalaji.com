@@ -103,7 +103,7 @@ function CertificationFolder({ category, certs }: { category: Category; certs: C
       >
         <div className="absolute -top-3 left-4 w-24 h-5 bg-accent rounded-t-lg" />
         
-        <div className="relative bg-card border border-border hover:border-accent/40 rounded-xl p-6 min-h-[180px] transition-all duration-300">
+        <div className="relative rounded-xl p-6 min-h-[180px] transition-all duration-300">
           <div className="flex flex-col items-center justify-center h-full">
             <motion.div
               animate={{ rotateY: isOpen ? 180 : 0 }}
