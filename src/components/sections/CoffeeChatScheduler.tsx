@@ -4,6 +4,7 @@ import { addDays, format, isSameDay } from 'date-fns';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { Coffee, ChevronLeft, Check, ArrowLeft } from 'lucide-react';
+import { sanitizeInput, validateField } from '@/lib/sanitize';
 
 const AVAILABLE_TIMES = ['10:00 AM EST', '11:30 AM EST', '2:00 PM EST', '3:30 PM EST', '5:00 PM EST'];
 
