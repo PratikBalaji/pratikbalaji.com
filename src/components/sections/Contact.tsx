@@ -25,11 +25,6 @@ export default function Contact() {
               Let's Connect
             </h2>
           </ScrollReveal>
-          <ScrollReveal delay={0.2}>
-            <p className="text-muted-foreground max-w-lg mx-auto">
-              Tap the card to book a coffee chat.
-            </p>
-          </ScrollReveal>
         </div>
 
         {/* 3D Card */}
