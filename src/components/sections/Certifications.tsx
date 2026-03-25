@@ -10,6 +10,7 @@ import outskillLogo from '@/assets/outskill-logo.png';
 import linkedinLogo from '@/assets/linkedin-logo.png';
 import jpmorganLogo from '@/assets/jpmorgan-logo.png';
 import anthropicLogo from '@/assets/anthropic-logo.png';
+import udacityLogo from '@/assets/udacity-logo.png';
 
 type Category = 'AI' | 'Development' | 'Data Science' | 'Database' | 'Finance';
 
@@ -35,6 +36,7 @@ const certifications: Certification[] = [
   { title: 'Quantitative Research', issuer: 'J.P. Morgan (Forage)', logo: jpmorganLogo, category: 'Finance' },
   { title: 'Software Engineering', issuer: 'J.P. Morgan (Forage)', logo: jpmorganLogo, category: 'Development' },
   { title: 'Claude Code In Action', issuer: 'Anthropic', logo: anthropicLogo, category: 'AI' },
+  { title: 'AWS AI Practitioner', issuer: 'Udacity', logo: udacityLogo, category: 'AI' },
 ];
 
 function CertificationCard({ certification, index }: { certification: Certification; index: number }) {
