@@ -50,9 +50,9 @@ function CertificationCard({ certification, index }: { certification: Certificat
       onMouseLeave={() => setIsHovered(false)}
       className="group relative"
     >
-      <div className="bg-card rounded-xl p-4 border border-border hover:border-accent/40 hover:shadow-[var(--electric-glow)] transition-all duration-300 hover:-translate-y-1">
-        <div className="flex items-center gap-3">
-          <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-muted flex items-center justify-center p-1.5 border border-border overflow-hidden">
+        <div className="rounded-xl p-4 hover:-translate-y-1 transition-all duration-300">
+          <div className="flex items-center gap-3">
+            <div className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center p-1.5 overflow-hidden">
             <img src={certification.logo} alt={`${certification.issuer} logo`} className="w-full h-full object-contain" />
           </div>
           <div className="flex-1 min-w-0">
