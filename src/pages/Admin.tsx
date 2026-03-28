@@ -9,6 +9,9 @@ import { toast } from 'sonner';
 import { LogOut, Shield, MapPin, Briefcase, Save, Settings, ArrowLeft, Bot, Rocket, Activity } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Link } from 'react-router-dom';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import ProjectsManager from '@/components/admin/ProjectsManager';
+import SkillsManager from '@/components/admin/SkillsManager';
 import type { Session } from '@supabase/supabase-js';
 
 function LoginForm() {
