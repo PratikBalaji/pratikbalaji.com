@@ -45,7 +45,7 @@ function Starfield({ count = 2000, accentColor = '#7C3AED' }: { count?: number; 
       </bufferGeometry>
       <pointsMaterial
         size={0.06}
-        color="#c4b5fd"
+        color={accentColor}
         transparent
         opacity={0.7}
         sizeAttenuation
