@@ -21,19 +21,21 @@ function AppInner() {
 
   return (
     <ActiveSectionContext.Provider value={activeSection}>
-      <DarkSpaceBackground />
-      <NoiseOverlay />
-      <ChatAssistant />
-      <Toaster />
-      <Sonner />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <SiteSettingsProvider>
+        <DarkSpaceBackground />
+        <NoiseOverlay />
+        <ChatAssistant />
+        <Toaster />
+        <Sonner />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </SiteSettingsProvider>
     </ActiveSectionContext.Provider>
   );
 }
