@@ -5,6 +5,7 @@ import { Html, RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
 import CoffeeChatScheduler from '@/components/sections/CoffeeChatScheduler';
 import { toast } from 'sonner';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 /* ── Copyable HUD Field ── */
 function HudField({ label, value }: { label: string; value: string }) {
@@ -38,6 +39,7 @@ function EstClock() {
 
 /* ── Front face HTML ── */
 function CardFront({ visible, onFlip }: { visible: boolean; onFlip: () => void }) {
+  const { currentStatus } = useSiteSettings();
   return (
     <Html
       transform
@@ -78,7 +80,7 @@ function CardFront({ visible, onFlip }: { visible: boolean; onFlip: () => void }
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-400" />
             </span>
-            <span>PHILADELPHIA // 39.9526° N, 75.1652° W</span>
+            <span className="text-green-400/80">{currentStatus || 'Online'}</span>
           </div>
           <span className="text-gray-500">LOCAL: <EstClock /></span>
         </div>

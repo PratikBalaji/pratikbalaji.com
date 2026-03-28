@@ -4,12 +4,14 @@ import { supabase } from '@/integrations/supabase/client';
 interface SiteSettings {
   isOpenToWork: boolean;
   currentLocation: string;
+  currentStatus: string;
   loaded: boolean;
 }
 
 const defaultSettings: SiteSettings = {
   isOpenToWork: true,
   currentLocation: 'Philadelphia, PA',
+  currentStatus: 'Training ML Models',
   loaded: false,
 };
 
@@ -30,6 +32,7 @@ export function SiteSettingsProvider({ children }: { children: React.ReactNode }
         data.forEach((row) => {
           if (row.key === 'is_open_to_work') next.isOpenToWork = row.value === 'true';
           if (row.key === 'current_location') next.currentLocation = row.value;
+          if (row.key === 'current_status') next.currentStatus = row.value;
         });
         setSettings(next);
       } else {

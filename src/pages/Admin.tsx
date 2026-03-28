@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { LogOut, Shield, MapPin, Briefcase, Save, Settings, ArrowLeft, Bot, Rocket } from 'lucide-react';
+import { LogOut, Shield, MapPin, Briefcase, Save, Settings, ArrowLeft, Bot, Rocket, Activity } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Link } from 'react-router-dom';
 import type { Session } from '@supabase/supabase-js';
@@ -81,6 +81,7 @@ function LoginForm() {
 function AdminDashboard() {
   const [isOpenToWork, setIsOpenToWork] = useState(true);
   const [location, setLocation] = useState('Philadelphia, PA');
+  const [currentStatus, setCurrentStatus] = useState('');
   const [systemPrompt, setSystemPrompt] = useState('');
   const [saving, setSaving] = useState(false);
   const [deployingPrompt, setDeployingPrompt] = useState(false);
@@ -93,6 +94,7 @@ function AdminDashboard() {
         data.forEach((row) => {
           if (row.key === 'is_open_to_work') setIsOpenToWork(row.value === 'true');
           if (row.key === 'current_location') setLocation(row.value);
+          if (row.key === 'current_status') setCurrentStatus(row.value);
           if (row.key === 'system_prompt') setSystemPrompt(row.value);
         });
       }
@@ -107,6 +109,7 @@ function AdminDashboard() {
     const results = await Promise.all([
       supabase.from('site_settings').update({ value: String(isOpenToWork), updated_at: now }).eq('key', 'is_open_to_work'),
       supabase.from('site_settings').update({ value: location, updated_at: now }).eq('key', 'current_location'),
+      supabase.from('site_settings').update({ value: currentStatus, updated_at: now }).eq('key', 'current_status'),
     ]);
     setSaving(false);
     if (results.some((r) => r.error)) {
@@ -201,7 +204,27 @@ function AdminDashboard() {
           </CardContent>
         </Card>
 
-        {/* Save Site Settings */}
+        {/* Current Activity */}
+        <Card className="border-border/20 bg-card/40 backdrop-blur-xl shadow-lg">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+                <Activity className="w-4 h-4 text-green-400" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">Current Activity</p>
+                <p className="text-xs text-muted-foreground">Live status on your 3D business card</p>
+              </div>
+            </div>
+            <Input
+              value={currentStatus}
+              onChange={(e) => setCurrentStatus(e.target.value)}
+              className="h-9 bg-background/50 border-border/30 text-sm font-mono"
+              placeholder="Training ML Models"
+            />
+          </CardContent>
+        </Card>
+
         <Button onClick={handleSave} disabled={saving} className="w-full h-10 text-sm gap-2">
           <Save className="w-4 h-4" />
           {saving ? 'Saving…' : 'Save Site Settings'}
