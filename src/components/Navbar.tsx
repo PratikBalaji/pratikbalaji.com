@@ -1,8 +1,9 @@
-import { motion, useMotionValueEvent, useScroll, AnimatePresence } from 'framer-motion';
+import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import { Menu } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 import {
   Sheet,
   SheetContent,
