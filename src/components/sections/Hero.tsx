@@ -67,6 +67,7 @@ const staggerItem = {
 };
 
 export default function Hero() {
+  const { isOpenToWork } = useSiteSettings();
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
