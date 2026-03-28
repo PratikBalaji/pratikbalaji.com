@@ -1,5 +1,6 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { useRef, useState, type MouseEvent } from 'react';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 const GitHubLogo = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
