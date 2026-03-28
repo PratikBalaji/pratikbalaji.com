@@ -101,6 +101,8 @@ function AdminDashboard() {
           if (row.key === 'current_location') setLocation(row.value);
           if (row.key === 'current_status') setCurrentStatus(row.value);
           if (row.key === 'system_prompt') setSystemPrompt(row.value);
+          if (row.key === 'enable_heavy_3d') setEnableHeavy3D(row.value === 'true');
+          if (row.key === 'enable_easter_eggs') setEnableEasterEggs(row.value === 'true');
         });
       }
       setLoaded(true);
