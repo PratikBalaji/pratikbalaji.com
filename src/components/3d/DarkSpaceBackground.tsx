@@ -68,6 +68,7 @@ const fogVertexShader = `
 const fogFragmentShader = `
   uniform float uTime;
   uniform vec2 uMouse;
+  uniform vec3 uAccentColor;
   varying vec2 vUv;
 
   float hash(vec2 p) {
@@ -98,27 +99,21 @@ const fogFragmentShader = `
 
   void main() {
     vec2 uv = vUv;
-    // mouse influence
     vec2 mouseOff = (uMouse - 0.5) * 0.15;
     uv += mouseOff;
 
     float n = fbm(uv * 3.0 + uTime * 0.08);
     float n2 = fbm(uv * 5.0 - uTime * 0.05 + 3.0);
 
-    // horizon band
     float horizon = smoothstep(0.55, 0.45, abs(uv.y - 0.5));
-
     float intensity = (n * 0.6 + n2 * 0.4) * horizon;
 
-    // deep purple glow
-    vec3 color = mix(
-      vec3(0.08, 0.0, 0.15),
-      vec3(0.35, 0.1, 0.55),
-      intensity
-    );
+    // Dark base tinted with accent
+    vec3 darkBase = uAccentColor * 0.15;
+    vec3 color = mix(darkBase, uAccentColor * 0.7, intensity);
 
-    // accent highlight
-    color += vec3(0.5, 0.2, 0.8) * pow(intensity, 3.0) * 0.4;
+    // Bright accent highlight
+    color += uAccentColor * pow(intensity, 3.0) * 0.4;
 
     float alpha = intensity * 0.6;
     gl_FragColor = vec4(color, alpha);
