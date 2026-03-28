@@ -117,6 +117,8 @@ function AdminDashboard() {
       supabase.from('site_settings').update({ value: String(isOpenToWork), updated_at: now }).eq('key', 'is_open_to_work'),
       supabase.from('site_settings').update({ value: location, updated_at: now }).eq('key', 'current_location'),
       supabase.from('site_settings').update({ value: currentStatus, updated_at: now }).eq('key', 'current_status'),
+      supabase.from('site_settings').update({ value: String(enableHeavy3D), updated_at: now }).eq('key', 'enable_heavy_3d'),
+      supabase.from('site_settings').update({ value: String(enableEasterEggs), updated_at: now }).eq('key', 'enable_easter_eggs'),
     ]);
     setSaving(false);
     if (results.some((r) => r.error)) {
