@@ -7,7 +7,7 @@ import { Coffee, ChevronLeft, Check, ArrowLeft } from 'lucide-react';
 import { sanitizeInput, validateField } from '@/lib/sanitize';
 
 const AVAILABLE_TIMES = ['10:00 AM EST', '11:30 AM EST', '2:00 PM EST', '3:30 PM EST', '5:00 PM EST'];
-const TURNSTILE_SITE_KEY = '0x4AAAAAABfYVr_CaBvlBYJw'; // Replace with your actual site key
+const TURNSTILE_SITE_KEY = '0x4AAAAAACxTkJNjvA1hAAje';
 
 declare global {
   interface Window {
