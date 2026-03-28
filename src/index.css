@@ -228,20 +228,28 @@ canvas {
   touch-action: none;
 }
 
-/* Custom scrollbar for dark theme */
+/* Ultra-thin custom scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(0 0% 22%) transparent;
+}
+
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(0 0% 4%);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(0 0% 20%);
-  border-radius: 3px;
+  background: hsl(0 0% 22%);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
 }
 
-::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active {
   background: hsl(270 100% 64%);
+  box-shadow: 0 0 6px hsl(270 100% 64% / 0.5);
 }
