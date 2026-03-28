@@ -204,7 +204,27 @@ function AdminDashboard() {
           </CardContent>
         </Card>
 
-        {/* Save Site Settings */}
+        {/* Current Activity */}
+        <Card className="border-border/20 bg-card/40 backdrop-blur-xl shadow-lg">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+                <Activity className="w-4 h-4 text-green-400" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">Current Activity</p>
+                <p className="text-xs text-muted-foreground">Live status on your 3D business card</p>
+              </div>
+            </div>
+            <Input
+              value={currentStatus}
+              onChange={(e) => setCurrentStatus(e.target.value)}
+              className="h-9 bg-background/50 border-border/30 text-sm font-mono"
+              placeholder="Training ML Models"
+            />
+          </CardContent>
+        </Card>
+
         <Button onClick={handleSave} disabled={saving} className="w-full h-10 text-sm gap-2">
           <Save className="w-4 h-4" />
           {saving ? 'Saving…' : 'Save Site Settings'}
