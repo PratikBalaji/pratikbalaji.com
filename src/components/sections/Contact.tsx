@@ -18,7 +18,7 @@ export default function Contact() {
         {/* Header */}
         <div className="text-center mb-8">
           <ScrollReveal>
-            <p className="text-sm font-medium text-accent uppercase tracking-widest mb-4">Hire Me</p>
+            <p className="section-label">Hire Me</p>
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
             <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-4 text-foreground">

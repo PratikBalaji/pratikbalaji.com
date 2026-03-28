@@ -150,7 +150,7 @@ export default function Experience() {
     <section id="experience" className="section-padding bg-background">
       <div className="container-tight">
         <ScrollReveal className="text-center mb-16">
-          <p className="text-sm font-medium text-accent uppercase tracking-widest mb-4">Career Journey</p>
+          <p className="section-label">Career Journey</p>
           <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-8">Experience</h2>
           <RecruiterToggle mode={mode} onToggle={() => setMode(m => m === 'technical' ? 'business' : 'technical')} />
         </ScrollReveal>

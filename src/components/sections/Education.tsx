@@ -104,7 +104,7 @@ export default function Education() {
     <section id="education" className="section-padding bg-background">
       <div className="container-tight">
         <ScrollReveal className="text-center mb-16">
-          <p className="text-sm font-medium text-accent uppercase tracking-widest mb-4">
+          <p className="section-label">
             Academic Background
           </p>
           <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground">
