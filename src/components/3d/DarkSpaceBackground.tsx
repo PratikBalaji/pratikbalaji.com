@@ -238,6 +238,7 @@ function Scene({ accentColor = '#7C3AED' }: { accentColor?: string }) {
 export default function DarkSpaceBackground() {
   const [hasError, setHasError] = useState(false);
   const [isWebGLSupported, setIsWebGLSupported] = useState<boolean | null>(null);
+  const { primaryAccentColor } = useSiteSettings();
 
   useEffect(() => {
     try {
@@ -261,7 +262,7 @@ export default function DarkSpaceBackground() {
         onError={() => setHasError(true)}
         style={{ background: 'transparent' }}
       >
-        <Scene />
+        <Scene accentColor={primaryAccentColor} />
       </SafeCanvas>
     </div>
   );
