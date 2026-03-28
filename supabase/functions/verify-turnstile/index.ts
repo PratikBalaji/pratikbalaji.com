@@ -6,6 +6,26 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+const RATE_LIMIT_THRESHOLD = 3; // max submissions per hour before alert
+
+async function fireSecurityAlert(alert: Record<string, unknown>) {
+  try {
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    // Fire-and-forget — don't block the main response
+    await fetch(`${supabaseUrl}/functions/v1/security-alert`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${supabaseKey}`,
+      },
+      body: JSON.stringify(alert),
+    });
+  } catch (err) {
+    console.error("Failed to fire security alert:", err);
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -55,6 +75,13 @@ Deno.serve(async (req) => {
 
     if (!verifyData.success) {
       console.warn("Turnstile verification failed:", verifyData);
+      // Fire alert for failed Turnstile
+      fireSecurityAlert({
+        type: "turnstile_fail",
+        table,
+        email: data?.email || "unknown",
+        details: `Turnstile codes: ${(verifyData["error-codes"] || []).join(", ")}`,
+      });
       return new Response(
         JSON.stringify({ error: "Bot verification failed. Please try again." }),
         { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -68,6 +95,7 @@ Deno.serve(async (req) => {
 
     // Validate and sanitize data based on table
     let insertData: Record<string, unknown>;
+    let emailForRateCheck: string;
 
     if (table === "meeting_requests") {
       const { name, email, requested_date, requested_time, message } = data || {};
@@ -77,17 +105,17 @@ Deno.serve(async (req) => {
           { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
+      emailForRateCheck = String(email).trim().slice(0, 255);
       insertData = {
         name: String(name).replace(/<[^>]*>/g, "").trim().slice(0, 100),
-        email: String(email).trim().slice(0, 255),
+        email: emailForRateCheck,
         requested_date: String(requested_date),
         requested_time: String(requested_time),
         message: message ? String(message).replace(/<[^>]*>/g, "").trim().slice(0, 1000) : null,
       };
 
-      // Validate email format
       const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-      if (!emailRegex.test(insertData.email as string)) {
+      if (!emailRegex.test(emailForRateCheck)) {
         return new Response(
           JSON.stringify({ error: "Invalid email format" }),
           { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -102,19 +130,48 @@ Deno.serve(async (req) => {
           { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
+      emailForRateCheck = String(email).trim().slice(0, 255);
       insertData = {
         name: String(name).replace(/<[^>]*>/g, "").trim().slice(0, 100),
-        email: String(email).trim().slice(0, 255),
+        email: emailForRateCheck,
         message: String(message).replace(/<[^>]*>/g, "").trim().slice(0, 2000),
       };
 
       const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-      if (!emailRegex.test(insertData.email as string)) {
+      if (!emailRegex.test(emailForRateCheck)) {
         return new Response(
           JSON.stringify({ error: "Invalid email format" }),
           { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
+    }
+
+    // Check rate limit BEFORE inserting
+    const { data: withinLimit, error: rlError } = await supabase.rpc("check_rate_limit", {
+      table_name: table,
+      ip_or_email: emailForRateCheck,
+      max_per_hour: RATE_LIMIT_THRESHOLD,
+    });
+
+    if (rlError) {
+      console.error("Rate limit check error:", rlError);
+    }
+
+    if (withinLimit === false) {
+      // Rate limit exceeded — fire security alert
+      fireSecurityAlert({
+        type: "rate_limit",
+        table,
+        email: emailForRateCheck,
+        count: RATE_LIMIT_THRESHOLD,
+        threshold: RATE_LIMIT_THRESHOLD,
+        details: `Email ${emailForRateCheck} exceeded ${RATE_LIMIT_THRESHOLD} submissions/hour on ${table}`,
+      });
+
+      return new Response(
+        JSON.stringify({ error: "Too many submissions. Please try again later." }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const { error: dbError } = await supabase.from(table).insert(insertData);
