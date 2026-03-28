@@ -110,6 +110,24 @@
   }
 }
 
+@layer components {
+  .section-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    color: hsl(var(--accent));
+    text-shadow: 0 0 12px hsl(var(--accent) / 0.4);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+    transition: text-shadow 0.3s ease;
+  }
+  .section-label:hover {
+    text-shadow: 0 0 8px hsl(var(--accent) / 0.7), 0 0 24px hsl(var(--accent) / 0.4);
+  }
+}
+
 @layer utilities {
   .font-display {
     font-family: var(--font-display);

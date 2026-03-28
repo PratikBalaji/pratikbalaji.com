@@ -38,7 +38,7 @@ export default function Skills() {
     <section id="skills" className="section-padding bg-background">
       <div className="container-tight">
         <ScrollReveal className="text-center mb-16">
-          <p className="text-sm font-medium text-accent uppercase tracking-widest mb-4">Technical Expertise</p>
+          <p className="section-label">Technical Expertise</p>
           <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground">Skills & Technologies</h2>
         </ScrollReveal>
 

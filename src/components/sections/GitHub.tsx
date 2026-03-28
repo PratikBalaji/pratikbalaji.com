@@ -249,7 +249,7 @@ export default function GitHub() {
     <section id="github" className="section-padding bg-background" ref={ref}>
       <div className="container-tight">
         <ScrollReveal className="text-center mb-10">
-          <p className="text-sm font-medium text-accent uppercase tracking-widest mb-4">Open Source</p>
+          <p className="section-label">Open Source</p>
           <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground">GitHub Activity</h2>
         </ScrollReveal>
 

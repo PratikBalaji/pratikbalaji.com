@@ -152,7 +152,7 @@ export default function Certifications() {
     <section id="certifications" className="section-padding bg-background" ref={ref}>
       <div className="container-tight">
         <ScrollReveal className="text-center mb-16">
-          <p className="text-sm font-medium text-accent uppercase tracking-widest mb-4">
+          <p className="section-label">
             Professional Development
           </p>
           <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-4 text-foreground">

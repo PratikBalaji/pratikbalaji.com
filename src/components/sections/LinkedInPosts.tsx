@@ -28,7 +28,7 @@ export default function LinkedInPosts() {
         {/* Header */}
         <div className="text-center mb-16">
           <ScrollReveal>
-            <p className="text-sm font-medium text-accent uppercase tracking-widest mb-4">
+            <p className="section-label">
               Latest Updates
             </p>
           </ScrollReveal>
