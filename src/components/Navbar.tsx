@@ -70,7 +70,7 @@ export default function Navbar() {
                   style={{
                     fontFamily: "'Cormorant Garamond', serif",
                     fontStyle: 'italic',
-                    textShadow: 'none',
+                    textShadow: '0 0 10px hsl(270 100% 64% / 0.3)',
                   }}
                   onMouseEnter={(e) => {
                     (e.currentTarget as HTMLElement).style.textShadow = '0 0 8px hsl(270 100% 64% / 0.6), 0 0 20px hsl(270 100% 64% / 0.3)';
