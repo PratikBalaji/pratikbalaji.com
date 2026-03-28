@@ -3,12 +3,13 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { LogOut, Shield } from 'lucide-react';
+import { LogOut, Shield, MapPin, Briefcase, Save, Settings } from 'lucide-react';
 import type { Session } from '@supabase/supabase-js';
 
-function LoginForm({ onLogin }: { onLogin: () => void }) {
+function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,47 +21,47 @@ function LoginForm({ onLogin }: { onLogin: () => void }) {
     setLoading(false);
     if (error) {
       toast.error(error.message);
-    } else {
-      onLogin();
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md border-border/50 bg-card/60 backdrop-blur-xl">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
-            <Shield className="w-6 h-6 text-accent" />
+      <Card className="w-full max-w-sm border-border/30 bg-card/50 backdrop-blur-2xl shadow-2xl">
+        <CardHeader className="text-center pb-2">
+          <div className="mx-auto mb-3 w-11 h-11 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center">
+            <Shield className="w-5 h-5 text-accent" />
           </div>
-          <CardTitle className="text-xl text-foreground">Admin Access</CardTitle>
-          <p className="text-sm text-muted-foreground">Sign in to manage site settings</p>
+          <CardTitle className="text-lg font-semibold text-foreground">Admin Access</CardTitle>
+          <CardDescription className="text-xs">Authenticate to manage site settings</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+          <form onSubmit={handleLogin} className="space-y-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="email" className="text-xs text-muted-foreground">Email</Label>
               <Input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                className="h-9 bg-background/50 border-border/40 text-sm"
                 placeholder="admin@example.com"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="password" className="text-xs text-muted-foreground">Password</Label>
               <Input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className="h-9 bg-background/50 border-border/40 text-sm"
                 placeholder="••••••••"
               />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Signing in...' : 'Sign In'}
+            <Button type="submit" className="w-full h-9 text-sm mt-2" disabled={loading}>
+              {loading ? 'Signing in…' : 'Sign In'}
             </Button>
           </form>
         </CardContent>
@@ -73,35 +74,34 @@ function AdminDashboard() {
   const [isOpenToWork, setIsOpenToWork] = useState(true);
   const [location, setLocation] = useState('Philadelphia, PA');
   const [saving, setSaving] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const fetchSettings = async () => {
-      const { data } = await supabase
-        .from('site_settings')
-        .select('key, value');
+      const { data } = await supabase.from('site_settings').select('key, value');
       if (data) {
         data.forEach((row) => {
           if (row.key === 'is_open_to_work') setIsOpenToWork(row.value === 'true');
           if (row.key === 'current_location') setLocation(row.value);
         });
       }
+      setLoaded(true);
     };
     fetchSettings();
   }, []);
 
   const handleSave = async () => {
     setSaving(true);
-    const updates = [
-      supabase.from('site_settings').update({ value: String(isOpenToWork), updated_at: new Date().toISOString() }).eq('key', 'is_open_to_work'),
-      supabase.from('site_settings').update({ value: location, updated_at: new Date().toISOString() }).eq('key', 'current_location'),
-    ];
-    const results = await Promise.all(updates);
-    const hasError = results.some((r) => r.error);
+    const now = new Date().toISOString();
+    const results = await Promise.all([
+      supabase.from('site_settings').update({ value: String(isOpenToWork), updated_at: now }).eq('key', 'is_open_to_work'),
+      supabase.from('site_settings').update({ value: location, updated_at: now }).eq('key', 'current_location'),
+    ]);
     setSaving(false);
-    if (hasError) {
+    if (results.some((r) => r.error)) {
       toast.error('Failed to save settings');
     } else {
-      toast.success('Settings saved!');
+      toast.success('Settings updated successfully');
     }
   };
 
@@ -109,54 +109,77 @@ function AdminDashboard() {
     await supabase.auth.signOut();
   };
 
+  if (!loaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="max-w-2xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Admin Dashboard</h1>
-            <p className="text-sm text-muted-foreground">Manage your site settings</p>
+    <div className="min-h-screen bg-background">
+      {/* Top bar */}
+      <div className="border-b border-border/20 bg-card/30 backdrop-blur-xl">
+        <div className="max-w-2xl mx-auto flex items-center justify-between h-14 px-4">
+          <div className="flex items-center gap-2.5">
+            <Settings className="w-4 h-4 text-accent" />
+            <span className="text-sm font-semibold text-foreground tracking-tight">Admin Panel</span>
           </div>
-          <Button variant="ghost" size="sm" onClick={handleLogout}>
-            <LogOut className="w-4 h-4 mr-2" /> Sign Out
+          <Button variant="ghost" size="sm" onClick={handleLogout} className="text-xs text-muted-foreground hover:text-foreground h-8 px-3">
+            <LogOut className="w-3.5 h-3.5 mr-1.5" /> Sign Out
           </Button>
         </div>
+      </div>
 
-        <Card className="border-border/50 bg-card/60 backdrop-blur-xl">
-          <CardHeader>
-            <CardTitle className="text-lg">Site Settings</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
+      <div className="max-w-2xl mx-auto p-4 pt-8 space-y-4">
+        {/* Open to Work toggle */}
+        <Card className="border-border/20 bg-card/40 backdrop-blur-xl shadow-lg">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <div>
-                <Label className="text-base">Open to Work</Label>
-                <p className="text-sm text-muted-foreground">Show "Open for Opportunities" badge</p>
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
+                  <Briefcase className="w-4 h-4 text-accent" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Open for Opportunities</p>
+                  <p className="text-xs text-muted-foreground">Display availability badge on hero</p>
+                </div>
               </div>
-              <button
-                onClick={() => setIsOpenToWork(!isOpenToWork)}
-                className={`relative w-12 h-6 rounded-full transition-colors ${isOpenToWork ? 'bg-accent' : 'bg-muted'}`}
-              >
-                <span
-                  className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform ${isOpenToWork ? 'translate-x-6' : ''}`}
-                />
-              </button>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="location">Current Location</Label>
-              <Input
-                id="location"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="City, State"
+              <Switch
+                checked={isOpenToWork}
+                onCheckedChange={setIsOpenToWork}
               />
             </div>
-
-            <Button onClick={handleSave} disabled={saving} className="w-full">
-              {saving ? 'Saving...' : 'Save Settings'}
-            </Button>
           </CardContent>
         </Card>
+
+        {/* Location */}
+        <Card className="border-border/20 bg-card/40 backdrop-blur-xl shadow-lg">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
+                <MapPin className="w-4 h-4 text-accent" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">Current Location</p>
+                <p className="text-xs text-muted-foreground">Shown in navbar and hero section</p>
+              </div>
+            </div>
+            <Input
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              className="h-9 bg-background/50 border-border/30 text-sm"
+              placeholder="City, State"
+            />
+          </CardContent>
+        </Card>
+
+        {/* Save */}
+        <Button onClick={handleSave} disabled={saving} className="w-full h-10 text-sm gap-2">
+          <Save className="w-4 h-4" />
+          {saving ? 'Saving…' : 'Save Changes'}
+        </Button>
       </div>
     </div>
   );
@@ -171,26 +194,20 @@ export default function Admin() {
       setSession(session);
       setLoading(false);
     });
-
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setLoading(false);
     });
-
     return () => subscription.unsubscribe();
   }, []);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
-  if (!session) {
-    return <LoginForm onLogin={() => {}} />;
-  }
-
-  return <AdminDashboard />;
+  return session ? <AdminDashboard /> : <LoginForm />;
 }
