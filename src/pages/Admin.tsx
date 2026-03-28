@@ -90,6 +90,8 @@ function AdminDashboard() {
   const [enableHeavy3D, setEnableHeavy3D] = useState(true);
   const [enableEasterEggs, setEnableEasterEggs] = useState(true);
   const [accentColor, setAccentColor] = useState('#7C3AED');
+  const [livePreview, setLivePreview] = useState(false);
+  const savedColorRef = useRef('#7C3AED');
   const [saving, setSaving] = useState(false);
   const [deployingPrompt, setDeployingPrompt] = useState(false);
   const [loaded, setLoaded] = useState(false);
