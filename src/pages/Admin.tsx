@@ -234,6 +234,43 @@ function AdminDashboard() {
           </CardContent>
         </Card>
 
+        {/* Feature Flags */}
+        <div className="flex items-center gap-3 pt-4">
+          <div className="h-px flex-1 bg-border/20" />
+          <span className="text-xs text-muted-foreground uppercase tracking-widest">Feature Flags</span>
+          <div className="h-px flex-1 bg-border/20" />
+        </div>
+
+        <Card className="border-border/20 bg-card/40 backdrop-blur-xl shadow-lg">
+          <CardContent className="p-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
+                  <Cpu className="w-4 h-4 text-accent" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Heavy 3D Background</p>
+                  <p className="text-xs text-muted-foreground">WebGL space particles &amp; floating shapes. Falls back to CSS gradient when off.</p>
+                </div>
+              </div>
+              <Switch checked={enableHeavy3D} onCheckedChange={setEnableHeavy3D} />
+            </div>
+            <div className="h-px bg-border/10" />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
+                  <Wand2 className="w-4 h-4 text-accent" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Easter Eggs</p>
+                  <p className="text-xs text-muted-foreground">AI chat assistant and hidden developer tools</p>
+                </div>
+              </div>
+              <Switch checked={enableEasterEggs} onCheckedChange={setEnableEasterEggs} />
+            </div>
+          </CardContent>
+        </Card>
+
         <Button onClick={handleSave} disabled={saving} className="w-full h-10 text-sm gap-2">
           <Save className="w-4 h-4" />
           {saving ? 'Saving…' : 'Save Site Settings'}
