@@ -203,8 +203,14 @@ function MetallicShard({
 }
 
 // ─── Scene ────────────────────────────────────────────────────
-function Scene() {
+function Scene({ accentColor = '#7C3AED' }: { accentColor?: string }) {
   const { gl } = useThree();
+  const threeColor = useMemo(() => hexToThreeColor(accentColor), [accentColor]);
+  const lightColor = useMemo(() => {
+    const c = threeColor.clone();
+    c.lerp(new THREE.Color('#ffffff'), 0.4);
+    return '#' + c.getHexString();
+  }, [threeColor]);
 
   useEffect(() => {
     gl.setClearColor(0x000000, 0);
@@ -213,12 +219,12 @@ function Scene() {
   return (
     <>
       <ambientLight intensity={0.15} />
-      <directionalLight position={[5, 5, 5]} intensity={0.4} color="#c4b5fd" />
-      <directionalLight position={[-5, -3, -5]} intensity={0.2} color="#7c3aed" />
-      <pointLight position={[0, 0, 4]} intensity={0.6} color="#8b5cf6" distance={20} />
+      <directionalLight position={[5, 5, 5]} intensity={0.4} color={lightColor} />
+      <directionalLight position={[-5, -3, -5]} intensity={0.2} color={accentColor} />
+      <pointLight position={[0, 0, 4]} intensity={0.6} color={accentColor} distance={20} />
 
-      <Starfield count={2500} />
-      <VolumetricFog />
+      <Starfield count={2500} accentColor={lightColor} />
+      <VolumetricFog accentColor={accentColor} />
 
       <MetallicShard position={[-5, 1.5, -3]} scale={0.7} rotationSpeed={[0.12, 0.18, 0.06]} />
       <MetallicShard position={[4.5, -1, -2]} scale={0.5} rotationSpeed={[0.08, 0.1, 0.14]} />
