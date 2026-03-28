@@ -310,6 +310,12 @@ function AdminDashboard() {
                       }}
                     />
                   ))}
+                  <button
+                    onClick={() => setAccentColor('#7C3AED')}
+                    className="ml-1 px-2 h-6 rounded-md border border-border/30 text-[10px] text-muted-foreground hover:text-foreground hover:border-accent/40 transition-colors"
+                  >
+                    Reset
+                  </button>
                 </div>
               </div>
               <div
