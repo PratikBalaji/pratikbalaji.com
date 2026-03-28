@@ -9,6 +9,9 @@ import { toast } from 'sonner';
 import { LogOut, Shield, MapPin, Briefcase, Save, Settings, ArrowLeft, Bot, Rocket, Activity } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Link } from 'react-router-dom';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import ProjectsManager from '@/components/admin/ProjectsManager';
+import SkillsManager from '@/components/admin/SkillsManager';
 import type { Session } from '@supabase/supabase-js';
 
 function LoginForm() {
@@ -263,6 +266,26 @@ function AdminDashboard() {
           <Rocket className="w-4 h-4" />
           {deployingPrompt ? 'Deploying…' : 'Deploy New Prompt'}
         </Button>
+
+        {/* Divider */}
+        <div className="flex items-center gap-3 pt-4">
+          <div className="h-px flex-1 bg-border/20" />
+          <span className="text-xs text-muted-foreground uppercase tracking-widest">Content</span>
+          <div className="h-px flex-1 bg-border/20" />
+        </div>
+
+        <Tabs defaultValue="projects" className="w-full">
+          <TabsList className="w-full bg-card/40 border border-border/20">
+            <TabsTrigger value="projects" className="flex-1 text-xs">Projects</TabsTrigger>
+            <TabsTrigger value="skills" className="flex-1 text-xs">Skills</TabsTrigger>
+          </TabsList>
+          <TabsContent value="projects" className="mt-4">
+            <ProjectsManager />
+          </TabsContent>
+          <TabsContent value="skills" className="mt-4">
+            <SkillsManager />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
