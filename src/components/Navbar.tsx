@@ -53,7 +53,7 @@ export default function Navbar() {
     >
       <nav className="relative">
         {/* Glassmorphism background */}
-        <div className="absolute inset-0 bg-card/40 backdrop-blur-2xl border-b border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)]" />
+        <div className="absolute inset-0 bg-transparent" />
         
         <div className="container-tight relative">
           <div className="flex items-center justify-between h-16 md:h-20">
