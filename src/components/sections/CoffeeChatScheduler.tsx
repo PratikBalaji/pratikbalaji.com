@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { addDays, format, isSameDay } from 'date-fns';
 import { supabase } from '@/integrations/supabase/client';
@@ -7,6 +7,17 @@ import { Coffee, ChevronLeft, Check, ArrowLeft } from 'lucide-react';
 import { sanitizeInput, validateField } from '@/lib/sanitize';
 
 const AVAILABLE_TIMES = ['10:00 AM EST', '11:30 AM EST', '2:00 PM EST', '3:30 PM EST', '5:00 PM EST'];
+const TURNSTILE_SITE_KEY = '0x4AAAAAABfYVr_CaBvlBYJw'; // Replace with your actual site key
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (container: string | HTMLElement, options: Record<string, unknown>) => string;
+      reset: (widgetId: string) => void;
+      remove: (widgetId: string) => void;
+    };
+  }
+}
 
 export default function CoffeeChatScheduler({ onFlipBack }: { onFlipBack: () => void }) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -16,16 +27,64 @@ export default function CoffeeChatScheduler({ onFlipBack }: { onFlipBack: () => 
   const [step, setStep] = useState<'date' | 'details'>('date');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDone, setIsDone] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<string | null>(null);
 
   const dates = useMemo(() => {
     const today = new Date();
     return Array.from({ length: 7 }, (_, i) => addDays(today, i + 1));
   }, []);
 
-  const handleSubmit = async () => {
+  // Render Turnstile widget when details step is shown
+  useEffect(() => {
+    if (step !== 'details' || !turnstileRef.current) return;
+
+    const renderWidget = () => {
+      if (!window.turnstile || !turnstileRef.current) return;
+      // Clean up previous widget
+      if (widgetIdRef.current) {
+        try { window.turnstile.remove(widgetIdRef.current); } catch {}
+      }
+      widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        theme: 'dark',
+        size: 'compact',
+        callback: (token: string) => setTurnstileToken(token),
+        'expired-callback': () => setTurnstileToken(null),
+        'error-callback': () => setTurnstileToken(null),
+      });
+    };
+
+    // Turnstile script may not be loaded yet
+    if (window.turnstile) {
+      renderWidget();
+    } else {
+      const interval = setInterval(() => {
+        if (window.turnstile) {
+          clearInterval(interval);
+          renderWidget();
+        }
+      }, 200);
+      return () => clearInterval(interval);
+    }
+
+    return () => {
+      if (widgetIdRef.current && window.turnstile) {
+        try { window.turnstile.remove(widgetIdRef.current); } catch {}
+        widgetIdRef.current = null;
+      }
+    };
+  }, [step]);
+
+  const handleSubmit = useCallback(async () => {
     if (!selectedDate || !selectedTime || !name.trim() || !email.trim()) return;
 
-    // Client-side validation & sanitization
+    if (!turnstileToken) {
+      toast({ title: 'Verification required', description: 'Please complete the bot check.', variant: 'destructive' });
+      return;
+    }
+
     const cleanName = sanitizeInput(name, 100);
     const cleanEmail = email.trim().slice(0, 255);
     const nameErr = validateField(cleanName, 'Name', { maxLength: 100 });
@@ -35,21 +94,36 @@ export default function CoffeeChatScheduler({ onFlipBack }: { onFlipBack: () => 
 
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from('meeting_requests').insert({
-        name: cleanName,
-        email: cleanEmail,
-        requested_date: format(selectedDate, 'yyyy-MM-dd'),
-        requested_time: selectedTime,
+      const { data: result, error: fnError } = await supabase.functions.invoke('verify-turnstile', {
+        body: {
+          token: turnstileToken,
+          table: 'meeting_requests',
+          data: {
+            name: cleanName,
+            email: cleanEmail,
+            requested_date: format(selectedDate, 'yyyy-MM-dd'),
+            requested_time: selectedTime,
+          },
+        },
       });
-      if (error) throw error;
+
+      if (fnError) throw fnError;
+      if (result?.error) throw new Error(result.error);
+
       setIsDone(true);
       toast({ title: '☕ Meeting Requested!', description: "I'll confirm your slot via email." });
-    } catch {
-      toast({ title: 'Something went wrong', description: 'Please try again.', variant: 'destructive' });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Please try again.';
+      toast({ title: 'Something went wrong', description: message, variant: 'destructive' });
+      // Reset turnstile for retry
+      setTurnstileToken(null);
+      if (widgetIdRef.current && window.turnstile) {
+        window.turnstile.reset(widgetIdRef.current);
+      }
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [selectedDate, selectedTime, name, email, turnstileToken]);
 
   if (isDone) {
     return (
@@ -110,7 +184,6 @@ export default function CoffeeChatScheduler({ onFlipBack }: { onFlipBack: () => 
             transition={{ duration: 0.2 }}
             className="flex flex-col flex-1 min-h-0"
           >
-            {/* Date row */}
             <p className="w-full max-w-[560px] mx-auto text-[10px] text-purple-200/50 mb-1.5 px-6">Pick a day</p>
             <div className="flex w-full max-w-[560px] mx-auto overflow-x-auto gap-2 pb-2 scrollbar-hide px-6 snap-x items-stretch justify-start">
               {dates.map((d) => {
@@ -133,7 +206,6 @@ export default function CoffeeChatScheduler({ onFlipBack }: { onFlipBack: () => 
               })}
             </div>
 
-            {/* Time slots */}
             <AnimatePresence>
               {selectedDate && (
                 <motion.div
@@ -167,7 +239,6 @@ export default function CoffeeChatScheduler({ onFlipBack }: { onFlipBack: () => 
               )}
             </AnimatePresence>
 
-            {/* Next */}
             {selectedDate && selectedTime && (
               <motion.button
                 initial={{ opacity: 0, y: 10 }}
@@ -209,9 +280,13 @@ export default function CoffeeChatScheduler({ onFlipBack }: { onFlipBack: () => 
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-purple-400/50 transition-colors"
               />
             </div>
+
+            {/* Turnstile widget */}
+            <div ref={turnstileRef} className="mt-3 flex justify-center" />
+
             <motion.button
               onClick={handleSubmit}
-              disabled={isSubmitting || !name.trim() || !email.trim()}
+              disabled={isSubmitting || !name.trim() || !email.trim() || !turnstileToken}
               whileTap={{ scale: 0.97 }}
               className="mt-auto flex items-center justify-center gap-2 bg-purple-500/80 hover:bg-purple-500 text-white text-sm font-semibold py-2.5 rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
