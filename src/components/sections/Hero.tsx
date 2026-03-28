@@ -1,5 +1,6 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { useRef, useState, type MouseEvent } from 'react';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 const GitHubLogo = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -66,6 +67,7 @@ const staggerItem = {
 };
 
 export default function Hero() {
+  const { isOpenToWork } = useSiteSettings();
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -84,15 +86,25 @@ export default function Hero() {
           animate="visible"
           className="max-w-4xl mx-auto text-center"
         >
-          <motion.div variants={staggerItem} className="flex justify-center mb-4">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-muted-foreground text-sm font-medium uppercase tracking-widest">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
-              </span>
-              Open for Opportunities
-            </span>
-          </motion.div>
+          <AnimatePresence>
+            {isOpenToWork && (
+              <motion.div
+                variants={staggerItem}
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="flex justify-center mb-4"
+              >
+                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-muted-foreground text-sm font-medium uppercase tracking-widest">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+                  </span>
+                  Open for Opportunities
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <motion.h1
             variants={staggerItem}

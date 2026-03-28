@@ -1,8 +1,9 @@
-import { motion, useMotionValueEvent, useScroll, AnimatePresence } from 'framer-motion';
+import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import { Menu } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 import {
   Sheet,
   SheetContent,
@@ -15,6 +16,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
   const { scrollY } = useScroll();
+  const { currentLocation } = useSiteSettings();
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     const previous = scrollY.getPrevious() ?? 0;
@@ -90,7 +92,7 @@ export default function Navbar() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
                 </span>
-                Philadelphia, PA
+                {currentLocation}
               </div>
               
               <Sheet open={open} onOpenChange={setOpen}>
@@ -122,7 +124,7 @@ export default function Navbar() {
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
                       </span>
-                      Philadelphia, PA
+                      {currentLocation}
                     </div>
                   </nav>
                 </SheetContent>

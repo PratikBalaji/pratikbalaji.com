@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ActiveSectionContext, useActiveSectionTracker } from "@/hooks/useActiveSection";
+import { SiteSettingsProvider } from "@/hooks/useSiteSettings";
 
 import NoiseOverlay from "@/components/NoiseOverlay";
 import ChatAssistant from "@/components/sections/ChatAssistant";
@@ -20,19 +21,21 @@ function AppInner() {
 
   return (
     <ActiveSectionContext.Provider value={activeSection}>
-      <DarkSpaceBackground />
-      <NoiseOverlay />
-      <ChatAssistant />
-      <Toaster />
-      <Sonner />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <SiteSettingsProvider>
+        <DarkSpaceBackground />
+        <NoiseOverlay />
+        <ChatAssistant />
+        <Toaster />
+        <Sonner />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </SiteSettingsProvider>
     </ActiveSectionContext.Provider>
   );
 }
