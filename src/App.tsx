@@ -11,6 +11,7 @@ import ChatAssistant from "@/components/sections/ChatAssistant";
 import DarkSpaceBackground from "@/components/3d/DarkSpaceBackground";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
