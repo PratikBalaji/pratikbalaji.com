@@ -66,7 +66,17 @@ export default function Navbar() {
                 <button
                   key={item.label}
                   onClick={() => scrollToSection(item.href)}
-                  className="text-sm font-medium text-muted-foreground hover:text-accent transition-colors duration-200 link-underline"
+                  className="text-[13px] font-semibold tracking-widest uppercase text-muted-foreground/80 hover:text-accent transition-all duration-300 link-underline"
+                  style={{
+                    fontFamily: "'Cinzel', serif",
+                    textShadow: 'none',
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.textShadow = '0 0 8px hsl(270 100% 64% / 0.6), 0 0 20px hsl(270 100% 64% / 0.3)';
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.textShadow = 'none';
+                  }}
                 >
                   {item.label}
                 </button>
