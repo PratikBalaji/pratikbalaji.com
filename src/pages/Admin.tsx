@@ -107,13 +107,30 @@ function AdminDashboard() {
           if (row.key === 'system_prompt') setSystemPrompt(row.value);
           if (row.key === 'enable_heavy_3d') setEnableHeavy3D(row.value === 'true');
           if (row.key === 'enable_easter_eggs') setEnableEasterEggs(row.value === 'true');
-          if (row.key === 'primary_accent_color') setAccentColor(row.value);
+          if (row.key === 'primary_accent_color') {
+            setAccentColor(row.value);
+            savedColorRef.current = row.value;
+          }
         });
       }
       setLoaded(true);
     };
     fetchSettings();
   }, []);
+
+  // Live preview: apply accent color to CSS vars in real-time
+  useEffect(() => {
+    if (livePreview && /^#[0-9A-Fa-f]{6}$/.test(accentColor)) {
+      applyAccentColor(accentColor);
+    }
+  }, [accentColor, livePreview]);
+
+  // Revert color when disabling live preview without saving
+  useEffect(() => {
+    if (!livePreview && savedColorRef.current) {
+      applyAccentColor(savedColorRef.current);
+    }
+  }, [livePreview]);
 
   const handleSave = async () => {
     setSaving(true);
