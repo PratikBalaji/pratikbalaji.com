@@ -16,7 +16,7 @@ function hexToThreeColor(hex: string): THREE.Color {
 }
 
 // ─── Starfield ────────────────────────────────────────────────
-function Starfield({ count = 2000 }: { count?: number }) {
+function Starfield({ count = 2000, accentColor = '#7C3AED' }: { count?: number; accentColor?: string }) {
   const ref = useRef<THREE.Points>(null);
 
   const [positions, sizes] = useMemo(() => {
