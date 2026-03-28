@@ -81,7 +81,9 @@ function LoginForm() {
 function AdminDashboard() {
   const [isOpenToWork, setIsOpenToWork] = useState(true);
   const [location, setLocation] = useState('Philadelphia, PA');
+  const [systemPrompt, setSystemPrompt] = useState('');
   const [saving, setSaving] = useState(false);
+  const [deployingPrompt, setDeployingPrompt] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -91,6 +93,7 @@ function AdminDashboard() {
         data.forEach((row) => {
           if (row.key === 'is_open_to_work') setIsOpenToWork(row.value === 'true');
           if (row.key === 'current_location') setLocation(row.value);
+          if (row.key === 'system_prompt') setSystemPrompt(row.value);
         });
       }
       setLoaded(true);
