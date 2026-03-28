@@ -116,6 +116,18 @@ function AdminDashboard() {
     }
   };
 
+  const handleDeployPrompt = async () => {
+    setDeployingPrompt(true);
+    const now = new Date().toISOString();
+    const { error } = await supabase.from('site_settings').update({ value: systemPrompt, updated_at: now }).eq('key', 'system_prompt');
+    setDeployingPrompt(false);
+    if (error) {
+      toast.error('Failed to deploy prompt');
+    } else {
+      toast.success('AI prompt deployed! Your chatbot is now updated.');
+    }
+  };
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
   };
