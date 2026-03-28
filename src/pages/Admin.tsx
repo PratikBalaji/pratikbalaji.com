@@ -86,6 +86,8 @@ function AdminDashboard() {
   const [location, setLocation] = useState('Philadelphia, PA');
   const [currentStatus, setCurrentStatus] = useState('');
   const [systemPrompt, setSystemPrompt] = useState('');
+  const [enableHeavy3D, setEnableHeavy3D] = useState(true);
+  const [enableEasterEggs, setEnableEasterEggs] = useState(true);
   const [saving, setSaving] = useState(false);
   const [deployingPrompt, setDeployingPrompt] = useState(false);
   const [loaded, setLoaded] = useState(false);
