@@ -120,7 +120,7 @@ const fogFragmentShader = `
   }
 `;
 
-function VolumetricFog() {
+function VolumetricFog({ accentColor = '#7C3AED' }: { accentColor?: string }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const mouse = useRef(new THREE.Vector2(0.5, 0.5));
@@ -138,6 +138,8 @@ function VolumetricFog() {
     if (materialRef.current) {
       materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
       materialRef.current.uniforms.uMouse.value.lerp(mouse.current, 0.05);
+      const [r, g, b] = hexToRGB(accentColor);
+      materialRef.current.uniforms.uAccentColor.value.set(r, g, b);
     }
   });
 
@@ -145,6 +147,7 @@ function VolumetricFog() {
     () => ({
       uTime: { value: 0 },
       uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+      uAccentColor: { value: new THREE.Vector3(...hexToRGB(accentColor)) },
     }),
     []
   );
