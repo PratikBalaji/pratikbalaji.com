@@ -318,6 +318,16 @@ function AdminDashboard() {
                 }}
               />
             </div>
+            <div className="mt-4 pt-3 border-t border-border/10">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {livePreview ? <Eye className="w-3.5 h-3.5 text-accent" /> : <EyeOff className="w-3.5 h-3.5 text-muted-foreground" />}
+                  <span className="text-xs font-medium text-foreground">Live Preview</span>
+                  <span className="text-xs text-muted-foreground">— see changes on this page before saving</span>
+                </div>
+                <Switch checked={livePreview} onCheckedChange={setLivePreview} />
+              </div>
+            </div>
           </CardContent>
         </Card>
 
