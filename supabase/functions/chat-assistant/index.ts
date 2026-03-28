@@ -131,7 +131,21 @@ serve(async (req) => {
     // If not agent mode, use simple streaming (existing behavior)
     if (!agent_mode) {
       const RESUME_CONTEXT = Object.values(KNOWLEDGE_BASE).join("\n\n");
-      const SYSTEM_PROMPT = `You are Pratik Balaji's AI Resume Assistant. Be friendly, concise, professional.\n\nResume:\n${RESUME_CONTEXT}\n\nRules:\n- For resume download requests, include: [Download Pratik's Resume (PDF)](/PratikBalaji-Resume.pdf)\n- For cover letter requests, include: [Download Pratik's Cover Letter (PDF)](/PratikBalaji-CoverLetter.pdf)\n- Keep responses under 150 words unless asked for detail\n- Use markdown formatting`;
+
+      // Fetch dynamic system prompt from database
+      let customPrompt = "";
+      try {
+        const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+        const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+        const sb = createClient(supabaseUrl, supabaseKey);
+        const { data } = await sb.from("site_settings").select("value").eq("key", "system_prompt").maybeSingle();
+        if (data?.value) customPrompt = data.value;
+      } catch (e) {
+        console.error("Failed to fetch system prompt:", e);
+      }
+
+      const basePrompt = customPrompt || `You are Pratik Balaji's AI Resume Assistant. Be friendly, concise, professional.`;
+      const SYSTEM_PROMPT = `${basePrompt}\n\nResume:\n${RESUME_CONTEXT}\n\nRules:\n- For resume download requests, include: [Download Pratik's Resume (PDF)](/PratikBalaji-Resume.pdf)\n- For cover letter requests, include: [Download Pratik's Cover Letter (PDF)](/PratikBalaji-CoverLetter.pdf)\n- Keep responses under 150 words unless asked for detail\n- Use markdown formatting`;
 
       const response = await fetch(GATEWAY_URL, {
         method: "POST",
