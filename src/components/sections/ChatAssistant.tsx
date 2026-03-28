@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Loader2, X, User, Square, Cloud, Cpu } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
@@ -11,12 +11,24 @@ import RAGVisualization from '@/components/chat/RAGVisualization';
 import EdgeTerminal from '@/components/chat/EdgeTerminal';
 import ChainOfThoughtTerminal, { type AgentStep } from '@/components/chat/ChainOfThoughtTerminal';
 import { Switch } from '@/components/ui/switch';
+import { useActiveSection } from '@/hooks/useActiveSection';
 
 type Msg = { role: 'user' | 'assistant'; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-assistant`;
-const INITIAL_MSG: Msg = { role: 'assistant', content: "Hi! I'm Pratik's AI Resume Assistant. Ask me about his skills, experience, projects — or just hold the mic and talk to me!" };
 const IDLE_RESET_MS = 2 * 60 * 1000;
+
+const SECTION_GREETINGS: Record<string, string> = {
+  hero: "Hi! I'm Pratik's AI Resume Assistant. Ask me about his skills, experience, projects — or just hold the mic and talk to me!",
+  about: "I see you're reading about Pratik! Want to know more about his background in Data Science, his passion for AI, or what drives him?",
+  education: "Checking out Pratik's education? Ask me about his coursework at Drexel, his GPA, or how his academics shaped his AI expertise!",
+  experience: "I see you're exploring Pratik's experience! Ask me about his work at Susquehanna, his AI/ML projects, or his internship highlights.",
+  certifications: "Looking at certifications! Ask me about Pratik's AWS AI Practitioner cert, his Google Cloud credentials, or any other qualifications.",
+  skills: "Exploring Pratik's skills! Ask me about his proficiency in Python, AWS SageMaker, Amazon Bedrock, LangChain, or any specific technology.",
+  github: "I see you're exploring my projects! Ask me how I built the AURA-ATLAS routing algorithm or the AROMA agentic workflow.",
+  linkedin: "Checking out Pratik's LinkedIn presence! Ask me about his latest posts, professional insights, or thought leadership in AI.",
+  contact: "Thinking of reaching out? I can tell you the best way to contact Pratik, or you can flip the card to schedule a coffee chat!",
+};
 
 // Keywords that trigger agent mode for complex queries
 const AGENT_TRIGGERS = ['compare', 'analyze', 'email', 'summarize', 'contrast', 'vs', 'versus', 'difference between', 'send', 'generate report', 'deep dive', 'breakdown'];
@@ -38,8 +50,13 @@ function PBLogo({ className }: { className?: string }) {
 }
 
 export default function ChatAssistant() {
+  const activeSection = useActiveSection();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Msg[]>([INITIAL_MSG]);
+  const initialMsg = useMemo<Msg>(() => ({
+    role: 'assistant',
+    content: SECTION_GREETINGS[activeSection] || SECTION_GREETINGS.hero,
+  }), [activeSection]);
+  const [messages, setMessages] = useState<Msg[]>([initialMsg]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [ragQuery, setRagQuery] = useState<string | null>(null);
@@ -50,9 +67,18 @@ export default function ChatAssistant() {
   const inputRef = useRef<HTMLInputElement>(null);
   const lastClosedRef = useRef<number>(Date.now());
   const pendingSendRef = useRef<Msg[] | null>(null);
+  const hasUserSentRef = useRef(false);
 
   const { isListening, isProcessing, isSpeaking, analyser, startListening, stopListening, stopSpeaking } = useVoiceAgent(messages, setMessages, setIsLoading);
   const { isModelLoaded, isModelLoading, logs, tokensPerSec, loadModel, unloadModel, chat: edgeChat } = useEdgeLLM();
+
+  // Update initial greeting when section changes (only if chat hasn't started)
+  useEffect(() => {
+    if (!hasUserSentRef.current && !isOpen) {
+      const newGreeting: Msg = { role: 'assistant', content: SECTION_GREETINGS[activeSection] || SECTION_GREETINGS.hero };
+      setMessages([newGreeting]);
+    }
+  }, [activeSection, isOpen]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -71,14 +97,17 @@ export default function ChatAssistant() {
       stopSpeaking();
       lastClosedRef.current = Date.now();
     } else {
-      if (Date.now() - lastClosedRef.current > IDLE_RESET_MS) {
-        setMessages([INITIAL_MSG]);
+      // Update greeting to current section when opening
+      if (!hasUserSentRef.current || Date.now() - lastClosedRef.current > IDLE_RESET_MS) {
+        const newGreeting: Msg = { role: 'assistant', content: SECTION_GREETINGS[activeSection] || SECTION_GREETINGS.hero };
+        setMessages([newGreeting]);
+        hasUserSentRef.current = false;
         setRagQuery(null);
         setAgentSteps([]);
       }
     }
     setIsOpen(prev => !prev);
-  }, [isOpen, stopSpeaking]);
+  }, [isOpen, stopSpeaking, activeSection]);
 
   const handleEdgeToggle = useCallback((checked: boolean) => {
     setEdgeMode(checked);
@@ -244,6 +273,7 @@ export default function ChatAssistant() {
     const trimmed = input.trim();
     if (!trimmed || isLoading || ragQuery) return;
 
+    hasUserSentRef.current = true;
     const userMsg: Msg = { role: 'user', content: trimmed };
     const allMessages = [...messages, userMsg];
     setMessages(allMessages);
