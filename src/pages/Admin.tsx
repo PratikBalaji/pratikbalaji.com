@@ -6,7 +6,8 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { LogOut, Shield, MapPin, Briefcase, Save, Settings } from 'lucide-react';
+import { LogOut, Shield, MapPin, Briefcase, Save, Settings, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import type { Session } from '@supabase/supabase-js';
 
 function LoginForm() {
@@ -38,6 +39,11 @@ function LoginForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <div className="absolute top-4 left-4">
+        <Link to="/" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to site
+        </Link>
+      </div>
       <Card className="w-full max-w-sm border-border/30 bg-card/50 backdrop-blur-2xl shadow-2xl">
         <CardHeader className="text-center pb-2">
           <div className="mx-auto mb-3 w-11 h-11 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center">
@@ -146,6 +152,9 @@ function AdminDashboard() {
       <div className="border-b border-border/20 bg-card/30 backdrop-blur-xl">
         <div className="max-w-2xl mx-auto flex items-center justify-between h-14 px-4">
           <div className="flex items-center gap-2.5">
+            <Link to="/" className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors mr-2">
+              <ArrowLeft className="w-4 h-4" />
+            </Link>
             <Settings className="w-4 h-4 text-accent" />
             <span className="text-sm font-semibold text-foreground tracking-tight">Admin Panel</span>
           </div>
