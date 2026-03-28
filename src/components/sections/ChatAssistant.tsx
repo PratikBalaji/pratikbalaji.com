@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Loader2, X, User, Square, Cloud, Cpu } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
@@ -11,12 +11,24 @@ import RAGVisualization from '@/components/chat/RAGVisualization';
 import EdgeTerminal from '@/components/chat/EdgeTerminal';
 import ChainOfThoughtTerminal, { type AgentStep } from '@/components/chat/ChainOfThoughtTerminal';
 import { Switch } from '@/components/ui/switch';
+import { useActiveSection } from '@/hooks/useActiveSection';
 
 type Msg = { role: 'user' | 'assistant'; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-assistant`;
-const INITIAL_MSG: Msg = { role: 'assistant', content: "Hi! I'm Pratik's AI Resume Assistant. Ask me about his skills, experience, projects — or just hold the mic and talk to me!" };
 const IDLE_RESET_MS = 2 * 60 * 1000;
+
+const SECTION_GREETINGS: Record<string, string> = {
+  hero: "Hi! I'm Pratik's AI Resume Assistant. Ask me about his skills, experience, projects — or just hold the mic and talk to me!",
+  about: "I see you're reading about Pratik! Want to know more about his background in Data Science, his passion for AI, or what drives him?",
+  education: "Checking out Pratik's education? Ask me about his coursework at Drexel, his GPA, or how his academics shaped his AI expertise!",
+  experience: "I see you're exploring Pratik's experience! Ask me about his work at Susquehanna, his AI/ML projects, or his internship highlights.",
+  certifications: "Looking at certifications! Ask me about Pratik's AWS AI Practitioner cert, his Google Cloud credentials, or any other qualifications.",
+  skills: "Exploring Pratik's skills! Ask me about his proficiency in Python, AWS SageMaker, Amazon Bedrock, LangChain, or any specific technology.",
+  github: "I see you're exploring my projects! Ask me how I built the AURA-ATLAS routing algorithm or the AROMA agentic workflow.",
+  linkedin: "Checking out Pratik's LinkedIn presence! Ask me about his latest posts, professional insights, or thought leadership in AI.",
+  contact: "Thinking of reaching out? I can tell you the best way to contact Pratik, or you can flip the card to schedule a coffee chat!",
+};
 
 // Keywords that trigger agent mode for complex queries
 const AGENT_TRIGGERS = ['compare', 'analyze', 'email', 'summarize', 'contrast', 'vs', 'versus', 'difference between', 'send', 'generate report', 'deep dive', 'breakdown'];
