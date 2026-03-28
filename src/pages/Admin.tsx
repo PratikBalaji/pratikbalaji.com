@@ -152,6 +152,9 @@ function AdminDashboard() {
       <div className="border-b border-border/20 bg-card/30 backdrop-blur-xl">
         <div className="max-w-2xl mx-auto flex items-center justify-between h-14 px-4">
           <div className="flex items-center gap-2.5">
+            <Link to="/" className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors mr-2">
+              <ArrowLeft className="w-4 h-4" />
+            </Link>
             <Settings className="w-4 h-4 text-accent" />
             <span className="text-sm font-semibold text-foreground tracking-tight">Admin Panel</span>
           </div>
