@@ -116,7 +116,8 @@ export default function Hero() {
 
           <motion.p
             variants={staggerItem}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8"
+            className="text-lg md:text-xl text-white max-w-2xl mx-auto mb-8"
+            style={{ textShadow: '0 0 12px hsl(270 100% 64% / 0.4), 0 0 24px hsl(270 100% 64% / 0.2)' }}
           >
             A passionate Data Science student specializing in AI, machine learning,
             and building intelligent applications that push boundaries.

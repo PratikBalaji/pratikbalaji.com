@@ -66,11 +66,11 @@ export default function Navbar() {
                 <button
                   key={item.label}
                   onClick={() => scrollToSection(item.href)}
-                  className="text-[15px] font-medium italic tracking-wide text-muted-foreground/80 hover:text-accent transition-all duration-300 link-underline normal-case"
+                  className="text-[15px] font-medium italic tracking-wide text-white hover:text-accent transition-all duration-300 link-underline normal-case"
                   style={{
                     fontFamily: "'Cormorant Garamond', serif",
                     fontStyle: 'italic',
-                    textShadow: 'none',
+                    textShadow: '0 0 10px hsl(270 100% 64% / 0.3)',
                   }}
                   onMouseEnter={(e) => {
                     (e.currentTarget as HTMLElement).style.textShadow = '0 0 8px hsl(270 100% 64% / 0.6), 0 0 20px hsl(270 100% 64% / 0.3)';
@@ -85,7 +85,7 @@ export default function Navbar() {
             </div>
             
             <div className="flex items-center gap-3">
-              <div className="hidden md:flex items-center gap-2 text-muted-foreground text-xs font-medium">
+              <div className="hidden md:flex items-center gap-2 text-white text-xs font-medium" style={{ textShadow: '0 0 10px hsl(270 100% 64% / 0.3)' }}>
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
@@ -111,7 +111,7 @@ export default function Navbar() {
                       <button
                         key={item.label}
                         onClick={() => scrollToSection(item.href)}
-                        className="text-lg font-medium italic tracking-wide text-muted-foreground hover:text-accent transition-all duration-300 text-left py-2 normal-case"
+                        className="text-lg font-medium italic tracking-wide text-white hover:text-accent transition-all duration-300 text-left py-2 normal-case"
                         style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic' }}
                       >
                         {item.label}
