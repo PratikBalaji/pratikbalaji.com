@@ -37,6 +37,8 @@ export function SiteSettingsProvider({ children }: { children: React.ReactNode }
           if (row.key === 'is_open_to_work') next.isOpenToWork = row.value === 'true';
           if (row.key === 'current_location') next.currentLocation = row.value;
           if (row.key === 'current_status') next.currentStatus = row.value;
+          if (row.key === 'enable_heavy_3d') next.enableHeavy3D = row.value === 'true';
+          if (row.key === 'enable_easter_eggs') next.enableEasterEggs = row.value === 'true';
         });
         setSettings(next);
       } else {

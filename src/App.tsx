@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ActiveSectionContext, useActiveSectionTracker } from "@/hooks/useActiveSection";
-import { SiteSettingsProvider } from "@/hooks/useSiteSettings";
+import { SiteSettingsProvider, useSiteSettings } from "@/hooks/useSiteSettings";
 
 import NoiseOverlay from "@/components/NoiseOverlay";
 import ChatAssistant from "@/components/sections/ChatAssistant";
@@ -16,17 +16,39 @@ import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
+function CSSFallbackBackground() {
+  return (
+    <div
+      className="fixed inset-0 -z-10"
+      style={{
+        background: 'radial-gradient(ellipse at 50% 0%, hsl(var(--accent) / 0.15) 0%, hsl(var(--background)) 70%)',
+      }}
+    />
+  );
+}
+
+function ConditionalBackground() {
+  const { enableHeavy3D, loaded } = useSiteSettings();
+  if (!loaded) return <CSSFallbackBackground />;
+  return enableHeavy3D ? <DarkSpaceBackground /> : <CSSFallbackBackground />;
+}
+
+function ConditionalChatAssistant() {
+  const { enableEasterEggs, loaded } = useSiteSettings();
+  if (!loaded) return null;
+  return enableEasterEggs ? <ChatAssistant /> : null;
+}
+
 function AppInner() {
   const activeSection = useActiveSectionTracker();
 
   return (
     <ActiveSectionContext.Provider value={activeSection}>
       <SiteSettingsProvider>
-        <DarkSpaceBackground />
+        <ConditionalBackground />
         <NoiseOverlay />
-        <ChatAssistant />
+        <ConditionalChatAssistant />
         <Toaster />
-        <Sonner />
         <Sonner />
         <BrowserRouter>
           <Routes>
