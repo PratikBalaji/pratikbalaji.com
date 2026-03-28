@@ -180,6 +180,26 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Check for XSS/SQL injection patterns in raw input BEFORE sanitization
+    const rawFields: Record<string, string> = {};
+    if (data?.name) rawFields.name = String(data.name);
+    if (data?.email) rawFields.email = String(data.email);
+    if (data?.message) rawFields.message = String(data.message);
+    const suspiciousMatches = detectSuspiciousContent(rawFields);
+    if (suspiciousMatches.length > 0) {
+      // Fire alert but still block the request
+      fireSecurityAlert({
+        type: "suspicious_submission",
+        table,
+        email: emailForRateCheck,
+        details: `Injection/XSS patterns detected:\n${suspiciousMatches.join("\n")}`,
+      });
+      return new Response(
+        JSON.stringify({ error: "Your submission contains invalid content." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     // Check rate limit BEFORE inserting
     const { data: withinLimit, error: rlError } = await supabase.rpc("check_rate_limit", {
       table_name: table,
