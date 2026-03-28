@@ -105,10 +105,10 @@ export default function Navbar() {
                         {item.label}
                       </button>
                     ))}
-                    <div className="mt-4 flex items-center gap-2 px-4 py-2.5 rounded-full border border-border/40 bg-card/50 text-muted-foreground text-sm">
+                    <div className="mt-4 flex items-center gap-2 text-muted-foreground text-sm">
                       <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
                       </span>
                       Philadelphia, PA
                     </div>
