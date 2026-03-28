@@ -39,6 +39,7 @@ function EstClock() {
 
 /* ── Front face HTML ── */
 function CardFront({ visible, onFlip }: { visible: boolean; onFlip: () => void }) {
+  const { currentStatus } = useSiteSettings();
   return (
     <Html
       transform
