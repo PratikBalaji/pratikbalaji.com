@@ -68,15 +68,9 @@ function LoginForm() {
               />
             </div>
             <Button type="submit" className="w-full h-9 text-sm mt-2" disabled={loading}>
-              {loading ? (isSignUp ? 'Creating…' : 'Signing in…') : (isSignUp ? 'Create Account' : 'Sign In')}
+              {loading ? 'Signing in…' : 'Sign In'}
             </Button>
           </form>
-          <button
-            onClick={() => setIsSignUp(!isSignUp)}
-            className="w-full text-center text-xs text-muted-foreground hover:text-foreground mt-3 transition-colors"
-          >
-            {isSignUp ? 'Already have an account? Sign in' : 'Need an account? Create one'}
-          </button>
         </CardContent>
       </Card>
     </div>
