@@ -104,6 +104,7 @@ function AdminDashboard() {
           if (row.key === 'system_prompt') setSystemPrompt(row.value);
           if (row.key === 'enable_heavy_3d') setEnableHeavy3D(row.value === 'true');
           if (row.key === 'enable_easter_eggs') setEnableEasterEggs(row.value === 'true');
+          if (row.key === 'primary_accent_color') setAccentColor(row.value);
         });
       }
       setLoaded(true);
