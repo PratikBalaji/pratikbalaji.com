@@ -6,7 +6,8 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { LogOut, Shield, MapPin, Briefcase, Save, Settings } from 'lucide-react';
+import { LogOut, Shield, MapPin, Briefcase, Save, Settings, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import type { Session } from '@supabase/supabase-js';
 
 function LoginForm() {
