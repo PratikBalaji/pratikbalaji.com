@@ -12,6 +12,8 @@ import { Link } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ProjectsManager from '@/components/admin/ProjectsManager';
 import SkillsManager from '@/components/admin/SkillsManager';
+import ContactMessagesViewer from '@/components/admin/ContactMessagesViewer';
+import MeetingRequestsViewer from '@/components/admin/MeetingRequestsViewer';
 import { applyAccentColor } from '@/hooks/useSiteSettings';
 import type { Session } from '@supabase/supabase-js';
 
@@ -406,6 +408,26 @@ function AdminDashboard() {
           <Rocket className="w-4 h-4" />
           {deployingPrompt ? 'Deploying…' : 'Deploy New Prompt'}
         </Button>
+
+        {/* Divider */}
+        <div className="flex items-center gap-3 pt-4">
+          <div className="h-px flex-1 bg-border/20" />
+          <span className="text-xs text-muted-foreground uppercase tracking-widest">Inbox</span>
+          <div className="h-px flex-1 bg-border/20" />
+        </div>
+
+        <Tabs defaultValue="contacts" className="w-full">
+          <TabsList className="w-full bg-card/40 border border-border/20">
+            <TabsTrigger value="contacts" className="flex-1 text-xs">Contact Messages</TabsTrigger>
+            <TabsTrigger value="meetings" className="flex-1 text-xs">Meeting Requests</TabsTrigger>
+          </TabsList>
+          <TabsContent value="contacts" className="mt-4">
+            <ContactMessagesViewer />
+          </TabsContent>
+          <TabsContent value="meetings" className="mt-4">
+            <MeetingRequestsViewer />
+          </TabsContent>
+        </Tabs>
 
         {/* Divider */}
         <div className="flex items-center gap-3 pt-4">
