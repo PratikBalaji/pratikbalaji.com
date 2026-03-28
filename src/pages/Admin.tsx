@@ -39,6 +39,11 @@ function LoginForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <div className="absolute top-4 left-4">
+        <Link to="/" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to site
+        </Link>
+      </div>
       <Card className="w-full max-w-sm border-border/30 bg-card/50 backdrop-blur-2xl shadow-2xl">
         <CardHeader className="text-center pb-2">
           <div className="mx-auto mb-3 w-11 h-11 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center">
