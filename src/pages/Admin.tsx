@@ -147,6 +147,7 @@ function AdminDashboard() {
     if (results.some((r) => r.error)) {
       toast.error('Failed to save settings');
     } else {
+      savedColorRef.current = accentColor;
       toast.success('Settings updated successfully');
     }
   };
