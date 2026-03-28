@@ -238,6 +238,59 @@ Deno.serve(async (req) => {
       );
     }
 
+    // Send admin email notification via Resend (fire-and-forget)
+    try {
+      const resendKey = Deno.env.get("RESEND_API_KEY");
+      if (resendKey) {
+        const subject = table === "meeting_requests"
+          ? `☕ New Meeting Request from ${insertData.name}`
+          : `💬 New Contact Message from ${insertData.name}`;
+
+        let htmlBody: string;
+        if (table === "meeting_requests") {
+          htmlBody = `
+            <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;padding:24px;">
+              <h2 style="color:#7C3AED;margin:0 0 16px;">New Meeting Request</h2>
+              <table style="width:100%;border-collapse:collapse;">
+                <tr><td style="padding:8px 0;color:#666;width:110px;">Name</td><td style="padding:8px 0;font-weight:600;">${insertData.name}</td></tr>
+                <tr><td style="padding:8px 0;color:#666;">Email</td><td style="padding:8px 0;"><a href="mailto:${insertData.email}" style="color:#7C3AED;">${insertData.email}</a></td></tr>
+                <tr><td style="padding:8px 0;color:#666;">Date</td><td style="padding:8px 0;">${insertData.requested_date}</td></tr>
+                <tr><td style="padding:8px 0;color:#666;">Time</td><td style="padding:8px 0;">${insertData.requested_time}</td></tr>
+                ${insertData.message ? `<tr><td style="padding:8px 0;color:#666;vertical-align:top;">Message</td><td style="padding:8px 0;">${insertData.message}</td></tr>` : ''}
+              </table>
+            </div>`;
+        } else {
+          htmlBody = `
+            <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;padding:24px;">
+              <h2 style="color:#7C3AED;margin:0 0 16px;">New Contact Message</h2>
+              <table style="width:100%;border-collapse:collapse;">
+                <tr><td style="padding:8px 0;color:#666;width:110px;">Name</td><td style="padding:8px 0;font-weight:600;">${insertData.name}</td></tr>
+                <tr><td style="padding:8px 0;color:#666;">Email</td><td style="padding:8px 0;"><a href="mailto:${insertData.email}" style="color:#7C3AED;">${insertData.email}</a></td></tr>
+              </table>
+              <div style="margin-top:16px;padding:16px;background:#f9f9fb;border-radius:8px;color:#333;line-height:1.6;">
+                ${insertData.message}
+              </div>
+            </div>`;
+        }
+
+        await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${resendKey}`,
+          },
+          body: JSON.stringify({
+            from: "notifications@pratikbalaji.com",
+            to: ["balajipratik8@gmail.com"],
+            subject,
+            html: htmlBody,
+          }),
+        });
+      }
+    } catch (emailErr) {
+      console.error("Email notification failed (non-blocking):", emailErr);
+    }
+
     return new Response(
       JSON.stringify({ success: true }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
