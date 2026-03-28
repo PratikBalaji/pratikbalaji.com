@@ -121,6 +121,7 @@ function AdminDashboard() {
       supabase.from('site_settings').update({ value: currentStatus, updated_at: now }).eq('key', 'current_status'),
       supabase.from('site_settings').update({ value: String(enableHeavy3D), updated_at: now }).eq('key', 'enable_heavy_3d'),
       supabase.from('site_settings').update({ value: String(enableEasterEggs), updated_at: now }).eq('key', 'enable_easter_eggs'),
+      supabase.from('site_settings').update({ value: accentColor, updated_at: now }).eq('key', 'primary_accent_color'),
     ]);
     setSaving(false);
     if (results.some((r) => r.error)) {
