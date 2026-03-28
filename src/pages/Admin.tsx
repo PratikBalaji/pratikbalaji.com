@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { LogOut, Shield, MapPin, Briefcase, Save, Settings, ArrowLeft, Bot, Rocket, Activity, Cpu, Wand2 } from 'lucide-react';
+import { LogOut, Shield, MapPin, Briefcase, Save, Settings, ArrowLeft, Bot, Rocket, Activity, Cpu, Wand2, Palette } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Link } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -88,6 +88,7 @@ function AdminDashboard() {
   const [systemPrompt, setSystemPrompt] = useState('');
   const [enableHeavy3D, setEnableHeavy3D] = useState(true);
   const [enableEasterEggs, setEnableEasterEggs] = useState(true);
+  const [accentColor, setAccentColor] = useState('#7C3AED');
   const [saving, setSaving] = useState(false);
   const [deployingPrompt, setDeployingPrompt] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -103,6 +104,7 @@ function AdminDashboard() {
           if (row.key === 'system_prompt') setSystemPrompt(row.value);
           if (row.key === 'enable_heavy_3d') setEnableHeavy3D(row.value === 'true');
           if (row.key === 'enable_easter_eggs') setEnableEasterEggs(row.value === 'true');
+          if (row.key === 'primary_accent_color') setAccentColor(row.value);
         });
       }
       setLoaded(true);
@@ -119,6 +121,7 @@ function AdminDashboard() {
       supabase.from('site_settings').update({ value: currentStatus, updated_at: now }).eq('key', 'current_status'),
       supabase.from('site_settings').update({ value: String(enableHeavy3D), updated_at: now }).eq('key', 'enable_heavy_3d'),
       supabase.from('site_settings').update({ value: String(enableEasterEggs), updated_at: now }).eq('key', 'enable_easter_eggs'),
+      supabase.from('site_settings').update({ value: accentColor, updated_at: now }).eq('key', 'primary_accent_color'),
     ]);
     setSaving(false);
     if (results.some((r) => r.error)) {
@@ -231,6 +234,69 @@ function AdminDashboard() {
               className="h-9 bg-background/50 border-border/30 text-sm font-mono"
               placeholder="Training ML Models"
             />
+          </CardContent>
+        </Card>
+
+        {/* Theme Engine */}
+        <div className="flex items-center gap-3 pt-4">
+          <div className="h-px flex-1 bg-border/20" />
+          <span className="text-xs text-muted-foreground uppercase tracking-widest">Theme</span>
+          <div className="h-px flex-1 bg-border/20" />
+        </div>
+
+        <Card className="border-border/20 bg-card/40 backdrop-blur-xl shadow-lg">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-9 h-9 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
+                <Palette className="w-4 h-4 text-accent" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">Global Accent Color</p>
+                <p className="text-xs text-muted-foreground">Changes all glows, buttons, hover states &amp; 3D lighting</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <input
+                  type="color"
+                  value={accentColor}
+                  onChange={(e) => setAccentColor(e.target.value)}
+                  className="w-12 h-12 rounded-lg border-2 border-border/30 cursor-pointer bg-transparent [&::-webkit-color-swatch-wrapper]:p-0.5 [&::-webkit-color-swatch]:rounded-md [&::-webkit-color-swatch]:border-none"
+                />
+              </div>
+              <div className="flex-1 space-y-2">
+                <Input
+                  value={accentColor}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    if (/^#[0-9A-Fa-f]{0,6}$/.test(v)) setAccentColor(v);
+                  }}
+                  className="h-8 bg-background/50 border-border/30 text-sm font-mono uppercase"
+                  placeholder="#7C3AED"
+                  maxLength={7}
+                />
+                <div className="flex gap-1.5">
+                  {['#7C3AED', '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#EC4899'].map((c) => (
+                    <button
+                      key={c}
+                      onClick={() => setAccentColor(c)}
+                      className="w-6 h-6 rounded-full border-2 transition-all hover:scale-110"
+                      style={{
+                        backgroundColor: c,
+                        borderColor: accentColor === c ? 'white' : 'transparent',
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+              <div
+                className="w-20 h-12 rounded-lg border border-border/20"
+                style={{
+                  background: `linear-gradient(135deg, ${accentColor}, ${accentColor}88)`,
+                  boxShadow: `0 0 30px ${accentColor}40`,
+                }}
+              />
+            </div>
           </CardContent>
         </Card>
 
