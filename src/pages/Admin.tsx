@@ -201,10 +201,44 @@ function AdminDashboard() {
           </CardContent>
         </Card>
 
-        {/* Save */}
+        {/* Save Site Settings */}
         <Button onClick={handleSave} disabled={saving} className="w-full h-10 text-sm gap-2">
           <Save className="w-4 h-4" />
-          {saving ? 'Saving…' : 'Save Changes'}
+          {saving ? 'Saving…' : 'Save Site Settings'}
+        </Button>
+
+        {/* Divider */}
+        <div className="flex items-center gap-3 pt-4">
+          <div className="h-px flex-1 bg-border/20" />
+          <span className="text-xs text-muted-foreground uppercase tracking-widest">AI Agent</span>
+          <div className="h-px flex-1 bg-border/20" />
+        </div>
+
+        {/* System Prompt */}
+        <Card className="border-border/20 bg-card/40 backdrop-blur-xl shadow-lg">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-9 h-9 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
+                <Bot className="w-4 h-4 text-accent" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">AI System Prompt</p>
+                <p className="text-xs text-muted-foreground">Control your chatbot's personality and behavior</p>
+              </div>
+            </div>
+            <Textarea
+              value={systemPrompt}
+              onChange={(e) => setSystemPrompt(e.target.value)}
+              className="min-h-[200px] bg-background/50 border-border/30 text-sm font-mono leading-relaxed resize-y"
+              placeholder="You are a helpful AI assistant..."
+            />
+            <p className="text-xs text-muted-foreground mt-2">{systemPrompt.length} characters</p>
+          </CardContent>
+        </Card>
+
+        <Button onClick={handleDeployPrompt} disabled={deployingPrompt} className="w-full h-10 text-sm gap-2 bg-accent hover:bg-accent/90">
+          <Rocket className="w-4 h-4" />
+          {deployingPrompt ? 'Deploying…' : 'Deploy New Prompt'}
         </Button>
       </div>
     </div>
