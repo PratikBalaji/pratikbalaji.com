@@ -12,6 +12,8 @@ import { Link } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ProjectsManager from '@/components/admin/ProjectsManager';
 import SkillsManager from '@/components/admin/SkillsManager';
+import ContactMessagesViewer from '@/components/admin/ContactMessagesViewer';
+import MeetingRequestsViewer from '@/components/admin/MeetingRequestsViewer';
 import { applyAccentColor } from '@/hooks/useSiteSettings';
 import type { Session } from '@supabase/supabase-js';
 
