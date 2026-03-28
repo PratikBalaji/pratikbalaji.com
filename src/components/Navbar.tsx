@@ -111,8 +111,8 @@ export default function Navbar() {
                       <button
                         key={item.label}
                         onClick={() => scrollToSection(item.href)}
-                        className="text-base font-semibold tracking-widest uppercase text-muted-foreground hover:text-accent transition-all duration-300 text-left py-2"
-                        style={{ fontFamily: "'Cinzel', serif" }}
+                        className="text-lg font-medium italic tracking-wide text-muted-foreground hover:text-accent transition-all duration-300 text-left py-2 normal-case"
+                        style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic' }}
                       >
                         {item.label}
                       </button>
