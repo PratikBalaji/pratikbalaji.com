@@ -117,6 +117,7 @@ export default function Hero() {
           <motion.p
             variants={staggerItem}
             className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8"
+            style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '1.25rem', lineHeight: '1.8' }}
           >
             A passionate Data Science student specializing in AI, machine learning,
             and building intelligent applications that push boundaries.
