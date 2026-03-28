@@ -5,6 +5,7 @@ import { Html, RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
 import CoffeeChatScheduler from '@/components/sections/CoffeeChatScheduler';
 import { toast } from 'sonner';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 /* ── Copyable HUD Field ── */
 function HudField({ label, value }: { label: string; value: string }) {
