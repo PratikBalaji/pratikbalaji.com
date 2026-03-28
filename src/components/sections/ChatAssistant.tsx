@@ -107,9 +107,7 @@ export default function ChatAssistant() {
       }
     }
     setIsOpen(prev => !prev);
-    }
-    setIsOpen(prev => !prev);
-  }, [isOpen, stopSpeaking]);
+  }, [isOpen, stopSpeaking, activeSection]);
 
   const handleEdgeToggle = useCallback((checked: boolean) => {
     setEdgeMode(checked);
