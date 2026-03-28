@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { ActiveSectionContext, useActiveSectionTracker } from "@/hooks/useActiveSection";
 
 import NoiseOverlay from "@/components/NoiseOverlay";
 import ChatAssistant from "@/components/sections/ChatAssistant";
@@ -13,23 +14,32 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+function AppInner() {
+  const activeSection = useActiveSectionTracker();
+
+  return (
+    <ActiveSectionContext.Provider value={activeSection}>
+      <DarkSpaceBackground />
+      <NoiseOverlay />
+      <ChatAssistant />
+      <Toaster />
+      <Sonner />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </ActiveSectionContext.Provider>
+  );
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
       <TooltipProvider>
-        
-        <DarkSpaceBackground />
-        <NoiseOverlay />
-        <ChatAssistant />
-        <Toaster />
-        <Sonner />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <AppInner />
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
