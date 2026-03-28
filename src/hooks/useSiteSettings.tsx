@@ -4,12 +4,14 @@ import { supabase } from '@/integrations/supabase/client';
 interface SiteSettings {
   isOpenToWork: boolean;
   currentLocation: string;
+  currentStatus: string;
   loaded: boolean;
 }
 
 const defaultSettings: SiteSettings = {
   isOpenToWork: true,
   currentLocation: 'Philadelphia, PA',
+  currentStatus: 'Training ML Models',
   loaded: false,
 };
 
