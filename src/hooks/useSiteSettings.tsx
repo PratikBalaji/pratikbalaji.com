@@ -5,6 +5,8 @@ interface SiteSettings {
   isOpenToWork: boolean;
   currentLocation: string;
   currentStatus: string;
+  enableHeavy3D: boolean;
+  enableEasterEggs: boolean;
   loaded: boolean;
 }
 
@@ -12,6 +14,8 @@ const defaultSettings: SiteSettings = {
   isOpenToWork: true,
   currentLocation: 'Philadelphia, PA',
   currentStatus: 'Training ML Models',
+  enableHeavy3D: true,
+  enableEasterEggs: true,
   loaded: false,
 };
 
@@ -33,6 +37,8 @@ export function SiteSettingsProvider({ children }: { children: React.ReactNode }
           if (row.key === 'is_open_to_work') next.isOpenToWork = row.value === 'true';
           if (row.key === 'current_location') next.currentLocation = row.value;
           if (row.key === 'current_status') next.currentStatus = row.value;
+          if (row.key === 'enable_heavy_3d') next.enableHeavy3D = row.value === 'true';
+          if (row.key === 'enable_easter_eggs') next.enableEasterEggs = row.value === 'true';
         });
         setSettings(next);
       } else {

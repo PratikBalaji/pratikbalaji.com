@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { LogOut, Shield, MapPin, Briefcase, Save, Settings, ArrowLeft, Bot, Rocket, Activity } from 'lucide-react';
+import { LogOut, Shield, MapPin, Briefcase, Save, Settings, ArrowLeft, Bot, Rocket, Activity, Cpu, Wand2 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Link } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -86,6 +86,8 @@ function AdminDashboard() {
   const [location, setLocation] = useState('Philadelphia, PA');
   const [currentStatus, setCurrentStatus] = useState('');
   const [systemPrompt, setSystemPrompt] = useState('');
+  const [enableHeavy3D, setEnableHeavy3D] = useState(true);
+  const [enableEasterEggs, setEnableEasterEggs] = useState(true);
   const [saving, setSaving] = useState(false);
   const [deployingPrompt, setDeployingPrompt] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -99,6 +101,8 @@ function AdminDashboard() {
           if (row.key === 'current_location') setLocation(row.value);
           if (row.key === 'current_status') setCurrentStatus(row.value);
           if (row.key === 'system_prompt') setSystemPrompt(row.value);
+          if (row.key === 'enable_heavy_3d') setEnableHeavy3D(row.value === 'true');
+          if (row.key === 'enable_easter_eggs') setEnableEasterEggs(row.value === 'true');
         });
       }
       setLoaded(true);
@@ -113,6 +117,8 @@ function AdminDashboard() {
       supabase.from('site_settings').update({ value: String(isOpenToWork), updated_at: now }).eq('key', 'is_open_to_work'),
       supabase.from('site_settings').update({ value: location, updated_at: now }).eq('key', 'current_location'),
       supabase.from('site_settings').update({ value: currentStatus, updated_at: now }).eq('key', 'current_status'),
+      supabase.from('site_settings').update({ value: String(enableHeavy3D), updated_at: now }).eq('key', 'enable_heavy_3d'),
+      supabase.from('site_settings').update({ value: String(enableEasterEggs), updated_at: now }).eq('key', 'enable_easter_eggs'),
     ]);
     setSaving(false);
     if (results.some((r) => r.error)) {
@@ -225,6 +231,43 @@ function AdminDashboard() {
               className="h-9 bg-background/50 border-border/30 text-sm font-mono"
               placeholder="Training ML Models"
             />
+          </CardContent>
+        </Card>
+
+        {/* Feature Flags */}
+        <div className="flex items-center gap-3 pt-4">
+          <div className="h-px flex-1 bg-border/20" />
+          <span className="text-xs text-muted-foreground uppercase tracking-widest">Feature Flags</span>
+          <div className="h-px flex-1 bg-border/20" />
+        </div>
+
+        <Card className="border-border/20 bg-card/40 backdrop-blur-xl shadow-lg">
+          <CardContent className="p-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
+                  <Cpu className="w-4 h-4 text-accent" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Heavy 3D Background</p>
+                  <p className="text-xs text-muted-foreground">WebGL space particles &amp; floating shapes. Falls back to CSS gradient when off.</p>
+                </div>
+              </div>
+              <Switch checked={enableHeavy3D} onCheckedChange={setEnableHeavy3D} />
+            </div>
+            <div className="h-px bg-border/10" />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
+                  <Wand2 className="w-4 h-4 text-accent" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Easter Eggs</p>
+                  <p className="text-xs text-muted-foreground">AI chat assistant and hidden developer tools</p>
+                </div>
+              </div>
+              <Switch checked={enableEasterEggs} onCheckedChange={setEnableEasterEggs} />
+            </div>
           </CardContent>
         </Card>
 
