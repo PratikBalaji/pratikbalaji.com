@@ -273,6 +273,7 @@ export default function ChatAssistant() {
     const trimmed = input.trim();
     if (!trimmed || isLoading || ragQuery) return;
 
+    hasUserSentRef.current = true;
     const userMsg: Msg = { role: 'user', content: trimmed };
     const allMessages = [...messages, userMsg];
     setMessages(allMessages);
