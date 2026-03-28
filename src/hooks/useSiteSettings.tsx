@@ -46,7 +46,7 @@ function hexToHSL(hex: string): string {
   return `${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
 }
 
-function applyAccentColor(hex: string) {
+export function applyAccentColor(hex: string) {
   const hsl = hexToHSL(hex);
   const root = document.documentElement;
   root.style.setProperty('--accent', hsl);
