@@ -85,7 +85,7 @@ export default function Navbar() {
               <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger asChild>
                   <button
-                    className="md:hidden w-10 h-10 rounded-full bg-card border border-border hover:border-accent flex items-center justify-center transition-colors"
+                    className="md:hidden w-10 h-10 rounded-full bg-card/40 backdrop-blur-xl border border-white/10 hover:border-accent/40 flex items-center justify-center transition-colors shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
                     aria-label="Open menu"
                   >
                     <Menu className="w-5 h-5" />
