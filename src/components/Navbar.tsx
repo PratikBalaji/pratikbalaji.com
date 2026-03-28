@@ -59,7 +59,7 @@ export default function Navbar() {
         
         <div className="container-tight relative">
           <div className="flex items-center justify-between h-16 md:h-20">
-            <Link to="/" className="flex items-center">
+            <Link to="/admin" className="flex items-center">
               <Logo size="lg" />
             </Link>
             
