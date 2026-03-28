@@ -14,26 +14,14 @@ function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    if (isSignUp) {
-      const { error } = await supabase.auth.signUp({ email, password });
-      setLoading(false);
-      if (error) {
-        toast.error(error.message);
-      } else {
-        toast.success('Account created! You can now sign in.');
-        setIsSignUp(false);
-      }
-    } else {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      setLoading(false);
-      if (error) {
-        toast.error(error.message);
-      }
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    setLoading(false);
+    if (error) {
+      toast.error(error.message);
     }
   };
 
