@@ -13,13 +13,13 @@ serve(async (req) => {
   const securityHeaders = {
     "Content-Security-Policy": [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://platform.linkedin.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://platform.linkedin.com https://challenges.cloudflare.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob: https:",
-      "connect-src 'self' https://*.supabase.co https://*.supabase.in https://ai.gateway.lovable.dev https://api.elevenlabs.io https://api.github.com",
+      "connect-src 'self' https://*.supabase.co https://*.supabase.in https://ai.gateway.lovable.dev https://api.elevenlabs.io https://api.github.com https://challenges.cloudflare.com",
       "media-src 'self' blob:",
-      "frame-src https://www.linkedin.com https://platform.linkedin.com",
+      "frame-src https://www.linkedin.com https://platform.linkedin.com https://challenges.cloudflare.com",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
