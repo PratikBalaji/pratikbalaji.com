@@ -8,6 +8,40 @@ const corsHeaders = {
 
 const RATE_LIMIT_THRESHOLD = 3; // max submissions per hour before alert
 
+// Patterns that indicate XSS or SQL injection attempts
+const SUSPICIOUS_PATTERNS = [
+  /<script[\s>]/i,
+  /javascript\s*:/i,
+  /on(load|error|click|mouseover|focus|blur)\s*=/i,
+  /\bUNION\s+(ALL\s+)?SELECT\b/i,
+  /\bDROP\s+(TABLE|DATABASE)\b/i,
+  /\bINSERT\s+INTO\b/i,
+  /\bDELETE\s+FROM\b/i,
+  /\bUPDATE\s+\w+\s+SET\b/i,
+  /\b(ALTER|CREATE|TRUNCATE)\s+(TABLE|DATABASE)\b/i,
+  /(['";])\s*(OR|AND)\s+\1?\s*\d+\s*=\s*\d+/i,
+  /'\s*OR\s+'1'\s*=\s*'1/i,
+  /--\s*$/m,
+  /<iframe[\s>]/i,
+  /<embed[\s>]/i,
+  /<object[\s>]/i,
+  /\beval\s*\(/i,
+  /\bdocument\.(cookie|location|write)/i,
+  /\bwindow\.(location|open)\b/i,
+];
+
+function detectSuspiciousContent(fields: Record<string, string>): string[] {
+  const matches: string[] = [];
+  for (const [field, value] of Object.entries(fields)) {
+    for (const pattern of SUSPICIOUS_PATTERNS) {
+      if (pattern.test(value)) {
+        matches.push(`${field} matched ${pattern.source}`);
+      }
+    }
+  }
+  return matches;
+}
+
 async function fireSecurityAlert(alert: Record<string, unknown>) {
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
