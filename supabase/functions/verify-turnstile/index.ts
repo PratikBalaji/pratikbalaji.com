@@ -294,7 +294,7 @@ Deno.serve(async (req) => {
 
     // Send Discord notification (fire-and-forget)
     try {
-      const discordWebhook = Deno.env.get("DISCORD_SECURITY_WEBHOOK_URL");
+      const discordWebhook = Deno.env.get("DISCORD_SUBMISSIONS_WEBHOOK_URL");
       if (discordWebhook) {
         const emoji = table === "meeting_requests" ? "☕" : "💬";
         const label = table === "meeting_requests" ? "Meeting Request" : "Contact Message";
