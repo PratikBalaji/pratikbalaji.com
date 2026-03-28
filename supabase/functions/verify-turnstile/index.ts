@@ -282,6 +282,7 @@ Deno.serve(async (req) => {
           body: JSON.stringify({
             from: "notifications@pratikbalaji.com",
             to: ["balajipratik8@gmail.com"],
+            reply_to: String(insertData.email),
             subject,
             html: htmlBody,
           }),
@@ -289,6 +290,37 @@ Deno.serve(async (req) => {
       }
     } catch (emailErr) {
       console.error("Email notification failed (non-blocking):", emailErr);
+    }
+
+    // Send Discord notification (fire-and-forget)
+    try {
+      const discordWebhook = Deno.env.get("DISCORD_SECURITY_WEBHOOK_URL");
+      if (discordWebhook) {
+        const emoji = table === "meeting_requests" ? "☕" : "💬";
+        const label = table === "meeting_requests" ? "Meeting Request" : "Contact Message";
+        let description = `**Name:** ${insertData.name}\n**Email:** ${insertData.email}`;
+        if (table === "meeting_requests") {
+          description += `\n**Date:** ${insertData.requested_date}\n**Time:** ${insertData.requested_time}`;
+        }
+        if (insertData.message) {
+          description += `\n**Message:** ${String(insertData.message).slice(0, 500)}`;
+        }
+
+        await fetch(discordWebhook, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            embeds: [{
+              title: `${emoji} New ${label}`,
+              description,
+              color: 0x7C3AED,
+              timestamp: new Date().toISOString(),
+            }],
+          }),
+        });
+      }
+    } catch (discordErr) {
+      console.error("Discord notification failed (non-blocking):", discordErr);
     }
 
     return new Response(
