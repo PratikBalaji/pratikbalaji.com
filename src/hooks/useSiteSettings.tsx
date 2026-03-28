@@ -5,6 +5,8 @@ interface SiteSettings {
   isOpenToWork: boolean;
   currentLocation: string;
   currentStatus: string;
+  enableHeavy3D: boolean;
+  enableEasterEggs: boolean;
   loaded: boolean;
 }
 
@@ -12,6 +14,8 @@ const defaultSettings: SiteSettings = {
   isOpenToWork: true,
   currentLocation: 'Philadelphia, PA',
   currentStatus: 'Training ML Models',
+  enableHeavy3D: true,
+  enableEasterEggs: true,
   loaded: false,
 };
 
