@@ -50,8 +50,13 @@ function PBLogo({ className }: { className?: string }) {
 }
 
 export default function ChatAssistant() {
+  const activeSection = useActiveSection();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Msg[]>([INITIAL_MSG]);
+  const initialMsg = useMemo<Msg>(() => ({
+    role: 'assistant',
+    content: SECTION_GREETINGS[activeSection] || SECTION_GREETINGS.hero,
+  }), [activeSection]);
+  const [messages, setMessages] = useState<Msg[]>([initialMsg]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [ragQuery, setRagQuery] = useState<string | null>(null);
@@ -62,9 +67,18 @@ export default function ChatAssistant() {
   const inputRef = useRef<HTMLInputElement>(null);
   const lastClosedRef = useRef<number>(Date.now());
   const pendingSendRef = useRef<Msg[] | null>(null);
+  const hasUserSentRef = useRef(false);
 
   const { isListening, isProcessing, isSpeaking, analyser, startListening, stopListening, stopSpeaking } = useVoiceAgent(messages, setMessages, setIsLoading);
   const { isModelLoaded, isModelLoading, logs, tokensPerSec, loadModel, unloadModel, chat: edgeChat } = useEdgeLLM();
+
+  // Update initial greeting when section changes (only if chat hasn't started)
+  useEffect(() => {
+    if (!hasUserSentRef.current && !isOpen) {
+      const newGreeting: Msg = { role: 'assistant', content: SECTION_GREETINGS[activeSection] || SECTION_GREETINGS.hero };
+      setMessages([newGreeting]);
+    }
+  }, [activeSection, isOpen]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -83,11 +97,16 @@ export default function ChatAssistant() {
       stopSpeaking();
       lastClosedRef.current = Date.now();
     } else {
-      if (Date.now() - lastClosedRef.current > IDLE_RESET_MS) {
-        setMessages([INITIAL_MSG]);
+      // Update greeting to current section when opening
+      if (!hasUserSentRef.current || Date.now() - lastClosedRef.current > IDLE_RESET_MS) {
+        const newGreeting: Msg = { role: 'assistant', content: SECTION_GREETINGS[activeSection] || SECTION_GREETINGS.hero };
+        setMessages([newGreeting]);
+        hasUserSentRef.current = false;
         setRagQuery(null);
         setAgentSteps([]);
       }
+    }
+    setIsOpen(prev => !prev);
     }
     setIsOpen(prev => !prev);
   }, [isOpen, stopSpeaking]);
