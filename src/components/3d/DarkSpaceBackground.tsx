@@ -2,9 +2,21 @@ import { useRef, useMemo, useEffect, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import SafeCanvas from './SafeCanvas';
 import * as THREE from 'three';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
+
+function hexToRGB(hex: string): [number, number, number] {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  return [r, g, b];
+}
+
+function hexToThreeColor(hex: string): THREE.Color {
+  return new THREE.Color(hex);
+}
 
 // ─── Starfield ────────────────────────────────────────────────
-function Starfield({ count = 2000 }: { count?: number }) {
+function Starfield({ count = 2000, accentColor = '#7C3AED' }: { count?: number; accentColor?: string }) {
   const ref = useRef<THREE.Points>(null);
 
   const [positions, sizes] = useMemo(() => {
@@ -33,7 +45,7 @@ function Starfield({ count = 2000 }: { count?: number }) {
       </bufferGeometry>
       <pointsMaterial
         size={0.06}
-        color="#c4b5fd"
+        color={accentColor}
         transparent
         opacity={0.7}
         sizeAttenuation
@@ -56,6 +68,7 @@ const fogVertexShader = `
 const fogFragmentShader = `
   uniform float uTime;
   uniform vec2 uMouse;
+  uniform vec3 uAccentColor;
   varying vec2 vUv;
 
   float hash(vec2 p) {
@@ -86,34 +99,28 @@ const fogFragmentShader = `
 
   void main() {
     vec2 uv = vUv;
-    // mouse influence
     vec2 mouseOff = (uMouse - 0.5) * 0.15;
     uv += mouseOff;
 
     float n = fbm(uv * 3.0 + uTime * 0.08);
     float n2 = fbm(uv * 5.0 - uTime * 0.05 + 3.0);
 
-    // horizon band
     float horizon = smoothstep(0.55, 0.45, abs(uv.y - 0.5));
-
     float intensity = (n * 0.6 + n2 * 0.4) * horizon;
 
-    // deep purple glow
-    vec3 color = mix(
-      vec3(0.08, 0.0, 0.15),
-      vec3(0.35, 0.1, 0.55),
-      intensity
-    );
+    // Dark base tinted with accent
+    vec3 darkBase = uAccentColor * 0.15;
+    vec3 color = mix(darkBase, uAccentColor * 0.7, intensity);
 
-    // accent highlight
-    color += vec3(0.5, 0.2, 0.8) * pow(intensity, 3.0) * 0.4;
+    // Bright accent highlight
+    color += uAccentColor * pow(intensity, 3.0) * 0.4;
 
     float alpha = intensity * 0.6;
     gl_FragColor = vec4(color, alpha);
   }
 `;
 
-function VolumetricFog() {
+function VolumetricFog({ accentColor = '#7C3AED' }: { accentColor?: string }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const mouse = useRef(new THREE.Vector2(0.5, 0.5));
@@ -131,6 +138,8 @@ function VolumetricFog() {
     if (materialRef.current) {
       materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
       materialRef.current.uniforms.uMouse.value.lerp(mouse.current, 0.05);
+      const [r, g, b] = hexToRGB(accentColor);
+      materialRef.current.uniforms.uAccentColor.value.set(r, g, b);
     }
   });
 
@@ -138,6 +147,7 @@ function VolumetricFog() {
     () => ({
       uTime: { value: 0 },
       uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+      uAccentColor: { value: new THREE.Vector3(...hexToRGB(accentColor)) },
     }),
     []
   );
@@ -193,8 +203,14 @@ function MetallicShard({
 }
 
 // ─── Scene ────────────────────────────────────────────────────
-function Scene() {
+function Scene({ accentColor = '#7C3AED' }: { accentColor?: string }) {
   const { gl } = useThree();
+  const threeColor = useMemo(() => hexToThreeColor(accentColor), [accentColor]);
+  const lightColor = useMemo(() => {
+    const c = threeColor.clone();
+    c.lerp(new THREE.Color('#ffffff'), 0.4);
+    return '#' + c.getHexString();
+  }, [threeColor]);
 
   useEffect(() => {
     gl.setClearColor(0x000000, 0);
@@ -203,12 +219,12 @@ function Scene() {
   return (
     <>
       <ambientLight intensity={0.15} />
-      <directionalLight position={[5, 5, 5]} intensity={0.4} color="#c4b5fd" />
-      <directionalLight position={[-5, -3, -5]} intensity={0.2} color="#7c3aed" />
-      <pointLight position={[0, 0, 4]} intensity={0.6} color="#8b5cf6" distance={20} />
+      <directionalLight position={[5, 5, 5]} intensity={0.4} color={lightColor} />
+      <directionalLight position={[-5, -3, -5]} intensity={0.2} color={accentColor} />
+      <pointLight position={[0, 0, 4]} intensity={0.6} color={accentColor} distance={20} />
 
-      <Starfield count={2500} />
-      <VolumetricFog />
+      <Starfield count={2500} accentColor={lightColor} />
+      <VolumetricFog accentColor={accentColor} />
 
       <MetallicShard position={[-5, 1.5, -3]} scale={0.7} rotationSpeed={[0.12, 0.18, 0.06]} />
       <MetallicShard position={[4.5, -1, -2]} scale={0.5} rotationSpeed={[0.08, 0.1, 0.14]} />
@@ -222,6 +238,7 @@ function Scene() {
 export default function DarkSpaceBackground() {
   const [hasError, setHasError] = useState(false);
   const [isWebGLSupported, setIsWebGLSupported] = useState<boolean | null>(null);
+  const { primaryAccentColor } = useSiteSettings();
 
   useEffect(() => {
     try {
@@ -245,7 +262,7 @@ export default function DarkSpaceBackground() {
         onError={() => setHasError(true)}
         style={{ background: 'transparent' }}
       >
-        <Scene />
+        <Scene accentColor={primaryAccentColor} />
       </SafeCanvas>
     </div>
   );
