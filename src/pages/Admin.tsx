@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,12 +6,13 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { LogOut, Shield, MapPin, Briefcase, Save, Settings, ArrowLeft, Bot, Rocket, Activity, Cpu, Wand2, Palette } from 'lucide-react';
+import { LogOut, Shield, MapPin, Briefcase, Save, Settings, ArrowLeft, Bot, Rocket, Activity, Cpu, Wand2, Palette, Eye, EyeOff } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Link } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ProjectsManager from '@/components/admin/ProjectsManager';
 import SkillsManager from '@/components/admin/SkillsManager';
+import { applyAccentColor } from '@/hooks/useSiteSettings';
 import type { Session } from '@supabase/supabase-js';
 
 function LoginForm() {
@@ -89,6 +90,8 @@ function AdminDashboard() {
   const [enableHeavy3D, setEnableHeavy3D] = useState(true);
   const [enableEasterEggs, setEnableEasterEggs] = useState(true);
   const [accentColor, setAccentColor] = useState('#7C3AED');
+  const [livePreview, setLivePreview] = useState(false);
+  const savedColorRef = useRef('#7C3AED');
   const [saving, setSaving] = useState(false);
   const [deployingPrompt, setDeployingPrompt] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -104,13 +107,30 @@ function AdminDashboard() {
           if (row.key === 'system_prompt') setSystemPrompt(row.value);
           if (row.key === 'enable_heavy_3d') setEnableHeavy3D(row.value === 'true');
           if (row.key === 'enable_easter_eggs') setEnableEasterEggs(row.value === 'true');
-          if (row.key === 'primary_accent_color') setAccentColor(row.value);
+          if (row.key === 'primary_accent_color') {
+            setAccentColor(row.value);
+            savedColorRef.current = row.value;
+          }
         });
       }
       setLoaded(true);
     };
     fetchSettings();
   }, []);
+
+  // Live preview: apply accent color to CSS vars in real-time
+  useEffect(() => {
+    if (livePreview && /^#[0-9A-Fa-f]{6}$/.test(accentColor)) {
+      applyAccentColor(accentColor);
+    }
+  }, [accentColor, livePreview]);
+
+  // Revert color when disabling live preview without saving
+  useEffect(() => {
+    if (!livePreview && savedColorRef.current) {
+      applyAccentColor(savedColorRef.current);
+    }
+  }, [livePreview]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -127,6 +147,7 @@ function AdminDashboard() {
     if (results.some((r) => r.error)) {
       toast.error('Failed to save settings');
     } else {
+      savedColorRef.current = accentColor;
       toast.success('Settings updated successfully');
     }
   };
@@ -296,6 +317,16 @@ function AdminDashboard() {
                   boxShadow: `0 0 30px ${accentColor}40`,
                 }}
               />
+            </div>
+            <div className="mt-4 pt-3 border-t border-border/10">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {livePreview ? <Eye className="w-3.5 h-3.5 text-accent" /> : <EyeOff className="w-3.5 h-3.5 text-muted-foreground" />}
+                  <span className="text-xs font-medium text-foreground">Live Preview</span>
+                  <span className="text-xs text-muted-foreground">— see changes on this page before saving</span>
+                </div>
+                <Switch checked={livePreview} onCheckedChange={setLivePreview} />
+              </div>
             </div>
           </CardContent>
         </Card>
