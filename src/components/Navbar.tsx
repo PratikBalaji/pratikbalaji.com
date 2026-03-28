@@ -66,9 +66,10 @@ export default function Navbar() {
                 <button
                   key={item.label}
                   onClick={() => scrollToSection(item.href)}
-                  className="text-[13px] font-semibold tracking-widest uppercase text-muted-foreground/80 hover:text-accent transition-all duration-300 link-underline"
+                  className="text-[15px] font-medium italic tracking-wide text-muted-foreground/80 hover:text-accent transition-all duration-300 link-underline normal-case"
                   style={{
-                    fontFamily: "'Cinzel', serif",
+                    fontFamily: "'Cormorant Garamond', serif",
+                    fontStyle: 'italic',
                     textShadow: 'none',
                   }}
                   onMouseEnter={(e) => {
