@@ -6,12 +6,18 @@ import ScrollReveal from '@/components/ScrollReveal';
 const embeds = [
   {
     id: '1',
+    src: 'https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7445325435254509568',
+    title: 'Embedded post',
+    height: 1215,
+  },
+  {
+    id: '2',
     src: 'https://www.linkedin.com/embed/feed/update/urn:li:share:7441918594923458560',
     title: 'Embedded post',
     height: 880,
   },
   {
-    id: '2',
+    id: '3',
     src: 'https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7434368685231738881',
     title: 'Embedded post',
     height: 880,
