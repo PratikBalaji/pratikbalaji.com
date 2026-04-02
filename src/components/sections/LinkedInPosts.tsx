@@ -46,7 +46,7 @@ export default function LinkedInPosts() {
         </div>
 
         {/* Embedded LinkedIn Posts */}
-        <div className="flex flex-col md:flex-row md:justify-center items-center gap-8 mb-12">
+        <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 mb-12 md:justify-center md:flex-wrap md:overflow-x-visible scrollbar-hide">
           {embeds.map((embed, i) => (
             <motion.div
               key={embed.id}
@@ -58,7 +58,7 @@ export default function LinkedInPosts() {
                 damping: 20,
                 delay: 0.3 + i * 0.15,
               }}
-              className="w-full max-w-[504px] rounded-xl overflow-hidden border border-accent/40 shadow-[0_0_30px_-5px_hsl(var(--accent)/0.3)]"
+              className="flex-shrink-0 w-[85vw] max-w-[504px] snap-center rounded-xl overflow-hidden border border-accent/40 shadow-[0_0_30px_-5px_hsl(var(--accent)/0.3)]"
             >
               <iframe
                 src={embed.src}
